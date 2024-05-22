@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* globals.css */
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background: #000;
+  }
+  
+  * {
+    box-sizing: inherit;
+  }
+  
+  nav a {
+    transition: color 0.3s;
+  }
+  * {
+    border-radius: 1.5rem; /* Tailwind's rounded-lg is equivalent to 0.5rem */
+  }
+  :root {
+    --primary-color: #000000; /* black */
+    --secondary-color: #007bff; /* blue */
+  }
+  
+  button {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background-color: var(--secondary-color);
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  }
+  
+  nav {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+  }
+  
+  nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 1rem;
+    transition: color 0.3s;
+  }
+  
+  nav a:hover {
+    color: #007bff; /* Change to your primary color */
+  }
+  
+  .bg-transparent {
+    background: transparent;
+  }
+  
+  .bg-white {
+    background: white;
+  }
+  
+  .text-black {
+    color: black;
+  }
+  
+  .rounded-lg {
+    border-radius: 1.5rem;
+  }
+  
+  .transition-colors {
+    transition: color 0.3s, background-color 0.3s;
+  }
+
+  
+
+
+.square-image-container {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* This creates a square container */
+    overflow: hidden;
+    border-radius: 8px; /* Optional: Add border radius for rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for a nice effect */
+}
+
+.square-image-container img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 100%;
+    width: auto;
+    transform: translate(-50%, -50%);
+}
+
+.square-image-container img.landscape {
+    width: 100%;
+    height: auto;
+}
+
+
+
+.pricing-container {
+  background-color: #f4f4f4;
+  padding: 2rem;
+}
+
+.pricing-card {
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pricing-card h3 {
+  font-family: 'Montserrat', sans-serif;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.pricing-card p {
+  font-family: 'Roboto', sans-serif;
+  color: #666;
+}
+
+.pricing-card .price {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 1rem;
+}
+
+.pricing-card .features {
+  margin-bottom: 1rem;
+}
+
+.pricing-card .subscribe-btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  transition: background-color 0.3s;
+}
+
+.pricing-card .subscribe-btn:hover {
+  background-color: #0056b3;
+}
