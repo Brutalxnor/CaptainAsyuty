@@ -1,7 +1,7 @@
 const Pricing = () => {
   return (
-    <div className="pricing-container ">
-      <h2 className=" mt-15 text-center text-4xl font-bold mb-8">خطط معقولة ومرنة</h2>
+    <div className="pricing-container py-12 mt-10">
+      <h2 className="text-center text-4xl font-bold mb-8">خطط معقولة ومرنة</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="pricing-card">
           <h3>شهري</h3>

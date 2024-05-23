@@ -12,7 +12,7 @@ const testimonials = [
           <h2 className="text-3xl font-bold text-center mb-8">عملائنا يحبوننا</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-blue-100 p-6 rounded-2xl shadow-md">
+              <div key={index} className="bg-blue-100 p-6 ml-3 mr-3 rounded-2xl shadow-md">
                 <p className="text-xl mb-4">“{testimonial.text}”</p>
                 <p className="text-right font-bold">- {testimonial.name}</p>
               </div>

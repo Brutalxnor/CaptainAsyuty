@@ -119,6 +119,9 @@ body, html {
   padding: 2rem;
 }
 
+.pricing-container {
+  @apply py-12 px-4;
+}
 .pricing-card {
   background-color: #fff;
   border-radius: 1rem;
