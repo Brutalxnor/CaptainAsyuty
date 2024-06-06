@@ -13,7 +13,9 @@ body, html {
   * {
     box-sizing: inherit;
   }
-  
+  .no-rounded {
+    border-radius: 0 !important; /* Override the global rule */
+  }
   nav a {
     transition: color 0.3s;
   }

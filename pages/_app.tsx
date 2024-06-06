@@ -1,40 +1,3 @@
-// import { ClerkProvider, RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs';
-// import { useRouter } from 'next/router';
-// import type { AppProps } from 'next/app';
-// import '../styles/global.css';
-// import { Url } from 'next/dist/shared/lib/router/router';
-
-// const publicPages = ["/", "/about", "/contact", "/online-gym", "/auth"];
-
-// function MyApp({ Component, pageProps }: AppProps) {
-//   const router = useRouter();
-//   const isPublicPage = publicPages.includes(router.pathname);
-
-//   return (
-//     <ClerkProvider
-//       frontendApi={process.env.pk_test_bG92aW5nLXNsdWctNTMuY2xlcmsuYWNjb3VudHMuZGV2JA}
-//       navigate={(to: Url) => router.push(to)}
-//     >
-//       {isPublicPage ? (
-//         <Component {...pageProps} />
-//       ) : (
-//         <RedirectToSignIn redirectUrl={router.pathname} />
-//       )}
-//     </ClerkProvider>
-//   );
-// }
-
-// export default MyApp;
-
-
-
-
-// pages/_app.tsx
-// pages/_app.tsx
-// pages/_app.tsx
-// pages/_app.tsx
-
-
 
 // import { ClerkProvider, RedirectToSignIn } from "@clerk/nextjs";
 // import type { AppProps } from "next/app";
@@ -57,52 +20,130 @@
 
 
 // pages/_app.tsx
-import { ClerkProvider, useAuth } from '@clerk/nextjs';
+
+// _app.tsx
+// _app.tsx
+// import { ClerkProvider } from '@clerk/nextjs';
+// import { SessionProvider } from "next-auth/react";
+// import type { AppProps } from 'next/app';
+// import { useRouter } from 'next/router';
+// import '../styles/global.css';
+
+// const publicPages = ['/', '/about', '/contact', '/online-gym', '/auth'];
+
+// function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+//   const router = useRouter();
+//   const isPublicPage = publicPages.includes(router.pathname);
+  
+//   return (
+//     <ClerkProvider>
+//         <Component {...pageProps} />
+//       {/* <SessionProvider session={session}>
+//       </SessionProvider> */}
+//     </ClerkProvider>
+//   );
+// }
+
+// export default MyApp;
+
+
+
+
+
+// import { ClerkProvider } from '@clerk/nextjs';
+// import { SessionProvider } from 'next-auth/react';
+// import type { AppProps } from 'next/app';
+// import { useRouter } from 'next/router';
+// import '../styles/global.css';
+
+// const publicPages = ['/', '/about', '/contact', '/online-gym', '/auth'];
+
+// function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+//   const router = useRouter();
+//   const isPublicPage = publicPages.includes(router.pathname);
+
+//   return (
+//     <ClerkProvider>
+//       <SessionProvider session={session}>
+//         <Component {...pageProps} />
+//       </SessionProvider>
+//     </ClerkProvider>
+//   );
+// }
+
+// export default MyApp;
+
+
+
+// _app.tsx
+
+// import { ClerkProvider } from '@clerk/nextjs';
+// import { SessionProvider } from 'next-auth/react';
+// import type { AppProps } from 'next/app';
+// import { useRouter } from 'next/router';
+// import '../styles/global.css';
+
+// const publicPages = ['/', '/about', '/contact', '/online-gym', '/auth'];
+
+// function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+//   const router = useRouter();
+//   const isPublicPage = publicPages.includes(router.pathname);
+
+//   return (
+//     <ClerkProvider>
+//       <SessionProvider session={session}>
+//         <Component {...pageProps} />
+//       </SessionProvider>
+//     </ClerkProvider>
+//   );
+// }
+
+// export default MyApp;
+
+
+
+
+
+
+
+
+
+// pages/_app.tsx
+
+import { ClerkProvider, RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs';
 import type { AppProps } from 'next/app';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import '../styles/global.css';
+import { useSession } from 'next-auth/react';
+import { SessionProvider } from 'next-auth/react';
+import { useRouter } from 'next/router';
+
+
+// const MyApp = ({ Component, pageProps }: AppProps) => {
+//   return (
+//     <ClerkProvider>
+//       <SignedIn>
+//         <Component {...pageProps} />
+//       </SignedIn>
+//       <SignedOut>
+//         <RedirectToSignIn />
+//       </SignedOut>
+//     </ClerkProvider>
+//   );
+// };
 
 const publicPages = ['/', '/about', '/contact', '/online-gym', '/auth'];
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const router = useRouter();
   const isPublicPage = publicPages.includes(router.pathname);
 
-  // return (
-  //   <ClerkProvider>
-  //     {isPublicPage ? (
-  //       <Component {...pageProps} />
-  //     ) : (
-  //       <AuthGuard>
-  //         <Component {...pageProps} />
-  //       </AuthGuard>
-  //     )}
-  //   </ClerkProvider>
-  // );
   return (
-        <ClerkProvider>
+    <ClerkProvider>
+      <SessionProvider session={session}>
           <Component {...pageProps} />
-        </ClerkProvider>
-      );
-
-}
-
-const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isSignedIn } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isSignedIn) {
-      router.push('/auth?mode=sign-in');
-    }
-  }, [isSignedIn, router]);
-
-  if (!isSignedIn) {
-    return null;
-  }
-
-  return <>{children}</>;
+       </SessionProvider>
+    </ClerkProvider>
+  );
 };
 
 export default MyApp;

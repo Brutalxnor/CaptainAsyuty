@@ -2,18 +2,26 @@
 import { useSignUp } from '@clerk/nextjs';
 import React from 'react';
 import { FaGift } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 import AuthLayout from './AuthLayout';
 
 const SignupForm = () => {
-  const { signUp } = useSignUp();
+  const { signUp, isLoaded } = useSignUp();
+  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const email = event.currentTarget.email.value;
 
+    if (!isLoaded || !signUp) {
+      console.error('signUp is not loaded');
+      return;
+    }
+
     try {
       await signUp.create({ emailAddress: email });
-      await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
+      // Redirect to auth page with email as query parameter
+      router.push(`/auth?email=${encodeURIComponent(email)}`);
     } catch (err) {
       console.error(err);
     }
