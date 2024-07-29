@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { FaMedal, FaCertificate } from 'react-icons/fa';
-import Layout from '@/components/Layout';
+import Layout from '../components/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageToggleLanding from '@/components/LanguageToggleLanding';
 

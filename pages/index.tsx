@@ -2,7 +2,7 @@
 
 
 import React, { useEffect } from 'react';
-import Layout from '@/components/Layout';
+import Layout from '../components/Layout';
 import HeroVideo from '@/components/HeroVideo';
 import Testimonials from '@/components/Testimonials';
 import Pricing from '@/components/Pricing';
