@@ -1,466 +1,24 @@
-// // components/ClientInfoForm.tsx
-// import React, { useState } from 'react';
-
-// const ClientInfoForm = ({ onSave }: { onSave: (data: any) => void }) => {
-//   const [formData, setFormData] = useState({
-//     weight: '',
-//     height: '',
-//     age: '',
-//     fatWeight: '',
-//     muscleWeight: '',
-//     musclePercentage: '',
-//     fatPercentage: '',
-//     waistMeasurement: '',
-//     rightArmMeasurement: '',
-//     leftArmMeasurement: '',
-//     rightLegMeasurement: '',
-//     leftLegMeasurement: '',
-//     frontImage: null,
-//     backImage: null,
-//     rightSideImage: null,
-//     leftSideImage: null,
-//     sugarCravings: '',
-//     previousInjuries: '',
-//     diabetes: '',
-//     bloodPressure: '',
-//     onlineTrainingExperience: '',
-//     trainingAge: '',
-//     workoutSets: '',
-//   });
-
-//   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-//     const { name, value } = e.target;
-//     setFormData({ ...formData, [name]: value });
-//   };
-
-//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name, files } = e.target;
-//     if (files) {
-//       setFormData({ ...formData, [name]: files[0] });
-//     }
-//   };
-
-//   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-//     onSave(formData);
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <div className="grid grid-cols-2 gap-4">
-//         <div>
-//           <label>الوزن (kg)</label>
-//           <input type="text" name="weight" value={formData.weight} onChange={handleChange} />
-//         </div>
-//         <div>
-//           <label>الطول (cm)</label>
-//           <input type="text" name="height" value={formData.height} onChange={handleChange} />
-//         </div>
-//         {/* Add more fields as shown in the image */}
-//         <div>
-//           <label>العمر</label>
-//           <input type="text" name="age" value={formData.age} onChange={handleChange} />
-//         </div>
-//         <div>
-//           <label>وزن الدهون (kg)</label>
-//           <input type="text" name="fatWeight" value={formData.fatWeight} onChange={handleChange} />
-//         </div>
-//         {/* Continue adding fields for all form data */}
-//         <div>
-//           <label>صورة للوجه الأمامي</label>
-//           <input type="file" name="frontImage" onChange={handleFileChange} />
-//         </div>
-//         <div>
-//           <label>صورة للوجه الخلفي</label>
-//           <input type="file" name="backImage" onChange={handleFileChange} />
-//         </div>
-//         {/* Add file inputs for side images */}
-//       </div>
-//       <button type="submit">Save</button>
-//     </form>
-//   );
-// };
-
-// export default ClientInfoForm;
-
-
-
-
-// const ClientInfoForm = ({ onSave }: { onSave: (data: any) => void }) => {
-//   const [fullName, setFullName] = useState('');
-//   const [weight, setWeight] = useState('');
-//   const [height, setHeight] = useState('');
-//   const [age, setAge] = useState('');
-//   const [fatWeight, setFatWeight] = useState('');
-//   const [muscleWeight, setMuscleWeight] = useState('');
-//   const [musclePercentage, setMusclePercentage] = useState('');
-//   const [fatPercentage, setFatPercentage] = useState('');
-//   const [waistMeasurement, setWaistMeasurement] = useState('');
-//   const [rightArmMeasurement, setRightArmMeasurement] = useState('');
-//   const [leftArmMeasurement, setLeftArmMeasurement] = useState('');
-//   const [rightLegMeasurement, setRightLegMeasurement] = useState('');
-//   const [leftLegMeasurement, setLeftLegMeasurement] = useState('');
-//   const [frontImage, setFrontImage] = useState<File | null>(null);
-//   const [backImage, setBackImage] = useState<File | null>(null);
-//   const [rightSideImage, setRightSideImage] = useState<File | null>(null);
-//   const [leftSideImage, setLeftSideImage] = useState<File | null>(null);
-
-//   const [sugarCravings, setSugarCravings] = useState('');
-//   const [previousInjuries, setPreviousInjuries] = useState('');
-//   const [diabetes, setDiabetes] = useState('');
-//   const [bloodPressure, setBloodPressure] = useState('');
-//   const [onlineTrainingExperience, setOnlineTrainingExperience] = useState('');
-//   const [trainingAge, setTrainingAge] = useState('');
-//   const [workoutSets, setWorkoutSets] = useState('');
-
-//   const handleSubmit = async (event: React.FormEvent) => {
-  //     event.preventDefault();
-  //     const data = {
-    //       fullName,
-//       weight,
-//       height,
-//       age,
-//       fatWeight,
-//       muscleWeight,
-//       musclePercentage,
-//       fatPercentage,
-//       waistMeasurement,
-//       rightArmMeasurement,
-//       leftArmMeasurement,
-//       rightLegMeasurement,
-//       leftLegMeasurement,
-//       frontImage,
-//       backImage,
-//       rightSideImage,
-//       leftSideImage,
-//       sugarCravings,
-//       previousInjuries,
-//       diabetes,
-//       bloodPressure,
-//       onlineTrainingExperience,
-//       trainingAge,
-//       workoutSets,
-//     };
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// import router from 'next/router';
-// import React, { useState } from 'react';
-
-// const ClientInfoForm = ({ onSave }: { onSave: (data: any) => void }) => {
-//   const [email, setEmail] = useState('');
-//   const [data, setData] = useState({
-//     fullName: '',
-//     weight: '',
-//     height: '',
-//     age: '',
-//     fatWeight: '',
-//     muscleWeight: '',
-//     musclePercentage: '',
-//     fatPercentage: '',
-//     waistMeasurement: '',
-//     rightArmMeasurement: '',
-//     leftArmMeasurement: '',
-//     rightLegMeasurement: '',
-//     leftLegMeasurement: '',
-//     frontImage: null,
-//     backImage: null,
-//     rightSideImage: null,
-//     leftSideImage: null,
-//     sugarCravings: '',
-//     previousInjuries: '',
-//     diabetes: '',
-//     bloodPressure: '',
-//     onlineTrainingExperience: '',
-//     trainingAge: '',
-//     workoutSets: ''
-//   });
-
-
-
-// const response = await fetch('/api/clients', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(data),
-//     });
-
-//     if (response.ok) {
-//       onSave(data);
-//       router.push('/dashboard/client');
-//     }
-//   };
-
-//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name, value } = e.target;
-//     setData((prevData) => ({ ...prevData, [name]: value }));
-//   };
-
-//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name } = e.target;
-//     const file = e.target.files ? e.target.files[0] : null;
-//     setData((prevData) => ({ ...prevData, [name]: file }));
-//   };
-
-//   const handleSubmit = async (event: React.FormEvent) => {
-//     event.preventDefault();
-//     onSave({ email, ...data });
-//   };
-
-
-
-//   return (
-//     <div className="flex justify-center bg-white">
-//       <div className="h-full w-full max-w-lg p-6 bg-white rounded-lg shadow-sm overflow-y-auto" style={{ maxHeight: '50vh' }}>
-//         <form onSubmit={handleSubmit} >
-
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>الاسم </label>
-//             <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)}
-//                     className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                     focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>الوزن (kg)</label>
-//             <input type="text" value={weight} onChange={(e) => setWeight(e.target.value)}
-//                     className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                     focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>الطول (cm)</label>
-//             <input type="text" value={height} onChange={(e) => setHeight(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>العمر</label>
-//             <input type="text" value={age} onChange={(e) => setAge(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>وزن الدهون (kg)</label>
-//             <input type="text" value={fatWeight} onChange={(e) => setFatWeight(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>وزن العضلات (kg)</label>
-//             <input type="text" value={muscleWeight} onChange={(e) => setMuscleWeight(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>نسبة العضلات (%)</label>
-//             <input type="text" value={musclePercentage} onChange={(e) => setMusclePercentage(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>نسبة الدهون (%)</label>
-//             <input type="text" value={fatPercentage} onChange={(e) => setFatPercentage(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>محيط الخصر (cm)</label>
-//             <input type="text" value={waistMeasurement} onChange={(e) => setWaistMeasurement(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>محيط الذراع الأيمن (cm)</label>
-//             <input type="text" value={rightArmMeasurement} onChange={(e) => setRightArmMeasurement(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>محيط الذراع الأيسر (cm)</label>
-//             <input type="text" value={leftArmMeasurement} onChange={(e) => setLeftArmMeasurement(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>محيط الساق الأيمن (cm)</label>
-//             <input type="text" value={rightLegMeasurement} onChange={(e) => setRightLegMeasurement(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>محيط الساق الأيسر (cm)</label>
-//             <input type="text" value={leftLegMeasurement} onChange={(e) => setLeftLegMeasurement(e.target.value)}
-//                 className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2">
-//             <label className='mt-5 mb-5'>صورة للوجه الأمامي</label>
-//             <input type="file" onChange={(e) => setFrontImage(e.target.files ? e.target.files[0] : null)}
-//                   className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent overflow-x-auto file:mr-4 file:py-2 file:px-4
-//                   file:rounded-full file:border-0
-//                   file:text-sm file:font-semibold
-//                   file:bg-black-50 file:text-white-700
-//                   hover:file:bg-blue-100 mt-5 mb-5"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2">
-//             <label className='mt-5 mb-5'>صورة للوجه الخلفي</label>
-//             <input type="file" onChange={(e) => setBackImage(e.target.files ? e.target.files[0] : null)}
-//                   className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent overflow-x-auto file:mr-4 file:py-2 file:px-4
-//                   file:rounded-full file:border-0
-//                   file:text-sm file:font-semibold
-//                   file:bg-black-50 file:text-white-700
-//                   hover:file:bg-blue-100 mt-5 mb-5"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2">
-//             <label className='mt-5 mb-5'>صورة للجانب الأيمن</label>
-//             <input type="file" onChange={(e) => setRightSideImage(e.target.files ? e.target.files[0] : null)}
-//                   className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent overflow-x-auto file:mr-4 file:py-2 file:px-4
-//                   file:rounded-full file:border-0
-//                   file:text-sm file:font-semibold
-//                   file:bg-black-50 file:text-white-700
-//                   hover:file:bg-blue-100 mt-5 mb-5"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2">
-//             <label className='mt-5 mb-5'>صورة للجانب الأيسر</label>
-//             <input type="file" onChange={(e) => setLeftSideImage(e.target.files ? e.target.files[0] : null)}
-//                   className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent overflow-x-auto file:mr-4 file:py-2 file:px-4
-//                   file:rounded-full file:border-0
-//                   file:text-sm file:font-semibold
-//                   file:bg-black-50 file:text-white-700
-//                   hover:file:bg-blue-100 mt-5 mb-5"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>اشتهاء السكر</label>
-//             <input type="text" value={sugarCravings} onChange={(e) => setSugarCravings(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>إصابات سابقة</label>
-//             <input type="text" value={previousInjuries} onChange={(e) => setPreviousInjuries(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>مرض السكري</label>
-//             <input type="text" value={diabetes} onChange={(e) => setDiabetes(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>ضغط الدم</label>
-//             <input type="text" value={bloodPressure} onChange={(e) => setBloodPressure(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-//             <label>مجموعات التمرين</label>
-//             <input type="text" value={workoutSets} onChange={(e) => setWorkoutSets(e.target.value)}
-//                   className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-//                   focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-//             />
-//           </div>
-//           <button type="submit">Save</button>
-//         </form>
-//       </div>
-//     </div>   
-//   );
-// };
-
-// export default ClientInfoForm;
 
 
 
 
 
-// import router from 'next/router';
-// import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { ClientData } from '@/types/ClientData';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useLanguage } from '@/contexts/LanguageContext';
 
-// const ClientInfoForm = ({ onSave }: { onSave: (data: any) => void }) => {
-//   const [email, setEmail] = useState('');
-//   const [data, setData] = useState({
-//     fullName: '',
-//     weight: '',
-//     height: '',
-//     age: '',
-//     fatWeight: '',
-//     muscleWeight: '',
-//     musclePercentage: '',
-//     fatPercentage: '',
-//     waistMeasurement: '',
-//     rightArmMeasurement: '',
-//     leftArmMeasurement: '',
-//     rightLegMeasurement: '',
-//     leftLegMeasurement: '',
-//     frontImage: null,
-//     backImage: null,
-//     rightSideImage: null,
-//     leftSideImage: null,
-//     sugarCravings: '',
-//     previousInjuries: '',
-//     diabetes: '',
-//     bloodPressure: '',
-//     onlineTrainingExperience: '',
-//     trainingAge: '',
-//     workoutSets: ''
-//   });
+interface ClientInfoFormProps {
+  email: string;
+  clientData?: Partial<ClientData>;
+}
 
-//   const handleSubmit = async (event: React.FormEvent) => {
-//     event.preventDefault();
-//     const response = await fetch('/api/clients', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ email, ...data }),
-//     });
-
-//     if (response.ok) {
-//       onSave({ email, ...data });
-//       router.push('/dashboard/client');
-//     }
-//   };
-
-//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name, value } = e.target;
-//     setData((prevData) => ({ ...prevData, [name]: value }));
-//   };
-
-//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name } = e.target;
-//     const file = e.target.files ? e.target.files[0] : null;
-//     setData((prevData) => ({ ...prevData, [name]: file }));
-//   };
-
-
-
-import router from 'next/router';
-import React, { useState } from 'react';
-
-const ClientInfoForm = ({ onSave }: { onSave: (data: any) => void }) => {
-  const [email, setEmail] = useState('');
-  const [data, setData] = useState({
+const ClientInfoForm: React.FC<ClientInfoFormProps> = ({ email, clientData = {} }) => {
+  const { language } = useLanguage();
+  const [data, setData] = useState<Partial<ClientData>>({
+    email: email,
     fullName: '',
     weight: '',
     height: '',
@@ -474,340 +32,269 @@ const ClientInfoForm = ({ onSave }: { onSave: (data: any) => void }) => {
     leftArmMeasurement: '',
     rightLegMeasurement: '',
     leftLegMeasurement: '',
-    frontImage: null,
-    backImage: null,
-    rightSideImage: null,
-    leftSideImage: null,
     sugarCravings: '',
     previousInjuries: '',
     diabetes: '',
     bloodPressure: '',
     onlineTrainingExperience: '',
     trainingAge: '',
-    workoutSets: ''
   });
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    const clientData = { email, ...data };
+  const [previousData, setPreviousData] = useState<Partial<ClientData>>({});
+  const router = useRouter();
 
-    const response = await fetch('/api/clients', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(clientData),
-    });
-
-    if (response.ok) {
-      onSave(clientData);
-      router.push('/dashboard/client');
+  useEffect(() => {
+    if (clientData) {
+      setData((prevData) => ({ ...prevData, ...clientData }));
+      setPreviousData((prevData) => ({
+        previousFullName: clientData.fullName,
+        previousWeight: clientData.weight,
+        previousHeight: clientData.height,
+        previousAge: clientData.age,
+        previousFatWeight: clientData.fatWeight,
+        previousMuscleWeight: clientData.muscleWeight,
+        previousMusclePercentage: clientData.musclePercentage,
+        previousFatPercentage: clientData.fatPercentage,
+        previousWaistMeasurement: clientData.waistMeasurement,
+        previousRightArmMeasurement: clientData.rightArmMeasurement,
+        previousLeftArmMeasurement: clientData.leftArmMeasurement,
+        previousRightLegMeasurement: clientData.rightLegMeasurement,
+        previousLeftLegMeasurement: clientData.leftLegMeasurement,
+        previousSugarCravings: clientData.sugarCravings,
+        previousInjuries: clientData.previousInjuries,
+        previousDiabetes: clientData.diabetes,
+        previousBloodPressure: clientData.bloodPressure,
+        previousOnlineTrainingExperience: clientData.onlineTrainingExperience,
+        previousTrainingAge: clientData.trainingAge,
+      }));
     }
-  };
+  }, [clientData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setData((prevData) => ({ ...prevData, [name]: value }));
+    setData((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name } = e.target;
-    const file = e.target.files ? e.target.files[0] : null;
-    setData((prevData) => ({ ...prevData, [name]: file }));
+  const handleToggleChange = (name: keyof ClientData) => {
+    setData((prevState) => ({
+      ...prevState,
+      [name]: prevState[name] === 'Yes' ? 'No' : 'Yes',
+    }));
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const updatedData = {
+      ...data,
+      ...previousData,
+    };
+
+    try {
+      const response = await fetch('/api/client', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!response.ok) throw new Error('Error posting data to MongoDB');
+
+      router.push('/dashboard/client');
+      toast.success('Data submitted successfully', {
+        position: 'top-right',
+        autoClose: 5000,
+      });
+    } catch (error: any) {
+      console.error('Error:', error.message);
+      toast.error('Error submitting data', {
+        position: 'top-right',
+        autoClose: 5000,
+      });
+    }
+  };
+
+  const content = {
+    fullName: {
+      en: 'Full Name',
+      ar: 'الاسم الكامل',
+    },
+    weight: {
+      en: 'Weight (kg)',
+      ar: 'الوزن (كجم)',
+    },
+    height: {
+      en: 'Height (cm)',
+      ar: 'الطول (سم)',
+    },
+    age: {
+      en: 'Age',
+      ar: 'العمر',
+    },
+    fatWeight: {
+      en: 'Fat Weight (kg)',
+      ar: 'وزن الدهون (كجم)',
+    },
+    muscleWeight: {
+      en: 'Muscle Weight (kg)',
+      ar: 'وزن العضلات (كجم)',
+    },
+    musclePercentage: {
+      en: 'Muscle Percentage (%)',
+      ar: 'نسبة العضلات (%)',
+    },
+    fatPercentage: {
+      en: 'Fat Percentage (%)',
+      ar: 'نسبة الدهون (%)',
+    },
+    waistMeasurement: {
+      en: 'Waist (cm)',
+      ar: 'الخصر (سم)',
+    },
+    rightArmMeasurement: {
+      en: 'Right Arm (cm)',
+      ar: 'الذراع الأيمن (سم)',
+    },
+    leftArmMeasurement: {
+      en: 'Left Arm (cm)',
+      ar: 'الذراع الأيسر (سم)',
+    },
+    rightLegMeasurement: {
+      en: 'Right Leg (cm)',
+      ar: 'الساق اليمنى (سم)',
+    },
+    leftLegMeasurement: {
+      en: 'Left Leg (cm)',
+      ar: 'الساق اليسرى (سم)',
+    },
+    sugarCravings: {
+      en: 'Sugar Cravings',
+      ar: 'الرغبة في الحلويات',
+    },
+    previousInjuries: {
+      en: 'Previous Injuries',
+      ar: 'إصابات سابقة',
+    },
+    diabetes: {
+      en: 'Diabetes',
+      ar: 'مرض السكري',
+    },
+    bloodPressure: {
+      en: 'Blood Pressure',
+      ar: 'ضغط الدم',
+    },
+    onlineTrainingExperience: {
+      en: 'Online Training Experience',
+      ar: 'تجربة التدريب عبر الإنترنت',
+    },
+    trainingAge: {
+      en: 'Training Age',
+      ar: 'عمر التدريب',
+    },
+    saveButton: {
+      en: 'Save',
+      ar: 'حفظ',
+    },
+  };
+
+  const containerStyle = {
+    minHeight: 'calc(90vh - 4rem)', // Adjust this value as needed
+    backgroundColor: 'var(--background-color)',
+    color: 'var(--text-color)',
+  };
+
+  const inputStyle = {
+    backgroundColor: 'var(--input-background-color)',
+    color: 'var(--input-text-color)',
+    borderColor: 'var(--input-border-color)',
+  };
+
+  const checkboxLabelStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    cursor: 'pointer',
+  };
+
+  const checkboxStyle: React.CSSProperties = {
+    width: '20px',
+    height: '20px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    appearance: 'none',
+    outline: 'none',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s',
+  };
+
+  const checkboxCheckedStyle: React.CSSProperties = {
+    backgroundColor: '#4caf50',
+    borderColor: '#4caf50',
+  };
 
   return (
-    <div className="flex justify-center bg-white">
-      <div className="h-full w-full max-w-lg p-6 bg-white rounded-lg shadow-sm overflow-y-auto" style={{ maxHeight: '50vh' }}>
-        <form onSubmit={handleSubmit} >
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>البريد الإلكتروني</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
+    <div className="flex justify-center items-center min-h-screen" style={containerStyle}>
+      <div className="w-full max-w-lg p-6 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] rounded-lg shadow-lg overflow-y-auto">
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[
+              { label: content.fullName[language as 'en' | 'ar'], name: 'fullName', type: 'text' },
+              { label: content.weight[language as 'en' | 'ar'], name: 'weight', type: 'text' },
+              { label: content.height[language as 'en' | 'ar'], name: 'height', type: 'text' },
+              { label: content.age[language as 'en' | 'ar'], name: 'age', type: 'text' },
+              { label: content.fatWeight[language as 'en' | 'ar'], name: 'fatWeight', type: 'text' },
+              { label: content.muscleWeight[language as 'en' | 'ar'], name: 'muscleWeight', type: 'text' },
+              { label: content.musclePercentage[language as 'en' | 'ar'], name: 'musclePercentage', type: 'text' },
+              { label: content.fatPercentage[language as 'en' | 'ar'], name: 'fatPercentage', type: 'text' },
+              { label: content.waistMeasurement[language as 'en' | 'ar'], name: 'waistMeasurement', type: 'text' },
+              { label: content.rightArmMeasurement[language as 'en' | 'ar'], name: 'rightArmMeasurement', type: 'text' },
+              { label: content.leftArmMeasurement[language as 'en' | 'ar'], name: 'leftArmMeasurement', type: 'text' },
+              { label: content.rightLegMeasurement[language as 'en' | 'ar'], name: 'rightLegMeasurement', type: 'text' },
+              { label: content.leftLegMeasurement[language as 'en' | 'ar'], name: 'leftLegMeasurement', type: 'text' },
+              { label: content.sugarCravings[language as 'en' | 'ar'], name: 'sugarCravings', type: 'text' },
+            ].map((input) => (
+              <div className="flex flex-col" key={input.name}>
+                <label className="mb-1">{input.label}</label>
+                <input
+                  type={input.type}
+                  name={input.name}
+                  value={data[input.name as keyof ClientData] as string}
+                  onChange={handleChange}
+                  className="mt-1 block px-3 py-2 border rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500"
+                  style={inputStyle}
+                />
+              </div>
+            ))}
+            {[
+              { label: content.previousInjuries[language as 'en' | 'ar'], name: 'previousInjuries' },
+              { label: content.diabetes[language as 'en' | 'ar'], name: 'diabetes' },
+              { label: content.bloodPressure[language as 'en' | 'ar'], name: 'bloodPressure' },
+              { label: content.onlineTrainingExperience[language as 'en' | 'ar'], name: 'onlineTrainingExperience' },
+              { label: content.trainingAge[language as 'en' | 'ar'], name: 'trainingAge' },
+            ].map((select) => (
+              <div className="flex flex-col" key={select.name}>
+                <label>{select.label}</label>
+                <label style={checkboxLabelStyle}>
+                  <input
+                    type="checkbox"
+                    checked={data[select.name as keyof ClientData] === 'Yes'}
+                    onChange={() => handleToggleChange(select.name as keyof ClientData)}
+                    className="mt-1"
+                    style={{
+                      ...checkboxStyle,
+                      ...(data[select.name as keyof ClientData] === 'Yes' ? checkboxCheckedStyle : {}),
+                    }}
+                  />
+                  <span>{data[select.name as keyof ClientData] === 'Yes' ? 'Yes' : 'No'}</span>
+                </label>
+              </div>
+            ))}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>الاسم </label>
-            <input
-              type="text"
-              name="fullName"
-              value={data.fullName}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>الوزن (kg)</label>
-            <input
-              type="text"
-              name="weight"
-              value={data.weight}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>الطول (cm)</label>
-            <input
-              type="text"
-              name="height"
-              value={data.height}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>العمر</label>
-            <input
-              type="text"
-              name="age"
-              value={data.age}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>وزن الدهون (kg)</label>
-            <input
-              type="text"
-              name="fatWeight"
-              value={data.fatWeight}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>وزن العضلات (kg)</label>
-            <input
-              type="text"
-              name="muscleWeight"
-              value={data.muscleWeight}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>نسبة العضلات (%)</label>
-            <input
-              type="text"
-              name="musclePercentage"
-              value={data.musclePercentage}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>نسبة الدهون (%)</label>
-            <input
-              type="text"
-              name="fatPercentage"
-              value={data.fatPercentage}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>محيط الخصر (cm)</label>
-            <input
-              type="text"
-              name="waistMeasurement"
-              value={data.waistMeasurement}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>محيط الذراع الأيمن (cm)</label>
-            <input
-              type="text"
-              name="rightArmMeasurement"
-              value={data.rightArmMeasurement}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>محيط الذراع الأيسر (cm)</label>
-            <input
-              type="text"
-              name="leftArmMeasurement"
-              value={data.leftArmMeasurement}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>محيط الساق الأيمن (cm)</label>
-            <input
-              type="text"
-              name="rightLegMeasurement"
-              value={data.rightLegMeasurement}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>محيط الساق الأيسر (cm)</label>
-            <input
-              type="text"
-              name="leftLegMeasurement"
-              value={data.leftLegMeasurement}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2">
-            <label className='mt-5 mb-5'>صورة للوجه الأمامي</label>
-            <input
-              type="file"
-              name="frontImage"
-              onChange={handleFileChange}
-              className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent overflow-x-auto file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0
-              file:text-sm file:font-semibold
-              file:bg-black-50 file:text-white-700
-              hover:file:bg-blue-100 mt-5 mb-5"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2">
-            <label className='mt-5 mb-5'>صورة للوجه الخلفي</label>
-            <input
-              type="file"
-              name="backImage"
-              onChange={handleFileChange}
-              className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent overflow-x-auto file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0
-              file:text-sm file:font-semibold
-              file:bg-black-50 file:text-white-700
-              hover:file:bg-blue-100 mt-5 mb-5"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2">
-            <label className='mt-5 mb-5'>صورة للجانب الأيمن</label>
-            <input
-              type="file"
-              name="rightSideImage"
-              onChange={handleFileChange}
-              className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent overflow-x-auto file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0
-              file:text-sm file:font-semibold
-              file:bg-black-50 file:text-white-700
-              hover:file:bg-blue-100 mt-5 mb-5"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2">
-            <label className='mt-5 mb-5'>صورة للجانب الأيسر</label>
-            <input
-              type="file"
-              name="leftSideImage"
-              onChange={handleFileChange}
-              className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent overflow-x-auto file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0
-              file:text-sm file:font-semibold
-              file:bg-black-50 file:text-white-700
-              hover:file:bg-blue-100 mt-5 mb-5"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>اشتهاء السكر</label>
-            <input
-              type="text"
-              name="sugarCravings"
-              value={data.sugarCravings}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>إصابات سابقة</label>
-            <input
-              type="text"
-              name="previousInjuries"
-              value={data.previousInjuries}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>مرض السكري</label>
-            <input
-              type="text"
-              name="diabetes"
-              value={data.diabetes}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>ضغط الدم</label>
-            <input
-              type="text"
-              name="bloodPressure"
-              value={data.bloodPressure}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>الخبرة في التدريب عبر الإنترنت</label>
-            <input
-              type="text"
-              name="onlineTrainingExperience"
-              value={data.onlineTrainingExperience}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>سن التدريب</label>
-            <input
-              type="text"
-              name="trainingAge"
-              value={data.trainingAge}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 mb-5">
-            <label>مجموعات التمرين</label>
-            <input
-              type="text"
-              name="workoutSets"
-              value={data.workoutSets}
-              onChange={handleChange}
-              className="mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-              focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500 overflow-x-auto"
-            />
-          </div>
-          <button type="submit">Save</button>
+          <button type="submit" className="mt-5 w-full bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition duration-200">{content.saveButton[language as 'en' | 'ar']}</button>
         </form>
       </div>
-    </div>   
+    </div>
   );
 };
 

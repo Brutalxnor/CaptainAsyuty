@@ -1,0 +1,22 @@
+{
+    "welcome": "Welcome",
+    "fullName": "Full Name",
+    "weight": "Weight",
+    "height": "Height",
+    "age": "Age",
+    "fatWeight": "Fat Weight",
+    "muscleWeight": "Muscle Weight",
+    "musclePercentage": "Muscle Percentage",
+    "fatPercentage": "Fat Percentage",
+    "waist": "Waist",
+    "rightArm": "Right Arm",
+    "leftArm": "Left Arm",
+    "rightLeg": "Right Leg",
+    "leftLeg": "Left Leg",
+    "sugarCravings": "Sugar Cravings",
+    "injuries": "Injuries",
+    "diabetes": "Diabetes",
+    "bloodPressure": "Blood Pressure",
+    "onlineTraining": "Online Training",
+    "trainingAge": "Training Age"
+}

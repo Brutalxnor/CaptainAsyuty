@@ -1,0 +1,22 @@
+{
+    "welcome": "مرحبا",
+    "fullName": "الاسم الكامل",
+    "weight": "الوزن",
+    "height": "الطول",
+    "age": "العمر",
+    "fatWeight": "وزن الدهون",
+    "muscleWeight": "وزن العضلات",
+    "musclePercentage": "نسبة العضلات",
+    "fatPercentage": "نسبة الدهون",
+    "waist": "الخصر",
+    "rightArm": "الذراع اليمنى",
+    "leftArm": "الذراع اليسرى",
+    "rightLeg": "الساق اليمنى",
+    "leftLeg": "الساق اليسرى",
+    "sugarCravings": "الرغبة في السكر",
+    "injuries": "الإصابات",
+    "diabetes": "السكري",
+    "bloodPressure": "ضغط الدم",
+    "onlineTraining": "التدريب عبر الإنترنت",
+    "trainingAge": "عمر التدريب"
+}

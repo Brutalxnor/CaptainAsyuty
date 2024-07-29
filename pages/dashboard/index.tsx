@@ -1,7 +1,10 @@
+
+
 // pages/dashboard/index.tsx
 import { useRouter } from 'next/router';
 import { useUser } from '@clerk/nextjs';
 import React from 'react';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const Dashboard = () => {
   const router = useRouter();
@@ -17,7 +20,7 @@ const Dashboard = () => {
     }
   }, [user, router]);
 
-  return <div>Loading...</div>;
+  return <LoadingSpinner />;
 };
-
+  
 export default Dashboard;

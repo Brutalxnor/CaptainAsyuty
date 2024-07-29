@@ -1,38 +1,81 @@
+
+
+
+import React from 'react';
+import Link from 'next/link';
+import { useLanguage } from '@/contexts/LanguageContext';
+import styles from './pricing.module.css';
+
 const Pricing = () => {
+  const { language } = useLanguage();
+
+  const plans = [
+    {
+      title: { en: 'Monthly', ar: 'شهري' },
+      price: { en: '499 EGP / month', ar: '499 جنيه / شهر' },
+      features: [
+        { en: 'Weekly Exercise Updates', ar: 'تحديثات التمرين أسبوعياً' },
+        { en: 'Nutrition Plan', ar: 'خطة تغذية' },
+        { en: 'Basic Support', ar: 'مساعدة أساسية' },
+      ],
+      link: '/sign-up?plan=monthly',
+      buttonColor: 'bg-gradient-to-r from-blue-400 to-blue-600',
+      buttonHoverColor: 'hover:from-blue-500 hover:to-blue-700',
+    },
+    {
+      title: { en: 'Yearly', ar: 'سنوي' },
+      price: { en: '3999 EGP / year', ar: '3999 جنيه / سنة' },
+      features: [
+        { en: 'Weekly Exercise Updates', ar: 'تحديثات التمرين أسبوعياً' },
+        { en: 'Nutrition Plan', ar: 'خطة تغذية' },
+        { en: 'Priority Support', ar: 'مساعدة ذات أولوية' },
+      ],
+      link: '/sign-up?plan=yearly',
+      buttonColor: 'bg-gradient-to-r from-green-400 to-green-600',
+      buttonHoverColor: 'hover:from-green-500 hover:to-green-700',
+    },
+    {
+      title: { en: 'Video Calls', ar: 'مكالمات فيديو' },
+      price: { en: '999 EGP / month', ar: '999 جنيه / شهر' },
+      features: [
+        { en: 'Daily Exercise Updates', ar: 'تحديثات التمرين يومياً' },
+        { en: 'Nutrition Plan', ar: 'خطة تغذية' },
+        { en: 'Personal Support', ar: 'مساعدة شخصية' },
+      ],
+      link: '/sign-up?plan=video',
+      buttonColor: 'bg-gradient-to-r from-red-400 to-red-600',
+      buttonHoverColor: 'hover:from-red-500 hover:to-red-700',
+    },
+  ];
+
   return (
-    <div className="pricing-container py-12 mt-10">
-      <h2 className="text-center text-4xl font-bold mb-8">خطط معقولة ومرنة</h2>
+    <div className={styles.pricingContainer + " py-12 mt-10"}>
+      <h2 className={styles.heading + " text-center text-4xl font-bold mb-8 text-gray-900 font-serif"}>
+        {language === 'en' ? 'Reasonable and Flexible Plans' : 'خطط معقولة ومرنة'}
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="pricing-card">
-          <h3>شهري</h3>
-          <p className="price">499 جنيه / شهر</p>
-          <div className="features">
-            <p>تحديثات التمرين أسبوعياً</p>
-            <p>خطة تغذية</p>
-            <p>مساعدة أساسية</p>
+        {plans.map((plan, index) => (
+          <div key={index} className={styles.pricingCard + " border border-gray-300 rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 font-serif"}>
+            <h3 className={styles.cardTitle + " text-2xl font-bold mb-4 text-center"}>
+              {plan.title[language as 'en' | 'ar']}
+            </h3>
+            <p className={styles.price + " text-3xl font-bold text-center"}>
+              {plan.price[language as 'en' | 'ar']}
+            </p>
+            <div className={styles.features + " mt-4"}>
+              {plan.features.map((feature, idx) => (
+                <p key={idx} className="font-bold">
+                  {feature[language as 'en' | 'ar']}
+                </p>
+              ))}
+            </div>
+            <Link href={plan.link}>
+              <button className={`${styles.subscribeBtn} ${plan.buttonColor} text-white py-3 px-6 rounded-full mt-6 block mx-auto ${plan.buttonHoverColor} transition-colors duration-300 font-serif transform hover:scale-105`}>
+                {language === 'en' ? 'Sign Up Now' : 'اشترك الآن'}
+              </button>
+            </Link>
           </div>
-          <button className="subscribe-btn">اشترك الآن</button>
-        </div>
-        <div className="pricing-card">
-          <h3>سنوي</h3>
-          <p className="price">3999 جنيه / سنة</p>
-          <div className="features">
-            <p>تحديثات التمرين أسبوعياً</p>
-            <p>خطة تغذية</p>
-            <p>مساعدة ذات أولوية</p>
-          </div>
-          <button className="subscribe-btn">اشترك الآن</button>
-        </div>
-        <div className="pricing-card">
-          <h3>مكالمات فيديو</h3>
-          <p className="price">999 جنيه / شهر</p>
-          <div className="features">
-            <p>تحديثات التمرين يومياً</p>
-            <p>خطة تغذية</p>
-            <p>مساعدة شخصية</p>
-          </div>
-          <button className="subscribe-btn">اشترك الآن</button>
-        </div>
+        ))}
       </div>
     </div>
   );

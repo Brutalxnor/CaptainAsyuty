@@ -7,45 +7,190 @@ body, html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background: #000;
-  }
-  
-  * {
+    background: var(--background-color);
+    overflow: auto;
+    color: var(--text-color);
+}
+
+* {
     box-sizing: inherit;
-  }
-  .no-rounded {
-    border-radius: 0 !important; /* Override the global rule */
-  }
-  nav a {
+}
+
+.no-rounded {
+    border-radius: 0 !important;
+}
+
+nav a {
     transition: color 0.3s;
-  }
-  * {
-    border-radius: 1.5rem; /* Tailwind's rounded-lg is equivalent to 0.5rem */
-  }
-  :root {
-    --primary-color: #000000; /* black */
-    --secondary-color: #007bff; /* blue */
+}
+
+* {
+    border-radius: .5rem;
+}
+
+/* Add these to your global.css or equivalent stylesheet */
+:root {
+    --primary-color: #000000;
+    --secondary-color: #007bff;
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --border-color: #d1d5db;
+    --select-background-color: #ffffff;
+    --select-text-color: #000000;
+    --select-border-color: #d1d5db;
+    --sidebar-background-color: #2d3748;
+    --sidebar-text-color: #ffffff;
+}
+
+[data-theme='dark'] {
+    --primary-color: #ffffff;
+    --primary-button-color: rgb(255, 255, 255)
+    --secondary-color: #007bff;
+    --background-color: #1a202c;
+    --text-color: #ffffff;
+    --border-color: #374151;
+    --select-background-color: #2d3748;
+    --select-text-color: #ffffff;
+    --select-border-color: #4a5568;
+    --sidebar-background-color: #1a202c;
+    --sidebar-text-color: #ffffff;
+}
+
+[data-theme='light'] {
+    --primary-color: #000000;
+    --secondary-color: #007bff;
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --border-color: #d1d5db;
+    --select-background-color: rgba(134, 172, 255, 0.161);
+    --select-text-color: #000000;
+    --select-border-color: #d1d5db;
+    --sidebar-background-color: #ffffff;
+    --sidebar-text-color: #000000;
+}
+
+[data-theme='landing-dark'] {
+    --primary-color: #ffffff;
+    --secondary-color: #007bff;
+    --background-color: #000000;
+    --text-color: #ffffff;
+    --border-color: #ffffff;
+    --sidebar-background-color: #000000;
+    --sidebar-text-color: #ffffff;
+}
+
+.scale-1 {
+    transform: scale(1);
   }
   
-  button {
-    background-color: var(--primary-color);
+  .scale-8 {
+    transform: scale(8);
+  }
+  
+
+.uncensored {
+    filter: none;
+    pointer-events: all;
+  }
+
+.censored {
+    filter: blur(15px);
+    pointer-events: none;
+  }
+  
+  .censored-text {
+    filter: blur(3px);
+    pointer-events: none;
+  }
+  
+  .censored-gif {
+    filter: blur(15px);
+    pointer-events: none;
+  }
+
+/* .censored {
+    position: relative;
+    filter: blur(10px);
+    pointer-events: none;
+} */
+
+/* .censored::after {
+    content: 'Censored';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 1.5rem;
+} */
+
+
+
+.landing-page {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.landing-page .top-section {
+    background-color: transparent;
+}
+
+.landing-page .middle-section,
+.landing-page .bottom-section {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+[data-theme='landing-dark'] .navbar {
+    background-color: transparent;
+    color: #ffffff;
+    border-bottom: none;
+}
+
+[data-theme='landing-dark'] .navbar a {
+    color: #ffffff;
+    transition: color 0.3s;
+}
+
+[data-theme='landing-dark'] .navbar a:hover {
+    color: #007bff;
+}
+
+.button {
+    background-color: var(--primary-button-color);
     color: #fff;
     border-radius: 30px;
     padding: 10px 20px;
     font-size: 16px;
-  }
-  
-  button:hover {
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.button:hover {
     background-color: var(--secondary-color);
-  }
-  body {
+    color: green;
+}
+
+.table th, .table td {
+    border: none;
+}
+
+.table td {
+    background-color: transparent;
+}
+
+body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  }
-  
-  nav {
+    background: var(--background-color);
+    color: var(--text-color);
+}
+
+nav {
     position: fixed;
     width: 100%;
     top: 0;
@@ -55,49 +200,48 @@ body, html {
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-  }
-  
-  nav a {
-    color: white;
+    background: var(--background-color);
+    color: var(--text-color);
+}
+
+nav a {
+    color: var(--text-color);
     text-decoration: none;
     margin-left: 1rem;
     transition: color 0.3s;
-  }
-  
-  nav a:hover {
-    color: #007bff; /* Change to your primary color */
-  }
-  
-  .bg-transparent {
+}
+
+nav a:hover {
+    color: #007bff;
+}
+
+.bg-transparent {
     background: transparent;
-  }
-  
-  .bg-white {
+}
+
+.bg-white {
     background: white;
-  }
-  
-  .text-black {
+}
+
+.text-black {
     color: black;
-  }
-  
-  .rounded-lg {
+}
+
+.rounded-lg {
     border-radius: 1.5rem;
-  }
-  
-  .transition-colors {
+}
+
+.transition-colors {
     transition: color 0.3s, background-color 0.3s;
-  }
-
-  
-
+}
 
 .square-image-container {
     position: relative;
     width: 100%;
-    padding-top: 100%; /* This creates a square container */
+    padding-top: 100%;
     overflow: hidden;
-    border-radius: 8px; /* Optional: Add border radius for rounded corners */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for a nice effect */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .square-image-container img {
@@ -114,54 +258,160 @@ body, html {
     height: auto;
 }
 
-
-
 .pricing-container {
-  background-color: #f4f4f4;
-  padding: 2rem;
+    background-color: #f4f4f4;
+    padding: 2rem;
 }
 
 .pricing-container {
-  @apply py-12 px-4;
+    @apply py-12 px-4;
 }
+
 .pricing-card {
-  background-color: #fff;
-  border-radius: 1rem;
-  padding: 2rem;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .pricing-card h3 {
-  font-family: 'Montserrat', sans-serif;
-  color: #333;
-  margin-bottom: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    color: #333;
+    margin-bottom: 1rem;
 }
 
 .pricing-card p {
-  font-family: 'Roboto', sans-serif;
-  color: #666;
+    font-family: 'Roboto', sans-serif;
+    color: #000000;
 }
 
 .pricing-card .price {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #007bff;
-  margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 1rem;
 }
 
 .pricing-card .features {
-  margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 
 .pricing-card .subscribe-btn {
-  background-color: #007bff;
-  color: #fff;
-  padding: 0.75rem 1.5rem;
-  border-radius: 2rem;
-  transition: background-color 0.3s;
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    transition: background-color 0.3s;
 }
 
 .pricing-card .subscribe-btn:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
+}
+
+input {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--secondary-color);
+}
+
+input:focus {
+    border-color: var(--secondary-color);
+}
+
+body.sidebar-closed {
+    background-color: var(--background-color);
+}
+
+.close-sidebar-button {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+}
+
+.open-sidebar-button {
+    position: fixed;
+    top: 4px;
+    left: 4px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bg-black.text-white.py-8 > .container {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+form.mt-4 {
+    margin-top: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+@media (max-width: 1024px) {
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    background-color: var(--sidebar-background-color);
+    z-index: 30;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 20;
+}
+
+.overlay.hidden {
+    display: none;
+}
+}
+
+@media (min-width: 1025px) {
+.sidebar {
+    position: relative;
+    transform: none;
+    width: 250px;
+}
+
+.overlay {
+    display: none;
+}
+}
+
+@media (max-width: 768px) {
+.navbar {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.main-content {
+    padding: 16px;
+}
 }

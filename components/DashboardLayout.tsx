@@ -1,28 +1,84 @@
-// components/DashboardLayout.tsx
-import Sidebar from '@/components/sidebar';
-import { useUser } from '@clerk/nextjs';
+
+
+
+
+
+import React, { useState, useEffect, ReactNode } from 'react';
+import Sidebar from "@/components/sidebar";
+import { useUser, UserButton } from '@clerk/nextjs';
 import { clientRoutes } from '@/routes/clientRoutes';
 import { adminRoutes } from '@/routes/adminRoutes';
-import { ReactNode } from 'react';
+import ChatModal from '@/components/ChatModal';
+import LanguageToggle from '@/components/LanguageToggle';
+// // import LanguageSwitcher from '../components/LanguageSwitcher';
+// // import { I18nextProvider } from 'react-i18next';
+// import i18n from '../i18n';
 
 interface DashboardLayoutProps {
   children: ReactNode;
-  className?: string;
 }
 
-const DashboardLayout = ({ children, className }: DashboardLayoutProps) => {
+const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const { user } = useUser();
   const routes = user?.publicMetadata.role === 'admin' ? adminRoutes : clientRoutes;
+  const [theme, setTheme] = useState('light');
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [isChatOpen, setChatOpen] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
+
+  const openChat = () => {
+    setChatOpen(true);
+  };
+
+  const closeChat = () => {
+    setChatOpen(false);
+  };
 
   return (
-    // <div className="flex h-scree rounded-lg">
-    // className="flex h-full h-screen w-full bg-white text-black"
-    <div  className={`flex h-full h-screen w-full bg-white text-black ${className}`} >
-      <Sidebar routes={routes} />
-      <div className="flex-1 p-4 bg-white rounded-lg">
-        {children}
+      <div className="flex h-screen w-full">
+        <Sidebar routes={routes} isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+        <div className="flex-1 flex flex-col">
+          <header className="flex justify-between items-center p-4 bg-[var(--background-color)] text-[var(--text-color)] border-b-[var(--border-color)]">
+            <div className="flex w-full justify-end space-x-4">
+              <UserButton />
+            </div>
+          </header>
+          <main className="p-4 flex-1 overflow-y-auto">{children}</main>
+          {isChatOpen && <ChatModal onClose={closeChat} />}
+          <div className="fixed bottom-4 right-4 flex flex-col space-y-4">
+            <button
+              onClick={toggleTheme}
+              className="bg-blue-500 text-white p-2 rounded-full shadow-md"
+            >
+              {theme === 'light' ? '🌙' : '☀️'}
+            </button>
+            <button
+              onClick={openChat}
+              className="bg-green-500 text-white p-2 rounded-full shadow-md flex items-center justify-center"
+              style={{ width: '40px', height: '40px' }}
+            >
+              💬
+            </button>
+            <LanguageToggle />
+          </div>
+        </div>
       </div>
-    </div>
   );
 };
 

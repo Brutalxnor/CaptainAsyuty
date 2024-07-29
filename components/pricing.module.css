@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+.pricingContainer {
+  font-family: 'Lobster', cursive;
+  background: linear-gradient(to right, #f9f9f9, #e6e6e6);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pricingCard {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  color: #333; /* Ensure the text is visible */
+}
+
+.pricingCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.pricingCard h3 {
+  color: #333; /* Explicitly setting text color */
+}
+
+.price {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #007bff; /* Explicitly setting text color */
+  text-align: center;
+}
+
+.features p {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+  font-weight: bold;
+  color: #555; /* Explicitly setting text color */
+}
+
+.subscribeBtn {
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: block;
+  margin: 1rem auto 0;
+}
+
+.subscribeBtn:hover {
+  background-color: #0056b3;
+}

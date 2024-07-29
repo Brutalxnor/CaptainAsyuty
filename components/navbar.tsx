@@ -1,98 +1,88 @@
-// import React from 'react';
-// import Link from 'next/link';
-
-// const Navbar: React.FC = () => {
-//   return (
-//     <nav className="fixed w-full bg-transparent z-10 top-0">
-//       <div className="container mx-auto flex justify-between items-center p-4">
-//         <div className="text-white text-2xl font-bold">
-//           <Link href="/">Fitness Website</Link>
-//         </div>
-//         <div className="space-x-4">
-//           <Link href="/" className="text-white hover:text-blue-500">Home</Link>
-//           <Link href="/about" className="text-white hover:text-blue-500">About</Link>
-//           <Link href="/onlineGym" className="text-white hover:text-blue-500">Online Gym</Link>
-//           <Link href="/contact" className="text-white hover:text-blue-500">Contact</Link>
-//           <Link href="/shop" className="text-white hover:text-blue-500">Shop</Link>
-//         </div>
-//       </div>
-//     </nav>
-//   );
-// }
-
-// export default Navbar;
-// components/Navbar.tsx
 
 
 
 
-
-// import Link from 'next/link';
-// import Image from 'next/image';
-
-// const Navbar: React.FC = () => {
-//   return (
-//     <nav className="absolute top-0 left-0 w-full flex justify-between items-center p-4">
-//       <Link href="/" legacyBehavior>
-//         <a className="flex items-center hover:translate-y-[-5px] transition-transform duration-300">
-//           <Image src="/logo.png" alt="Logo" width={50} height={50} />
-//           <span className="ml-4 text-white text-2xl font-bold">Fitness Website</span>
-//         </a>
-//       </Link>
-//       <div className="flex space-x-10 mx-auto text-white text-xl font-bold">
-//         <Link href="/online-gym" legacyBehavior>
-//           <a className="text-white">Online Gym</a>
-//         </Link>
-//         <Link href="/about" legacyBehavior>
-//           <a className="text-white">About</a>
-//         </Link>
-//         <Link href="/contact" legacyBehavior>
-//           <a className="text-white">Contact</a>
-//         </Link>
-//       </div>
-//     </nav>
-//   );
-// }
-
-// export default Navbar;
-
-
+'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+import { UserButton } from '@clerk/nextjs';
+import { FaBars, FaTimes, FaHome } from 'react-icons/fa';
+import { useLanguage } from '@/contexts/LanguageContext'; // Import useLanguage
 
 const Navbar: React.FC = () => {
   const router = useRouter();
+  const { language } = useLanguage(); // Use the language context
+  const [error, setError] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleRouteChange = () => setError(null);
+    router.events.on('routeChangeStart', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, [router]);
+
+  const handleLoginClick = async () => {
+    try {
+      await router.push('/sign-in');
+    } catch (error) {
+      setError('Failed to navigate to login page');
+      console.error(error);
+    }
+  };
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const menuItems = [
+    { href: '/about', label: { en: 'About', ar: 'عنى' } },
+    { href: '/contact', label: { en: 'Contact', ar: 'اتصل بنا' } },
+  ];
 
   return (
-    <nav className="absolute top-0 left-0 w-full flex justify-between items-center p-4">
-      <Link href="/" legacyBehavior>
-        <a className="flex items-center hover:translate-y-[-5px] transition-transform duration-300">
-          <Image src="/logo.png" alt="Logo" width={50} height={50} />
-          <span className="ml-4 text-white text-2xl font-bold">Fitness Website</span>
-        </a>
-      </Link>
-      <div className="flex space-x-10 mx-auto text-white text-xl font-bold">
-        <Link href="/online-gym" legacyBehavior>
-          <a className="text-white">Online Gym</a>
-        </Link>
-        <Link href="/about" legacyBehavior>
-          <a className="text-white">About</a>
-        </Link>
-        <Link href="/contact" legacyBehavior>
-          <a className="text-white">Contact</a>
+    <nav className="absolute top-0 left-0 w-full flex items-center justify-between p-4 bg-transparent z-50 backdrop-filter backdrop-blur-lg">
+      {error && <div className="bg-red-500 text-white p-2 rounded">{error}</div>}
+      <div className="flex items-center">
+        <Link href="/" legacyBehavior>
+          <a className="flex flex-row justify-center items-center hover:translate-y-[-5px] transition-transform duration-300">
+            <Image src="/logo.png" alt="Logo" width={50} height={50} />
+            <span className="ml-4 text-white text-2xl font-serif flex">Captain Asyuty</span>
+          </a>
         </Link>
       </div>
-      <button
-          onClick={() => router.push('/auth?mode=sign-in')}
-          className="bg-blue-500 text-white px-4 py-2 rounded-2xl"
-        >
-          Log In
-      </button>
-      
+      <div className="lg:hidden">
+        <button onClick={toggleMenu} className="text-white text-2xl">
+          {menuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+      </div>
+      <div
+        className={`flex-col justify-center items-center lg:flex lg:flex-row lg:items-center lg:space-x-10 lg:static absolute top-16 left-0 w-full lg:w-auto ${
+          menuOpen ? 'bg-transparent text-white flex' : 'hidden'
+        }`}
+        style={{ background: 'rgba(60, 60, 60, 0.4)', backdropFilter: 'blur(10px)', borderRadius: '12px' }}
+      >
+        {menuItems.map((item, index) => (
+          <Link href={item.href} key={index} legacyBehavior>
+            <a className="text-white text-xl font-bold p-4 lg:p-4 hover:text-yellow-300 transition-colors duration-300" onClick={toggleMenu}>
+              {item.label[language as 'en' | 'ar']}
+            </a>
+          </Link>
+        ))}
+        <div className="lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-4 p-4 lg:p-0">
+          <button onClick={handleLoginClick} className="bg-blue-500 text-white text-xl font-bold py-2 px-6 rounded-full cursor-pointer hover:bg-yellow-300 hover:text-black transition-colors duration-300">
+            {language === 'en' ? 'Log In' : 'تسجيل الدخول'}
+          </button>
+        </div>
+        <UserButton />
+      </div>
     </nav>
   );
-}
+};
 
 export default Navbar;
