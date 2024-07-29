@@ -18,6 +18,14 @@ const SignInPage = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+
+  if (isSignedIn && user) {
+    router.push('/dashboard');
+  }
+}, [isSignedIn, user, router]);
+
+
   const handleBackToHome = () => {
     router.push('/');
   };
