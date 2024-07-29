@@ -1,13 +1,14 @@
 
 
 
-import { SignIn } from '@clerk/nextjs';
+import { SignIn, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import LoadingSpinner from '@/components/LoadingSpinner';
 
 const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const { isSignedIn, user } = useUser();
   const router = useRouter();
 
   useEffect(() => {
