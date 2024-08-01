@@ -2,7 +2,6 @@
 
 
 
-
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
@@ -238,6 +237,12 @@ const ClientNutritionPage: React.FC = () => {
     fetchNutritionData();
   }, [user, router]);
 
+  const ensureNumber = (value: any, defaultValue: number = 0): number => {
+    const number = Number(value);
+    return isNaN(number) ? defaultValue : number;
+  };
+  
+
   const handleFoodSelect = (food: FoodOption) => {
     const newSelectedMeals = [...selectedMeals];
     newSelectedMeals[selectedMealIndex] = [...(newSelectedMeals[selectedMealIndex] || []), food];
@@ -464,9 +469,9 @@ const ClientNutritionPage: React.FC = () => {
           <div className="mb-4">
             <h2 className="text-lg font-semibold mb-2">{language === 'en' ? 'Remaining Nutrition' : 'التغذية المتبقية'}</h2>
             <div>
-              <div>{language === 'en' ? 'Calories' : 'سعرات حرارية'}: {remainingNutrition.find(nut => nut.type === 'Calories')?.quantity.toFixed(1)}</div>
-              <div>{language === 'en' ? 'Fats' : 'دهون'}: {remainingNutrition.find(nut => nut.type === 'Fats')?.quantity.toFixed(1)}</div>
-              <div>{language === 'en' ? 'Carbs' : 'كربوهيدرات'}: {remainingNutrition.find(nut => nut.type === 'Carbs')?.quantity.toFixed(1)}</div>
+              <div>{language === 'en' ? 'Calories' : 'سعرات حرارية'}: {ensureNumber(remainingNutrition.find(nut => nut.type === 'Calories')?.quantity).toFixed(1)}</div>
+              <div>{language === 'en' ? 'Fats' : 'دهون'}: {ensureNumber(remainingNutrition.find(nut => nut.type === 'Fats')?.quantity).toFixed(1)}</div>
+              <div>{language === 'en' ? 'Carbs' : 'كربوهيدرات'}: {ensureNumber(remainingNutrition.find(nut => nut.type === 'Carbs')?.quantity).toFixed(1)}</div>
             </div>
           </div>
           {recommendations.length > 0 && (
