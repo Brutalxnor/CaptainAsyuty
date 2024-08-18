@@ -9,7 +9,7 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
-import { useUser } from '@clerk/nextjs';
+import { useAuth } from '@/contexts/AuthContext';
 import useExerciseData from '../../components/useExerciseData';
 import * as XLSX from 'xlsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -75,10 +75,10 @@ const gifFolders = ['Back', 'Biceps', 'Chest', 'Leg', 'Shoulder', 'Triceps', 'Al
 
 const AdminAddExercises = () => {
   const router = useRouter();
-  const { user } = useUser();
-  const { clientEmail } = router.query;
+  const user = useAuth()?.user;
+  const clientEmail = user?.primaryEmailAddress?.emailAddress || user?.email || '';
   const [clients, setClients] = useState([]);
-  const [selectedClient, setSelectedClient] = useState(clientEmail || '');
+  const [selectedClient, setSelectedClient] = useState(clientEmail);
   const [selectedType, setSelectedType] = useState('Upper-Lower 3 Days');
   const [exercises, setExercises] = useState<ExerciseOption[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -201,7 +201,7 @@ const handleAssignExercise = async () => {
         type: selectedType,
         date: currentDate,
       };
-      console.log('Assigning exercises:', payload); // Debug log
+      // console.log('Assigning exercises:', payload); // Debug log
       const response = await fetch('/api/adminAddExercise', {
         method: 'POST',
         headers: {
@@ -212,7 +212,7 @@ const handleAssignExercise = async () => {
   
       if (!response.ok) throw new Error('Error assigning exercise');
       const data = await response.json();
-      console.log(data.message);
+      // console.log(data.message);
       router.push('/dashboard');
     } catch (error: any) {
       console.error('Error:', error);

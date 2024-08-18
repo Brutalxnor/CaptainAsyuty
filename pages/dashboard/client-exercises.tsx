@@ -1,11 +1,164 @@
 
+  // const isCurrentDay = (day: string, assignedDate: string): boolean => {
+  //   const assigned = new Date(assignedDate);
+  //   const today = new Date();
+  //   const dayNumber = parseInt(day.split(' ')[1], 10);
+
+  //   // Calculate the date for the current exercise day
+  //   const exerciseDate = new Date(assigned);
+  //   exerciseDate.setDate(exerciseDate.getDate() + dayNumber - 1);
+
+  //   // Convert today and exercise date to 'YYYY-MM-DD' for comparison
+  //   const todayString = today.toISOString().split('T')[0];
+  //   const exerciseDateString = exerciseDate.toISOString().split('T')[0];
+
+  //   return todayString === exerciseDateString;
+  // };
+
+
+//   const handleSaveWeights = async () => {
+//     if (selectedExercise && activeSetIndex !== null && clientData) {
+//       try {
+//         const updatedWeights = selectedExercise.weights ? [...selectedExercise.weights] : [];
+//         const updatedReps = selectedExercise.reps ? [...selectedExercise.reps] : [];
+
+//         updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
+//         updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
+
+//         console.log('Weights:', updatedWeights);
+//         console.log('Reps:', updatedReps);
+//         console.log('Selected Exercise:', selectedExercise);
+//         console.log('Active Set Index:', activeSetIndex);
+//         console.log('Client Data:', clientData);
+
+//         const response = await fetch('/api/assign-weights', {
+//           method: 'POST',
+//           headers: {
+//             'Content-Type': 'application/json',
+//           },
+//           body: JSON.stringify({
+//             email: clientData.email,
+//             exerciseId: selectedExercise.id,
+//             weights: updatedWeights,
+//             reps: updatedReps,
+//           }),
+//         });
+
+//         console.log('Response status:', response.status);
+//         console.log('Response:', response);
+
+//         if (!response.ok) {
+//           const errorData = await response.json();
+//           console.error('Error data:', errorData);
+//           throw new Error(errorData.message || 'Failed to assign weights and reps');
+//         }
+
+//         // Update the local state to reflect the changes
+//         const updatedExercises = clientData.exercises?.map(exercise =>
+//           exercise.id === selectedExercise.id
+//             ? { ...exercise, weights: updatedWeights, reps: updatedReps }
+//             : exercise
+//         );
+
+//         console.log('Updated Exercises:', updatedExercises);
+
+//         setClientData({
+//           ...clientData,
+//           exercises: updatedExercises,
+//         });
+
+//         setShowWeightsModal(false); // Close the modal after saving
+//         setSelectedExercise(null); // Reset the selected exercise
+//         setSets([]); // Clear the sets array
+
+//         console.log('Weights and reps assigned successfully');
+//       } catch (error: any) {
+//         console.error('Error assigning weights and reps:', error);
+//       }
+//     } else {
+//       if (!selectedExercise) console.error('selectedExercise is null or undefined');
+//       if (activeSetIndex === null) console.error('activeSetIndex is null');
+//       if (!clientData) console.error('clientData is null or undefined');
+//     }
+//   };
+
+
+
+//   const handleToggleExerciseStart = async (exercise: Exercise) => {
+        //     if (clientData) {
+        //       const updatedExercises = clientData.exercises?.map(ex =>
+        //         ex.id === exercise.id
+        //           ? { ...ex, started: !ex.started }
+        //           : { ...ex, started: false } // Close all other exercises
+        //       );
+        
+        //       const updatedClientData = {
+        //         ...clientData,
+        //         email: clientData.email,
+        //         exercises: updatedExercises,
+        //       };
+        
+        //       setClientData(updatedClientData);
+        
+        //       try {
+        //         const response = await fetch('/api/update-exercise', {
+        //           method: 'POST',
+        //           headers: {
+        //             'Content-Type': 'application/json',
+        //           },
+        //           body: JSON.stringify({
+        //             email: clientData.email,
+        //             exerciseId: exercise.id,
+        //             exerciseStarted: !exercise.started,
+        //           }),
+        //         });
+        
+        //         if (!response.ok) {
+        //           const errorData = await response.json();
+        //           throw new Error(errorData.message || 'Failed to update exercise');
+        //         }
+        //       } catch (error: any) {
+        //         console.error('Error updating exercise:', error);
+        //       }
+        //     }
+        //   };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 import React, { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
-import { useUser } from '@clerk/nextjs';
+import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/router';
 import Modal from '@/components/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -88,7 +241,7 @@ interface ClickedButtons {
 }
 
 const ClientExercises: React.FC = () => {
-  const { user } = useUser();
+  const { user } = useAuth();
   const { language } = useLanguage();
   const [clientData, setClientData] = useState<ClientData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -129,7 +282,7 @@ const ClientExercises: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log(data.message);
+        // console.log(data.message);
         return !data.exists;
       } catch (error) {
         console.error('Error checking/adding email:', error);
@@ -143,7 +296,8 @@ const ClientExercises: React.FC = () => {
         return;
       }
 
-      const userEmail = user.primaryEmailAddress?.emailAddress;
+      const userEmail = user.primaryEmailAddress?.emailAddress || user.email;
+
       if (!userEmail) {
         setLoading(false);
         return;
@@ -229,16 +383,17 @@ const ClientExercises: React.FC = () => {
     const today = new Date();
     const dayNumber = parseInt(day.split(' ')[1], 10);
 
-    // Calculate the date for the current exercise day
-    const exerciseDate = new Date(assigned);
-    exerciseDate.setDate(exerciseDate.getDate() + dayNumber - 1);
+    // Calculate the number of days since the assigned date
+    const diffDays = Math.floor((today.getTime() - assigned.getTime()) / (1000 * 60 * 60 * 24));
 
-    // Convert today and exercise date to 'YYYY-MM-DD' for comparison
-    const todayString = today.toISOString().split('T')[0];
-    const exerciseDateString = exerciseDate.toISOString().split('T')[0];
+    // Determine the day in the current rotation
+    const rotatedDay = ((diffDays % days.length) + 1);
 
-    return todayString === exerciseDateString;
-  };
+    // Check if the rotated day matches the current day
+    return dayNumber === rotatedDay;
+};
+
+
 
   const handleAddSet = () => {
     setSets([...sets, { weight: 0, reps: 0, timer: '00:00', started: false, finished: false }]);
@@ -273,7 +428,7 @@ const ClientExercises: React.FC = () => {
           throw new Error(errorData.message || 'Failed to save sets');
         }
 
-        const updatedExercises = clientData.exercises?.map(exercise =>
+                const updatedExercises = clientData.exercises?.map(exercise =>
           exercise.id === selectedExercise.id ? { ...exercise, sets: sets.length, weights, reps } : exercise
         );
 
@@ -305,44 +460,6 @@ const ClientExercises: React.FC = () => {
     }
   };
 
-//   const handleToggleExerciseStart = async (exercise: Exercise) => {
-//     if (clientData) {
-//       const updatedExercises = clientData.exercises?.map(ex =>
-//         ex.id === exercise.id
-//           ? { ...ex, started: !ex.started }
-//           : { ...ex, started: false } // Close all other exercises
-//       );
-
-//       const updatedClientData = {
-//         ...clientData,
-//         email: clientData.email,
-//         exercises: updatedExercises,
-//       };
-
-//       setClientData(updatedClientData);
-
-//       try {
-//         const response = await fetch('/api/update-exercise', {
-//           method: 'POST',
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//           body: JSON.stringify({
-//             email: clientData.email,
-//             exerciseId: exercise.id,
-//             exerciseStarted: !exercise.started,
-//           }),
-//         });
-
-//         if (!response.ok) {
-//           const errorData = await response.json();
-//           throw new Error(errorData.message || 'Failed to update exercise');
-//         }
-//       } catch (error: any) {
-//         console.error('Error updating exercise:', error);
-//       }
-//     }
-//   };
 
 
 
@@ -431,8 +548,8 @@ const handleToggleExerciseStart = async (exercise: Exercise) => {
   const weights = Array.from({ length: 20 }, (_, i) => 2.5 * (i + 1));
 
   const openWeightsModal = (exercise: Exercise, setIndex: number) => {
-    console.log('Opening weights modal for exercise:', exercise);
-    console.log('Set index:', setIndex);
+    // console.log('Opening weights modal for exercise:', exercise);
+    // console.log('Set index:', setIndex);
 
     // Ensure sets array has enough elements without causing performance issues
     if (setIndex >= sets.length) {
@@ -445,13 +562,13 @@ const handleToggleExerciseStart = async (exercise: Exercise) => {
       });
     }
 
-    console.log('Sets after initialization:', sets);
+    // console.log('Sets after initialization:', sets);
     setSelectedExercise(exercise);
     setActiveSetIndex(setIndex);
     setShowWeightsModal(true);
 
-    console.log('Selected exercise set to:', exercise);
-    console.log('Active set index set to:', setIndex);
+    // console.log('Selected exercise set to:', exercise);
+    // console.log('Active set index set to:', setIndex);
   };
 
   const closeWeightsModal = () => {
@@ -459,71 +576,6 @@ const handleToggleExerciseStart = async (exercise: Exercise) => {
     setActiveSetIndex(null);
   };
 
-//   const handleSaveWeights = async () => {
-//     if (selectedExercise && activeSetIndex !== null && clientData) {
-//       try {
-//         const updatedWeights = selectedExercise.weights ? [...selectedExercise.weights] : [];
-//         const updatedReps = selectedExercise.reps ? [...selectedExercise.reps] : [];
-
-//         updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
-//         updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
-
-//         console.log('Weights:', updatedWeights);
-//         console.log('Reps:', updatedReps);
-//         console.log('Selected Exercise:', selectedExercise);
-//         console.log('Active Set Index:', activeSetIndex);
-//         console.log('Client Data:', clientData);
-
-//         const response = await fetch('/api/assign-weights', {
-//           method: 'POST',
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//           body: JSON.stringify({
-//             email: clientData.email,
-//             exerciseId: selectedExercise.id,
-//             weights: updatedWeights,
-//             reps: updatedReps,
-//           }),
-//         });
-
-//         console.log('Response status:', response.status);
-//         console.log('Response:', response);
-
-//         if (!response.ok) {
-//           const errorData = await response.json();
-//           console.error('Error data:', errorData);
-//           throw new Error(errorData.message || 'Failed to assign weights and reps');
-//         }
-
-//         // Update the local state to reflect the changes
-//         const updatedExercises = clientData.exercises?.map(exercise =>
-//           exercise.id === selectedExercise.id
-//             ? { ...exercise, weights: updatedWeights, reps: updatedReps }
-//             : exercise
-//         );
-
-//         console.log('Updated Exercises:', updatedExercises);
-
-//         setClientData({
-//           ...clientData,
-//           exercises: updatedExercises,
-//         });
-
-//         setShowWeightsModal(false); // Close the modal after saving
-//         setSelectedExercise(null); // Reset the selected exercise
-//         setSets([]); // Clear the sets array
-
-//         console.log('Weights and reps assigned successfully');
-//       } catch (error: any) {
-//         console.error('Error assigning weights and reps:', error);
-//       }
-//     } else {
-//       if (!selectedExercise) console.error('selectedExercise is null or undefined');
-//       if (activeSetIndex === null) console.error('activeSetIndex is null');
-//       if (!clientData) console.error('clientData is null or undefined');
-//     }
-//   };
 
 
 const handleStartCardioTimer = (exerciseId: string, duration: number) => {
@@ -568,11 +620,11 @@ const handleSaveWeights = async () => {
             updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
             updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
 
-            console.log('Weights:', updatedWeights);
-            console.log('Reps:', updatedReps);
-            console.log('Selected Exercise:', selectedExercise);
-            console.log('Active Set Index:', activeSetIndex);
-            console.log('Client Data:', clientData);
+            // console.log('Weights:', updatedWeights);
+            // console.log('Reps:', updatedReps);
+            // console.log('Selected Exercise:', selectedExercise);
+            // console.log('Active Set Index:', activeSetIndex);
+            // console.log('Client Data:', clientData);
 
             const response = await fetch('/api/assign-weights', {
                 method: 'POST',
@@ -587,8 +639,8 @@ const handleSaveWeights = async () => {
                 }),
             });
 
-            console.log('Response status:', response.status);
-            console.log('Response:', response);
+            // console.log('Response status:', response.status);
+            // console.log('Response:', response);
 
             if (!response.ok) {
                 const errorData = await response.json();
@@ -613,8 +665,7 @@ const handleSaveWeights = async () => {
             setShowWeightsModal(false); // Close the modal after saving
             // setSelectedExercise(null); // Do not reset the selected exercise
             setSets([]); // Clear the sets array
-
-            console.log('Weights and reps assigned successfully');
+            // console.log('Weights and reps assigned successfully');
         } catch (error: any) {
             console.error('Error assigning weights and reps:', error);
         }

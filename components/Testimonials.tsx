@@ -21,8 +21,8 @@ const testimonials: Testimonial[] = [
       ar: 'خدمة ممتازة وتخصيص عالي يناسب احتياجاتي. أوصي بهذه الخدمة للجميع.'
     },
     author: {
-      en: 'Brigadier General in the Egyptian Army',
-      ar: 'عميد بالجيش المصري'
+      en: 'Senior Officer in the Military',
+      ar: 'ضابط كبير في الجيش'
     }
   },
   {
@@ -31,8 +31,8 @@ const testimonials: Testimonial[] = [
       ar: 'تجربة رائعة وممتعة. البرامج المتاحة فعلاً تساعد في تحقيق أهدافي الصحية.'
     },
     author: {
-      en: 'Lieutenant Colonel in the Egyptian Army',
-      ar: 'مقدم بالجيش المصري'
+      en: 'High-Ranking Military Official',
+      ar: 'مسؤول عسكري رفيع المستوى'
     }
   },
   {
@@ -41,8 +41,8 @@ const testimonials: Testimonial[] = [
       ar: 'دعم متميز من الفريق. يمكنني أن أرى فرقاً كبيراً في مستوى لياقتي منذ أن بدأت استخدام هذا البرنامج.'
     },
     author: {
-      en: 'Head of Almaza Airport',
-      ar: 'رئيس مطار ألماظة'
+      en: 'Airport Executive',
+      ar: 'مدير مطار'
     }
   },
   {
@@ -51,11 +51,12 @@ const testimonials: Testimonial[] = [
       ar: 'خدمة ممتازة وتخصيص عالي يناسب احتياجاتي. أوصي بهذه الخدمة للجميع.'
     },
     author: {
-      en: 'Head of Toyota Kuwait',
-      ar: 'رئيس تويوتا الكويت'
+      en: 'Corporate Executive in the Automotive Industry',
+      ar: 'مدير تنفيذي في صناعة السيارات'
     }
   },
 ];
+
 
 const Testimonials: React.FC = () => {
   const { language } = useLanguage();

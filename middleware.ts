@@ -611,12 +611,84 @@
 
 
 
-import { clerkMiddleware } from '@clerk/nextjs/server';
+// import { clerkMiddleware } from '@clerk/nextjs/server';
 
-export default clerkMiddleware()
+// export default clerkMiddleware()
+
+
+
+
+
+// import { NextRequest, NextResponse } from 'next/server';
+// import jwt from 'jsonwebtoken';
+
+// const protectedRoutes = ['/dashboard', '/api/protected'];
+
+// export function middleware(req: NextRequest) {
+//   const token = req.cookies.get('auth-token')?.value;
+
+//   if (protectedRoutes.includes(req.nextUrl.pathname)) {
+//     if (!token) {
+//       return NextResponse.redirect(new URL('/sign-in', req.url));
+//     }
+
+//     try {
+//       jwt.verify(token, process.env.JWT_SECRET!);
+//       return NextResponse.next();
+//     } catch (error) {
+//       console.error('JWT verification error:', error);
+//       return NextResponse.redirect(new URL('/sign-in', req.url));
+//     }
+//   }
+
+//   return NextResponse.next();
+// }
+
+
+
+// export const config = {
+//   // The following matcher runs middleware on all routes
+//   // except static assets.
+//   matcher: [ '/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)','/dashboard/:path*', '/api/protected/:path*'],
+// };
+
+
+
+
+import { NextRequest, NextResponse } from 'next/server';
+import { parse } from 'cookie';
+
+export function middleware(req: NextRequest) {
+  const token = req.cookies.get('auth-token')?.value;
+
+  const protectedRoutes = ['/dashboard', '/api/protected'];
+
+  if (protectedRoutes.includes(req.nextUrl.pathname)) {
+    if (!token) {
+      return NextResponse.redirect(new URL('/sign-in', req.url));
+    }
+
+    try {
+      // Assuming your JWT_SECRET is a base64 encoded string, you can decode it for use
+      const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
+
+      // Decode JWT token without verification as Edge Runtime does not support Node.js crypto
+      const decoded = JSON.parse(atob(token.split('.')[1]));
+
+      if (decoded.exp * 1000 < Date.now()) {
+        throw new Error('Token expired');
+      }
+
+      return NextResponse.next();
+    } catch (error) {
+      console.error('JWT verification error:', error);
+      return NextResponse.redirect(new URL('/sign-in', req.url));
+    }
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
-  // The following matcher runs middleware on all routes
-  // except static assets.
-  matcher: [ '/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+  matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)', '/dashboard/:path*', '/api/protected/:path*'],
 };

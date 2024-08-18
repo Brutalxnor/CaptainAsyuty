@@ -8,7 +8,7 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
-import { useUser } from '@clerk/nextjs';
+import { useAuth } from '@/contexts/AuthContext';
 import useExerciseData from '../../components/useExerciseData';
 import * as XLSX from 'xlsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -62,7 +62,7 @@ const cardioCategories = ['Running', 'Burpees', 'High Knees'];
 
 const AdminAddCardio = () => {
   const router = useRouter();
-  const { user } = useUser();
+  const { user } = useAuth();
   const { clientEmail } = router.query;
   const [clients, setClients] = useState([]);
   const [selectedClient, setSelectedClient] = useState(clientEmail || '');

@@ -69,4 +69,16 @@ export interface ClientData {
   date?:string;
   exerciseType?: string;
   cardio?: Cardio[];
+
+  images?: {
+    front: {
+      url: string;
+      public_id: string;
+    };
+    back: {
+      url: string;
+      public_id: string;
+    };
+  };
+
 }

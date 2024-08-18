@@ -1,4 +1,4 @@
-//pages/api/checkPaymentStatus.ts
+// pages/api/checkPaymentStatus.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '@/lib/mongodb';
 

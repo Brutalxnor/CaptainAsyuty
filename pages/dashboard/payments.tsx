@@ -12,14 +12,15 @@
 import React, { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import { useUser } from '@clerk/nextjs';
+import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const PaymentsPage: React.FC = () => {
   const { language } = useLanguage();
   const [hasPaid, setHasPaid] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { user, isSignedIn } = useUser();
+  const { user } = useAuth();
+  const isSignedIn = !!user;
 
   useEffect(() => {
     const checkPaymentStatus = async () => {
@@ -31,7 +32,7 @@ const PaymentsPage: React.FC = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ email: user.primaryEmailAddress?.emailAddress }),
+          body: JSON.stringify({ email: user.primaryEmailAddress?.emailAddress || user.email }),
         });
 
         if (response.ok) {

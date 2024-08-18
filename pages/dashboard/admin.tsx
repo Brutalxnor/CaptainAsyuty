@@ -22,7 +22,7 @@
 
 import React, { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
-import { useUser } from '@clerk/nextjs';
+import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/router';
 import { Line, Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
@@ -103,7 +103,7 @@ interface ClientData {
 }
 
 const AdminDashboard: React.FC = () => {
-  const { user } = useUser();
+  const { user } = useAuth();
   const { t, i18n } = useTranslation();
   const [clientData, setClientData] = useState<ClientData[]>([]);
   const [loading, setLoading] = useState(true);
