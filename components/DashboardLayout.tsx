@@ -188,6 +188,7 @@
 
 
 
+
 // components/DashboardLayout.tsx
 
 import React, { useState, useEffect, ReactNode } from 'react';
@@ -198,6 +199,7 @@ import { adminRoutes } from '@/routes/adminRoutes';
 import ChatModal from '@/components/ChatModal';
 import LanguageToggle from '@/components/LanguageToggle';
 import SettingsModal from '@/components/SettingsModal'; // Import the new SettingsModal component
+
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -253,6 +255,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             {/* Replacing sign-out button with settings button */}
             <button onClick={openSettings} className="text-white px-4 py-2 rounded" style={{ fontSize: '1.5rem' }}>
               ⚙️
+
             </button>
           </div>
         </header>

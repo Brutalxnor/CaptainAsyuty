@@ -260,7 +260,6 @@
 
 
 
-
 // import { useRouter } from 'next/router';
 // import React, { useState } from 'react';
 // import { useAuth } from '@/contexts/AuthContext';
@@ -384,13 +383,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
-const SignUpPage = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [referralCode, setReferralCode] = useState(''); // For referral code
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // For toggling password visibility
-  const [isLoading, setIsLoading] = useState(false);
+  
+  const SignUpPage = () => {
+    const [username, setUsername] = useState(''); 
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [referralCode, setReferralCode] = useState(''); // For referral code
+    const [isLoading, setIsLoading] = useState(false);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false); // For toggling password visibility
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const router = useRouter();
   const { signUp } = useAuth();
@@ -414,6 +414,7 @@ const SignUpPage = () => {
         pauseOnHover: true,
         draggable: true,
       });
+
       return;
     }
     setIsLoading(true);
@@ -438,6 +439,7 @@ const SignUpPage = () => {
         pauseOnHover: true,
         draggable: true,
       });
+
     } finally {
       setIsLoading(false);
     }
@@ -500,6 +502,7 @@ const SignUpPage = () => {
                 <FontAwesomeIcon icon={isPasswordVisible ? faEyeSlash : faEye} />
               </button>
             </div>
+
             <input
               type="text"
               value={referralCode}
@@ -511,6 +514,7 @@ const SignUpPage = () => {
               sitekey="YOUR_RECAPTCHA_SITE_KEY" // Add your reCAPTCHA site key here
               onChange={handleCaptcha}
               className="mb-4"
+
             />
             <button
               type="submit"
@@ -533,6 +537,7 @@ const SignUpPage = () => {
       )}
       {/* Toast container to show notifications */}
       <ToastContainer />
+
     </div>
   );
 };

@@ -167,6 +167,7 @@ const BeforeAfter: React.FC = () => {
             {beforeAfterData.muscleGain.map((src, index) => (
               <div key={index} className="p-4">
                 <div className="p-4 rounded-lg shadow-md">
+
                   <img src={src} alt={`Muscle Gain ${index + 1}`} className="rounded-lg w-full" />
                   <p className="text-center mt-2 text-gray-900">{language === 'en' ? 'Before and After' : 'قبل وبعد'}</p>
                 </div>

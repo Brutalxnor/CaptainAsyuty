@@ -262,7 +262,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const SignInPage = () => {
-
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); // For toggling password visibility
@@ -302,7 +301,6 @@ const SignInPage = () => {
       setIsLoading(false);
     }
   };
-
 
   const handleBackToLanding = () => {
     router.push('/'); // Redirect to landing page

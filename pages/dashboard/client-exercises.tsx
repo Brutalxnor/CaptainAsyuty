@@ -4,6 +4,7 @@
   //   const today = new Date();
   //   const dayNumber = parseInt(day.split(' ')[1], 10);
 
+
   //   // Calculate the date for the current exercise day
   //   const exerciseDate = new Date(assigned);
   //   exerciseDate.setDate(exerciseDate.getDate() + dayNumber - 1);
@@ -122,6 +123,511 @@
         //       }
         //     }
         //   };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //   // Calculate the date for the current exercise day
+  //   const exerciseDate = new Date(assigned);
+  //   exerciseDate.setDate(exerciseDate.getDate() + dayNumber - 1);
+
+  //   // Convert today and exercise date to 'YYYY-MM-DD' for comparison
+  //   const todayString = today.toISOString().split('T')[0];
+  //   const exerciseDateString = exerciseDate.toISOString().split('T')[0];
+
+  //   return todayString === exerciseDateString;
+  // };
+
+
+
+// import React, { useEffect, useState } from 'react';
+// import DashboardLayout from '@/components/DashboardLayout';
+// import { useAuth } from '@/contexts/AuthContext';
+// import { useRouter } from 'next/router';
+// import Modal from '@/components/Modal';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { fa1, fa2, fa3, fa4, fa5, fa6, faPlus, faSave, faTrash, faDumbbell, faHeartCircleBolt, faLock, faPlay, faStop, faWeightHanging, faRedoAlt, faClock, faArrowLeft, faArrowRight, fa7 } from '@fortawesome/free-solid-svg-icons';
+// import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+// import LoadingSpinner from '@/components/LoadingSpinner';
+// import { useLanguage } from '@/contexts/LanguageContext';
+
+// const dayIcons: Record<string, IconDefinition> = {
+//   'Day 1': fa1,
+//   'Day 2': fa2,
+//   'Day 3': fa3,
+//   'Day 4': fa4,
+//   'Day 5': fa5,
+//   'Day 6': fa6,
+//   'Day 7': fa7,
+// };
+
+// const translations: Record<string, string> = {
+//     'Day 1': 'اليوم 1',
+//     'Day 2': 'اليوم 2',
+//     'Day 3': 'اليوم 3',
+//     'Day 4': 'اليوم 4',
+//     'Day 5': 'اليوم 5',
+//     'Day 6': 'اليوم 6',
+//     'Day 7': 'اليوم 7',
+//     Proteins: 'البروتينات',
+//     Vegetables: 'الخضروات',
+//     Grains: 'الحبوب',
+//     Dairy: 'منتجات الألبان',
+//     Fruits: 'الفواكه',
+//     Nuts: 'المكسرات',
+// };
+
+// interface Set {
+//   weight: number;
+//   reps: number;
+//   timer?: string;
+//   started?: boolean;
+//   finished?: boolean;
+// }
+
+// interface Exercise {
+//   id: string;
+//   name: string;
+//   muscle?: string;
+//   day: string;
+//   gif?: string;
+//   sets: number; // Number of sets
+//   restTime: number; // Rest time in seconds
+//   weights: number[]; // Array of weights
+//   reps: number[]; // Array of reps
+//   started?: boolean;
+//   finished?: boolean;
+// }
+
+// interface Cardio {
+//     id: string;
+//     name: string;
+//     duration: string;
+//     day: string;
+//     gif?: string;
+//   }
+  
+
+// interface ClientData {
+//   email: string;
+//   exerciseType?: string;
+//   exercises?: Exercise[];
+//   cardio?: Cardio[];
+//   date?: string; // Added date field
+// }
+
+// interface Timers {
+//   [key: string]: string;
+// }
+
+// interface ClickedButtons {
+//   [key: string]: boolean[];
+// }
+
+// const ClientExercises: React.FC = () => {
+//   const { user } = useAuth();
+//   const { language } = useLanguage();
+//   const [clientData, setClientData] = useState<ClientData | null>(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState<string | null>(null);
+//   const [selectedGif, setSelectedGif] = useState<string | null>(null);
+//   const [selectedDay, setSelectedDay] = useState<string | null>(null);
+//   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
+//   const [sets, setSets] = useState<Set[]>([]);
+//   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+//   const [timers, setTimers] = useState<Timers>({});
+//   const [showCardio, setShowCardio] = useState(false);
+//   const [showExercises, setShowExercises] = useState(true);
+//   const [restTimer, setRestTimer] = useState<string | null>(null);
+//   const [showWeightsModal, setShowWeightsModal] = useState(false);
+//   const [activeSetIndex, setActiveSetIndex] = useState<number | null>(null);
+//   const [currentUnlockedIndex, setCurrentUnlockedIndex] = useState(0);
+//   const [clickedButtons, setClickedButtons] = useState<ClickedButtons>({});
+//   const [unlockedExerciseIndices, setUnlockedExerciseIndices] = useState<number[]>([]);
+//   const [cardioTimers, setCardioTimers] = useState<Timers>({});
+//   const [cardioIntervalId, setCardioIntervalId] = useState<NodeJS.Timeout | null>(null);
+//   const [cardioClickedButtons, setCardioClickedButtons] = useState<ClickedButtons>({});
+
+//   const router = useRouter();
+
+//   useEffect(() => {
+//     const checkAndAddEmail = async (email: string): Promise<boolean> => {
+//       try {
+//         const response = await fetch('/api/addEmail', {
+//           method: 'POST',
+//           headers: {
+//             'Content-Type': 'application/json',
+//           },
+//           body: JSON.stringify({ email }),
+//         });
+
+//         if (!response.ok) {
+//           throw new Error('Error checking/adding email');
+//         }
+
+//         const data = await response.json();
+//         // console.log(data.message);
+//         return !data.exists;
+//       } catch (error) {
+//         console.error('Error checking/adding email:', error);
+//         return false;
+//       }
+//     };
+
+//     const fetchClientData = async () => {
+//       if (!user) {
+//         router.push('/sign-in');
+//         return;
+//       }
+
+//       const userEmail = user.primaryEmailAddress?.emailAddress || user.email;
+
+//       if (!userEmail) {
+//         setLoading(false);
+//         return;
+//       }
+
+//       const isNew = await checkAndAddEmail(userEmail);
+
+//       try {
+//         const [clientResponse, cardioResponse] = await Promise.all([
+//           fetch(`/api/client?email=${userEmail}`, {
+//             method: 'GET',
+//           }),
+//           fetch(`/api/adminAddCardio?email=${userEmail}`, {
+//             method: 'GET',
+//           }),
+//         ]);
+
+//         if (!clientResponse.ok) {
+//           const errorData = await clientResponse.json();
+//           throw new Error(errorData.message || 'Failed to fetch client data');
+//         }
+
+//         if (!cardioResponse.ok) {
+//           const errorData = await cardioResponse.json();
+//           throw new Error(errorData.message || 'Failed to fetch cardio data');
+//         }
+
+//         const client = await clientResponse.json();
+//         const cardio = await cardioResponse.json();
+
+//         if ((isNew && !client.hasPaid) || !client.hasPaid) {
+//           router.push('/dashboard/payments');
+//           return;
+//         }
+
+//         setClientData({ ...client, cardio: cardio.exercises });
+//       } catch (error: any) {
+//         console.error('Error fetching client data:', error);
+//         setError(error.message);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchClientData();
+//   }, [user, router]);
+
+//   useEffect(() => {
+//     if (clientData?.exercises) {
+//       const unlockedIndices = clientData.exercises.map((exercise, index) => 
+//         isCurrentDay(exercise.day, clientData.date || '') ? index : -1
+//       ).filter(index => index !== -1);
+//       setUnlockedExerciseIndices(unlockedIndices);
+//       setCurrentUnlockedIndex(0); // Reset to the first unlocked exercise
+//     }
+//   }, [clientData, clientData?.date]);
+
+//   const days = clientData?.exercises?.reduce((acc, exercise) => {
+//     if (!acc.includes(exercise.day)) acc.push(exercise.day);
+//     return acc;
+//   }, [] as string[]) || [];
+
+//   const cardioDays = clientData?.cardio?.reduce((acc, exercise) => {
+//     if (!acc.includes(exercise.day)) acc.push(exercise.day);
+//     return acc;
+//   }, [] as string[]) || [];
+
+//   if (loading) return <LoadingSpinner />;
+//   if (error) return <div className="text-[var(--text-color)]">Error: {error}</div>;
+
+//   const containerStyle = {
+//     minHeight: 'calc(90vh - 4rem)', // Adjust this value as needed
+//     backgroundColor: 'var(--background-color)',
+//     color: 'var(--text-color)',
+//   };
+
+//   const handleGifClick = (gif: string | null) => {
+//     setSelectedGif(gif);
+//   };
+
+//   const isCurrentDay = (day: string, assignedDate: string): boolean => {
+//     const assigned = new Date(assignedDate);
+//     const today = new Date();
+//     const dayNumber = parseInt(day.split(' ')[1], 10);
+
+//     // Calculate the number of days since the assigned date
+//     const diffDays = Math.floor((today.getTime() - assigned.getTime()) / (1000 * 60 * 60 * 24));
+
+//     // Determine the day in the current rotation
+//     const rotatedDay = ((diffDays % days.length) + 1);
+
+//     // Check if the rotated day matches the current day
+//     return dayNumber === rotatedDay;
+// };
+
+
+
+//   const handleAddSet = () => {
+//     setSets([...sets, { weight: 0, reps: 0, timer: '00:00', started: false, finished: false }]);
+//   };
+
+//   const handleSetChange = (index: number, field: 'weight' | 'reps', value: number) => {
+//     const updatedSets = sets.map((set, i) => (i === index ? { ...set, [field]: value } : set));
+//     setSets(updatedSets);
+//   };
+
+//   const handleSaveSets = async () => {
+//     if (selectedExercise && clientData) {
+//       try {
+//         const weights = sets.map(set => set.weight);
+//         const reps = sets.map(set => set.reps);
+
+//         const response = await fetch('/api/update-exercise', {
+//           method: 'POST',
+//           headers: {
+//             'Content-Type': 'application/json',
+//           },
+//           body: JSON.stringify({
+//             email: clientData.email,
+//             exerciseId: selectedExercise.id,
+//             weights,
+//             reps,
+//           }),
+//         });
+
+//         if (!response.ok) {
+//           const errorData = await response.json();
+//           throw new Error(errorData.message || 'Failed to save sets');
+//         }
+
+//                 const updatedExercises = clientData.exercises?.map(exercise =>
+//           exercise.id === selectedExercise.id ? { ...exercise, sets: sets.length, weights, reps } : exercise
+//         );
+
+//         const updatedClientData = {
+//           ...clientData,
+//           email: clientData.email as string,
+//           exercises: updatedExercises,
+//         };
+
+//         setClientData(updatedClientData);
+//         setSelectedExercise(null);
+//         setSets([]);
+//       } catch (error: any) {
+//         console.error('Error saving sets:', error);
+//         setError(error.message);
+//       }
+//     }
+//   };
+
+//   const handleNextExercise = () => {
+//     if (unlockedExerciseIndices.length) {
+//       setCurrentUnlockedIndex((prevIndex) => (prevIndex + 1) % unlockedExerciseIndices.length);
+//     }
+//   };
+
+//   const handlePreviousExercise = () => {
+//     if (unlockedExerciseIndices.length) {
+//       setCurrentUnlockedIndex((prevIndex) => (prevIndex - 1 + unlockedExerciseIndices.length) % unlockedExerciseIndices.length);
+//     }
+//   };
+
+
+
+
+// const handleToggleExerciseStart = async (exercise: Exercise) => {
+//     if (clientData) {
+//       const updatedExercises = clientData.exercises?.map(ex =>
+//         ex.id === exercise.id
+//           ? { ...ex, started: !ex.started }
+//           : { ...ex, started: false } // Close all other exercises
+//       );
+
+//       const updatedClientData = {
+//         ...clientData,
+//         email: clientData.email,
+//         exercises: updatedExercises,
+//       };
+
+//       setClientData(updatedClientData);
+
+//       try {
+//         const response = await fetch('/api/update-exercise', {
+//           method: 'POST',
+//           headers: {
+//             'Content-Type': 'application/json',
+//           },
+//           body: JSON.stringify({
+//             email: clientData.email,
+//             exerciseId: exercise.id,
+//             exerciseStarted: !exercise.started,
+//           }),
+//         });
+
+//         if (!response.ok) {
+//           const errorData = await response.json();
+//           throw new Error(errorData.message || 'Failed to update exercise');
+//         }
+
+//         // Ensure the current exercise index points to the newly started exercise
+//         const newCurrentIndex = unlockedExerciseIndices.indexOf(clientData.exercises?.indexOf(exercise) || 0);
+//         setCurrentUnlockedIndex(newCurrentIndex);
+
+//       } catch (error: any) {
+//         console.error('Error updating exercise:', error);
+//       }
+//     }
+//   };
+
+
+
+//   const handleRemoveSet = (index: number) => {
+//     const updatedSets = sets.filter((_, i) => i !== index);
+//     setSets(updatedSets);
+//   };
+
+//   const handleStartRestTimer = (exerciseId: string, setIndex: number, duration: number) => {
+//     if (intervalId) {
+//       clearInterval(intervalId);
+//     }
+//     setClickedButtons(prevState => {
+//       const newState = { ...prevState };
+//       if (!newState[exerciseId]) {
+//         newState[exerciseId] = [];
+//       }
+//       newState[exerciseId][setIndex] = true;
+//       return newState;
+//     });
+
+//     const startTime = Date.now();
+//     const endTime = startTime + duration * 1000;
+//     const newIntervalId = setInterval(() => {
+//       const remainingTime = endTime - Date.now();
+//       if (remainingTime <= 0) {
+//         clearInterval(newIntervalId);
+//         setRestTimer('00:00');
+//         setIntervalId(null);
+//       } else {
+//         const minutes = Math.floor(remainingTime / 60000);
+//         const seconds = ((remainingTime % 60000) / 1000).toFixed(0).padStart(2, '0');
+//         setTimers(prevTimers => ({ ...prevTimers, [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}` }));
+//       }
+//     }, 1000);
+
+//     setIntervalId(newIntervalId);
+//   };
+
+//   const weights = Array.from({ length: 20 }, (_, i) => 2.5 * (i + 1));
+
+//   const openWeightsModal = (exercise: Exercise, setIndex: number) => {
+//     // console.log('Opening weights modal for exercise:', exercise);
+//     // console.log('Set index:', setIndex);
+
+//     // Ensure sets array has enough elements without causing performance issues
+//     if (setIndex >= sets.length) {
+//       setSets(prevSets => {
+//         const newSets = [...prevSets];
+//         for (let i = prevSets.length; i <= setIndex; i++) {
+//           newSets.push({ weight: 0, reps: 0, started: false, finished: false });
+//         }
+//         return newSets;
+//       });
+//     }
+
+//     // console.log('Sets after initialization:', sets);
+//     setSelectedExercise(exercise);
+//     setActiveSetIndex(setIndex);
+//     setShowWeightsModal(true);
+
+//     // console.log('Selected exercise set to:', exercise);
+//     // console.log('Active set index set to:', setIndex);
+//   };
+
+//   const closeWeightsModal = () => {
+//     setShowWeightsModal(false);
+//     setActiveSetIndex(null);
+//   };
+
+
+
+
+// //   const handleToggleExerciseStart = async (exercise: Exercise) => {
+//         //     if (clientData) {
+//         //       const updatedExercises = clientData.exercises?.map(ex =>
+//         //         ex.id === exercise.id
+//         //           ? { ...ex, started: !ex.started }
+//         //           : { ...ex, started: false } // Close all other exercises
+//         //       );
+        
+//         //       const updatedClientData = {
+//         //         ...clientData,
+//         //         email: clientData.email,
+//         //         exercises: updatedExercises,
+//         //       };
+        
+//         //       setClientData(updatedClientData);
+        
+//         //       try {
+//         //         const response = await fetch('/api/update-exercise', {
+//         //           method: 'POST',
+//         //           headers: {
+//         //             'Content-Type': 'application/json',
+//         //           },
+//         //           body: JSON.stringify({
+//         //             email: clientData.email,
+//         //             exerciseId: exercise.id,
+//         //             exerciseStarted: !exercise.started,
+//         //           }),
+//         //         });
+        
+//         //         if (!response.ok) {
+//         //           const errorData = await response.json();
+//         //           throw new Error(errorData.message || 'Failed to update exercise');
+//         //         }
+//         //       } catch (error: any) {
+//         //         console.error('Error updating exercise:', error);
+//         //       }
+//         //     }
+//         //   };
 
 
 
@@ -748,11 +1254,6 @@
 //             updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
 //             updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
 
-//             // console.log('Weights:', updatedWeights);
-//             // console.log('Reps:', updatedReps);
-//             // console.log('Selected Exercise:', selectedExercise);
-//             // console.log('Active Set Index:', activeSetIndex);
-//             // console.log('Client Data:', clientData);
 
 //             const response = await fetch('/api/assign-weights', {
 //                 method: 'POST',
@@ -767,8 +1268,6 @@
 //                 }),
 //             });
 
-//             // console.log('Response status:', response.status);
-//             // console.log('Response:', response);
 
 //             if (!response.ok) {
 //                 const errorData = await response.json();
@@ -803,6 +1302,7 @@
 //         if (!clientData) console.error('clientData is null or undefined');
 //     }
 // };
+
 
 
 //   const currentExercise = clientData?.exercises?.[unlockedExerciseIndices[currentUnlockedIndex]];

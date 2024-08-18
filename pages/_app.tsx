@@ -48,7 +48,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   }, [router]);
 
   return (
-
     <AuthProvider> {/* Wrap the component with AuthProvider */}
       <LanguageProvider>
         <Component {...pageProps} />

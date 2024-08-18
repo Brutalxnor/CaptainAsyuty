@@ -1765,6 +1765,7 @@ const AdminClientList: React.FC = () => {
                             </div>
                             <div className="overflow-x-auto ">
                               <table className="min-w-full text-[var(--text-color)] rounded-lg shadow-lg mt-4">
+
                                 <thead>
                                   <tr className="bg-gray-100">
                                     <th className="py-2 px-4 text-left font-bold">Label</th>

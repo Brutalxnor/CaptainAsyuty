@@ -2499,7 +2499,7 @@ return (
   <div className="flex justify-center items-center min-h-screen">
     <div className="w-full max-w-lg p-6 text-[var(--text-color)]  font-serif border-gray-200 rounded-lg shadow-lg overflow-y-auto relative">
       {isLoading && (
-        <div className="absolute inset-0 bg-white bg-opacity-75 flex justify-center items-center">
+        <div className="absolute inset-0 bg-[var(--background-color)] bg-opacity-75 flex justify-center items-center">
           <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
           <span className="ml-2">Uploading...</span>
         </div>
