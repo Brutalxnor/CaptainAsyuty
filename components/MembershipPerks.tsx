@@ -91,7 +91,7 @@ const MembershipPerks: FC = () => {
   const { language } = useLanguage();
 
   return (
-    <div className="bg-white py-12 text-gray-900 relative">
+    <div className=" py-12 text-gray-900 relative">
       <div className="container mx-auto">
         <h2 className="text-3xl font-bold text-center mb-8">
           {language === 'en' ? 'Membership Perks' : 'مميزات العضوية'}

@@ -2,6 +2,7 @@
 // components/Testimonials.tsx
 import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import styles from './pricing.module.css';
 
 interface Testimonial {
   text: {
@@ -21,8 +22,8 @@ const testimonials: Testimonial[] = [
       ar: 'خدمة ممتازة وتخصيص عالي يناسب احتياجاتي. أوصي بهذه الخدمة للجميع.'
     },
     author: {
-      en: 'Brigadier General in the Egyptian Army',
-      ar: 'عميد بالجيش المصري'
+      en: 'Senior Officer in the Military',
+      ar: 'ضابط كبير في الجيش'
     }
   },
   {
@@ -31,8 +32,8 @@ const testimonials: Testimonial[] = [
       ar: 'تجربة رائعة وممتعة. البرامج المتاحة فعلاً تساعد في تحقيق أهدافي الصحية.'
     },
     author: {
-      en: 'Lieutenant Colonel in the Egyptian Army',
-      ar: 'مقدم بالجيش المصري'
+      en: 'High-Ranking Military Official',
+      ar: 'مسؤول عسكري رفيع المستوى'
     }
   },
   {
@@ -41,8 +42,8 @@ const testimonials: Testimonial[] = [
       ar: 'دعم متميز من الفريق. يمكنني أن أرى فرقاً كبيراً في مستوى لياقتي منذ أن بدأت استخدام هذا البرنامج.'
     },
     author: {
-      en: 'Head of Almaza Airport',
-      ar: 'رئيس مطار ألماظة'
+      en: 'Airport Executive',
+      ar: 'مدير مطار'
     }
   },
   {
@@ -51,25 +52,26 @@ const testimonials: Testimonial[] = [
       ar: 'خدمة ممتازة وتخصيص عالي يناسب احتياجاتي. أوصي بهذه الخدمة للجميع.'
     },
     author: {
-      en: 'Head of Toyota Kuwait',
-      ar: 'رئيس تويوتا الكويت'
+      en: 'Corporate Executive in the Automotive Industry',
+      ar: 'مدير تنفيذي في صناعة السيارات'
     }
   },
 ];
+
 
 const Testimonials: React.FC = () => {
   const { language } = useLanguage();
 
   return (
-    <section className="py-12 bg-gray-100 light:bg-gray-900 relative">
+    <section className= "bg-[#f4f4f4] py-12 mt-10 py-12 relative" >
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold mb-8 text-center text-gray-900">
+        <h2 className="text-3xl font-bold mb-8 text-center text-black">
           {language === 'en' ? 'Our Clients Love Us' : 'عملائنا يحبوننا'}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {testimonials.map((testimonial, index) => (
-            <div key={index} className="bg-blue-100 p-6 rounded-lg shadow-lg">
-              <p className="text-lg mb-4 text-gray-900">{testimonial.text[language as 'en' | 'ar']}</p>
+            <div key={index} className="bg-blue-100 p-6 text-black rounded-lg shadow-lg">
+              <p className="text-lg mb-4 ">{testimonial.text[language as 'en' | 'ar']}</p>
               <p className="text-sm text-right font-bold text-gray-900">- {testimonial.author[language as 'en' | 'ar']}</p>
             </div>
           ))}

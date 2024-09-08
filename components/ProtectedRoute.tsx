@@ -31,25 +31,25 @@
 
 
 // components/ProtectedRoute.tsx
-import { useRouter } from 'next/router';
-import { useUser } from '@clerk/nextjs';
-import { useEffect } from 'react';
+// import { useRouter } from 'next/router';
+// import { useAuth } from '@/contexts/AuthContext';
+// import { useEffect } from 'react';
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isSignedIn } = useUser();
-  const router = useRouter();
+// const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+//   const { isSignedIn } = useAuth();
+//   const router = useRouter();
 
-  useEffect(() => {
-    if (!isSignedIn) {
-      router.push('/sign-in');
-    }
-  }, [isSignedIn, router]);
+//   useEffect(() => {
+//     if (!isSignedIn) {
+//       router.push('/sign-in');
+//     }
+//   }, [isSignedIn, router]);
 
-  if (!isSignedIn) {
-    return <div>Loading...</div>;
-  }
+//   if (!isSignedIn) {
+//     return <div>Loading...</div>;
+//   }
 
-  return <>{children}</>;
-};
+//   return <>{children}</>;
+// };
 
-export default ProtectedRoute;
+// export default ProtectedRoute;

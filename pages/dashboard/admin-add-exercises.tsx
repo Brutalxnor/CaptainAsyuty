@@ -9,16 +9,18 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
-import { useUser } from '@clerk/nextjs';
+import { useAuth } from '@/contexts/AuthContext';
 import useExerciseData from '../../components/useExerciseData';
 import * as XLSX from 'xlsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExchangeAlt, faPlus, faTasks, faTrash, faDumbbell } from '@fortawesome/free-solid-svg-icons';
+import { faExchangeAlt, faPlus, faTasks, faTrash, faDumbbell, faDownload } from '@fortawesome/free-solid-svg-icons';
 import Modal from '@/components/Modal';
 import { fa1, fa2, fa3, fa4, fa5, fa6 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { format } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const dayIcons: Record<string, IconDefinition> = {
   'Day 1': fa1,
@@ -39,12 +41,14 @@ interface Exercise {
 }
 
 interface ExerciseOption {
-  id: string; // Add id property
+  id: string;
   name: string;
   sets?: string;
   day: string;
   gif?: string;
-  restTime: number; // Add rest time property
+  restTime: number;
+  weights?: number[]; // Add weights property
+  reps?: number[];    // Add reps property
 }
 
 const exercisesTypes = {
@@ -62,10 +66,12 @@ const exercisesTypes = {
 };
 
 interface ClientData {
-  email: string;
-  exerciseType: string;
-  date: string;
-  exercises?: Exercise[];
+  [key: string]: {
+    email: string;
+    exerciseType: string;
+    date: string;
+    exercises?: Exercise[];
+  };
 }
 
 const setsOptions = ['1', '2', '3', '4', '5', '6', '7'];
@@ -75,10 +81,11 @@ const gifFolders = ['Back', 'Biceps', 'Chest', 'Leg', 'Shoulder', 'Triceps', 'Al
 
 const AdminAddExercises = () => {
   const router = useRouter();
-  const { user } = useUser();
-  const { clientEmail } = router.query;
-  const [clients, setClients] = useState([]);
-  const [selectedClient, setSelectedClient] = useState(clientEmail || '');
+  const user = useAuth()?.user;
+  const clientEmail = user?.primaryEmailAddress?.emailAddress || user?.email || '';
+  // const [clients, setClients] = useState([]);
+  const [clients, setClients] = useState<any[]>([]); 
+  const [selectedClient, setSelectedClient] = useState(clientEmail);
   const [selectedType, setSelectedType] = useState('Upper-Lower 3 Days');
   const [exercises, setExercises] = useState<ExerciseOption[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -92,6 +99,7 @@ const AdminAddExercises = () => {
   const [showExercises, setShowExercises] = useState(true);
   const [isGifModalOpen, setIsGifModalOpen] = useState<boolean>(false);
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState<number | null>(null);
+  const [fetchExisting, setFetchExisting] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -107,9 +115,275 @@ const AdminAddExercises = () => {
     fetchClients();
   }, []);
 
+  // useEffect(() => {
+  //   if (selectedType) {
+  //     const fetchExerciseData = async () => {
+  //       try {
+  //         const response = await fetch(`/${selectedType}.xlsx`);
+  //         if (!response.ok) {
+  //           throw new Error(`HTTP error! Status: ${response.status}`);
+  //         }
+  //         const data = await response.arrayBuffer();
+  //         const workbook = XLSX.read(data, { type: 'array' });
+
+  //         const exercises: ExerciseOption[] = [];
+
+  //         workbook.SheetNames.forEach(sheetName => {
+  //           const sheet = workbook.Sheets[sheetName];
+  //           const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as string[][];
+
+  //           rows.slice(1).forEach(row => {
+  //             row.forEach((exerciseName, dayIndex) => {
+  //               if (exerciseName) {
+  //                 exercises.push({
+  //                   id: uuidv4(), // Generate unique id
+  //                   name: exerciseName,
+  //                   sets: '1', // Default sets
+  //                   day: `Day ${dayIndex + 1}`,
+  //                   restTime: 30, // Default rest time
+  //                 });
+  //               }
+  //             });
+  //           });
+  //         });
+
+  //         setExercises(exercises);
+  //         console.log('Exercises fetched and set:', exercises);
+  //       } catch (error) {
+  //         console.error('Error fetching exercise data:', error);
+  //       }
+  //     };
+
+  //     fetchExerciseData();
+  //   }
+  // }, [selectedType]);
+
+  // useEffect(() => {
+  //   const fetchClientExercises = async () => {
+  //     try {
+  //       const response = await fetch(`/api/adminAddExercise?email=${selectedClient}`);
+  //       const data = await response.json();
+  //       console.log('Fetched client exercises:', data); // Debugging log
+  
+  //       // If exercises are available in the database, use them
+  //       if (data.exercises.length > 0) {
+  //         setExercises(data.exercises);
+  //       } else {
+  //         console.log('No exercises in DB, fetching from Excel');
+  //         fetchExerciseDataFromExcel(); // Fetch from Excel if no exercises
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching client exercises:', error);
+  //     }
+  //   };
+  
+  //   if (selectedClient) {
+  //     fetchClientExercises();
+  //   }
+  // }, [selectedClient]);
+
+  // useEffect(() => {
+  //   const fetchClientExercises = async () => {
+  //     try {
+  //       const response = await fetch(`/api/adminAddExercise?email=${selectedClient}`);
+  //       const data = await response.json();
+        
+  //       console.log('Fetched data:', data); // Log the entire fetched data for inspection
+  //       console.log('Selected client email:', selectedClient); // Log the selected client email
+  
+  //       // Check if the selected client exists in the fetched data
+  //       const client = data.exercises.find((c: any) => c.email === selectedClient);
+  //       console.log('Found client:', client); // Log the client found
+  
+  //       // If client and exercises are found, set exercises
+  //       if (client && client.exercises && client.exercises.length > 0) {
+  //         console.log('Client exercises:', client.exercises); // Log exercises
+  //         setExercises(client.exercises);
+  //       } else {
+  //         console.log('No exercises found for the selected client');
+  //         fetchExerciseDataFromExcel(); // Fetch from Excel if no exercises
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching client exercises:', error);
+  //     }
+  //   };
+  
+  //   if (selectedClient) {
+  //     fetchClientExercises();
+  //   }
+  // }, [selectedClient]);
+  
+
   useEffect(() => {
-    if (selectedType) {
-      const fetchExerciseData = async () => {
+    const fetchClientExercises = async () => {
+      if (fetchExisting && selectedClient) {
+        try {
+          const response = await fetch(`/api/adminAddExercise?email=${selectedClient}`);
+          const data = await response.json();
+          const client = data.exercises.find((c: any) => c.email === selectedClient);
+
+          if (client && client.exercises) {
+            setExercises(client.exercises);
+          }
+        } catch (error) {
+          console.error('Error fetching client exercises:', error);
+        }
+      }
+    };
+
+    fetchClientExercises();
+  }, [selectedClient, fetchExisting]);
+
+
+
+
+  
+
+
+  const handleDownloadPDF = async () => {
+    const doc = new jsPDF('p', 'mm', 'a4');
+    
+    // Use Helvetica as a standard font
+    doc.setFont('Helvetica');
+  
+    let yOffset = 20;
+  
+    // Add client's name or email at the top
+    doc.setFontSize(18);
+    doc.text(`Exercises for: ${selectedClient}`, 105, yOffset, { align: 'center' });
+    yOffset += 20;
+  
+    // Add title with a styled header
+    doc.setFontSize(20);
+    doc.setTextColor(0, 102, 204); // blue color for title
+    doc.text('Client Exercises', 105, yOffset, { align: 'center' });
+    yOffset += 20;
+  
+    // Iterate through each day and each exercise
+    for (const day of ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6']) {
+      const dayExercises = exercises.filter(exercise => exercise.day === day);
+      
+      if (dayExercises.length > 0) {
+        // Add day title
+        doc.setFontSize(16);
+        doc.setTextColor(50, 50, 50); // dark gray for day
+        doc.text(`Day: ${day}`, 10, yOffset);
+        yOffset += 10;
+        
+        // Add exercises
+        for (const exercise of dayExercises) {
+          doc.setFontSize(12);
+          doc.setTextColor(0, 0, 0); // black for exercise details
+          
+          // Add exercise name and sets
+          doc.text(`Exercise: ${exercise.name}`, 10, yOffset);
+          doc.text(`Sets: ${exercise.sets}`, 140, yOffset);
+          yOffset += 10;
+  
+          // Add reps if they exist
+          if (exercise.reps && exercise.reps.length > 0) {
+            doc.text(`Reps: ${exercise.reps.join(', ')}`, 10, yOffset);
+            yOffset += 10;
+          }
+  
+          // Add weights if they exist
+          if (exercise.weights && exercise.weights.length > 0) {
+            doc.text(`Weights: ${exercise.weights.join(', ')} kg`, 10, yOffset);
+            yOffset += 10;
+          }
+  
+          // Add rest time
+          doc.text(`Rest Time: ${exercise.restTime} seconds`, 10, yOffset);
+          yOffset += 10;
+  
+          // If there's a GIF, render it in the PDF
+          if (exercise.gif) {
+            try {
+              const imgElement = document.querySelector(`img[src="${exercise.gif}"]`) as HTMLImageElement;
+              if (imgElement) {
+                const canvas = await html2canvas(imgElement);
+                const imgData = canvas.toDataURL('image/png');
+  
+                // Add GIF image to the PDF
+                doc.addImage(imgData, 'PNG', 10, yOffset, 30, 30);
+                yOffset += 40; // Adjust Y position after image
+              }
+            } catch (error) {
+              console.error('Error rendering GIF in PDF:', error);
+            }
+          }
+  
+          // Add some space after each exercise
+          yOffset += 10;
+          
+          // Check if the next exercise will fit on the page
+          if (yOffset > 260) {
+            doc.addPage();
+            yOffset = 20;
+          }
+        }
+      }
+    }
+  
+    // Add a footer with a message
+    doc.setFontSize(10);
+    doc.setTextColor(150, 150, 150); // light gray for footer
+    doc.text('Generated by FusionSoft Works', 105, 290, { align: 'center' });
+  
+    // Save the PDF
+    doc.save(`${selectedClient}_exercises.pdf`);
+  };
+  
+  
+
+  // // Function to fetch exercises from Excel
+  // const fetchExerciseDataFromExcel = async () => {
+  //   try {
+  //     const response = await fetch(`/${selectedType}.xlsx`);
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
+  //     const data = await response.arrayBuffer();
+  //     const workbook = XLSX.read(data, { type: 'array' });
+  //     console.log('Workbook data:', workbook); // Debugging log
+  
+  //     const exercises: ExerciseOption[] = [];
+  //     workbook.SheetNames.forEach(sheetName => {
+  //       const sheet = workbook.Sheets[sheetName];
+  //       const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as string[][];
+  
+  //       rows.slice(1).forEach(row => {
+  //         row.forEach((exerciseName, dayIndex) => {
+  //           if (exerciseName) {
+  //             exercises.push({
+  //               id: uuidv4(),
+  //               name: exerciseName,
+  //               sets: '1', // Default sets
+  //               day: `Day ${dayIndex + 1}`,
+  //               restTime: 30, // Default rest time
+  //             });
+  //           }
+  //         });
+  //       });
+  //     });
+  
+  //     console.log('Exercises loaded from Excel:', exercises); // Debugging log
+  //     setExercises(exercises);
+  //   } catch (error) {
+  //     console.error('Error fetching exercise data from Excel:', error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (!fetchExisting) {
+  //     fetchExerciseDataFromExcel();
+  //   }
+  // }, [fetchExisting, selectedType]);
+  
+
+  useEffect(() => {
+    if (!fetchExisting) {
+      const fetchExerciseDataFromExcel = async () => {
         try {
           const response = await fetch(`/${selectedType}.xlsx`);
           if (!response.ok) {
@@ -117,20 +391,19 @@ const AdminAddExercises = () => {
           }
           const data = await response.arrayBuffer();
           const workbook = XLSX.read(data, { type: 'array' });
+          const newExercises: ExerciseOption[] = [];
 
-          const exercises: ExerciseOption[] = [];
-
-          workbook.SheetNames.forEach(sheetName => {
+          workbook.SheetNames.forEach((sheetName) => {
             const sheet = workbook.Sheets[sheetName];
             const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as string[][];
 
-            rows.slice(1).forEach(row => {
+            rows.slice(1).forEach((row) => {
               row.forEach((exerciseName, dayIndex) => {
                 if (exerciseName) {
-                  exercises.push({
-                    id: uuidv4(), // Generate unique id
+                  newExercises.push({
+                    id: uuidv4(),
                     name: exerciseName,
-                    sets: '10', // Default sets
+                    sets: '1', // Default sets
                     day: `Day ${dayIndex + 1}`,
                     restTime: 30, // Default rest time
                   });
@@ -138,17 +411,18 @@ const AdminAddExercises = () => {
               });
             });
           });
-
-          setExercises(exercises);
-          console.log('Exercises fetched and set:', exercises);
+          setExercises(newExercises);
         } catch (error) {
-          console.error('Error fetching exercise data:', error);
+          console.error('Error fetching exercise data from Excel:', error);
         }
       };
 
-      fetchExerciseData();
+      fetchExerciseDataFromExcel();
     }
-  }, [selectedType]);
+  }, [fetchExisting, selectedType]);
+
+  
+
 
   useEffect(() => {
     const fetchGifOptions = async () => {
@@ -192,6 +466,9 @@ const AdminAddExercises = () => {
 //     }
 //   };
 
+
+
+
 const handleAssignExercise = async () => {
     try {
       const currentDate = format(new Date(), 'yyyy-MM-dd');
@@ -201,7 +478,7 @@ const handleAssignExercise = async () => {
         type: selectedType,
         date: currentDate,
       };
-      console.log('Assigning exercises:', payload); // Debug log
+      // console.log('Assigning exercises:', payload); // Debug log
       const response = await fetch('/api/adminAddExercise', {
         method: 'POST',
         headers: {
@@ -212,7 +489,7 @@ const handleAssignExercise = async () => {
   
       if (!response.ok) throw new Error('Error assigning exercise');
       const data = await response.json();
-      console.log(data.message);
+      // console.log(data.message);
       router.push('/dashboard');
     } catch (error: any) {
       console.error('Error:', error);
@@ -272,9 +549,44 @@ const handleAssignExercise = async () => {
     setIsGifModalOpen(false);
   };
 
+
+  const handleDownloadExercises = () => {
+    if (!exercises || exercises.length === 0) {
+      console.error('No exercises to download');
+      return;
+    }
+  
+    // Create worksheet data including exercise name, sets, day, rest time, weights, and reps
+    const worksheetData = [
+      ['Exercise Name', 'Sets', 'Day', 'Rest Time (sec)', 'Weights', 'Reps'], // Add headers for weights and reps
+      ...exercises.map(exercise => [
+        exercise.name,
+        exercise.sets,
+        exercise.day,
+        exercise.restTime,
+        exercise.weights ? exercise.weights.join(', ') : '', // Join weights array if it exists
+        exercise.reps ? exercise.reps.join(', ') : '', // Join reps array if it exists
+      ]),
+    ];
+  
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+  
+    // Create a workbook and add the worksheet
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Exercises');
+  
+    // Generate a file name
+    const fileName = `${selectedClient}_exercises.xlsx`;
+  
+    // Trigger the download
+    XLSX.writeFile(workbook, fileName);
+  };
+  
+
+
   const renderGifModal = () => (
     <Modal onClose={() => setIsGifModalOpen(false)}>
-      <div className="max-h-screen overflow-y-auto bg-[var(--background-color)] text-[var(--text-color)] p-4 mx-auto max-w-sm md:max-w-2xl">
+      <div className="max-h-screen overflow-y-auto bg-[var(--background-color)] text-[var(--text-color)] p-4 w-full md:w-3/4 lg:w-2/3 xl:w-3/4 mx-auto">
         <div className="flex justify-between items-center mb-4">
           <div className="flex flex-wrap justify-center space-x-2">
             {gifFolders.map(folder => (
@@ -378,7 +690,9 @@ const handleAssignExercise = async () => {
                       alt={exercise.name}
                       className="w-24 h-24 self-center mt-2 cursor-pointer"
                     />
-                    <p className="mt-2 font-sans">{exercise.gif.split('/').pop()}</p>
+                    <p className="mt-2 font-sans w-24 text-center text-ellipsis overflow-hidden whitespace-nowrap">
+                      {exercise.gif.split('/').pop()}
+                    </p>
                   </div>
                 )}
               </td>
@@ -485,7 +799,9 @@ const handleAssignExercise = async () => {
                   alt={exercise.name}
                   className="w-24 h-24 self-center mt-2 cursor-pointer"
                 />
-                <p className="mt-2 font-sans">{exercise.gif.split('/').pop()}</p>
+                <p className="mt-2 font-sans w-24 text-center text-ellipsis overflow-hidden whitespace-nowrap">
+                  {exercise.gif.split('/').pop()}
+                </p>
               </div>
             )}
             <select
@@ -527,7 +843,7 @@ const handleAssignExercise = async () => {
 
   return (
     <DashboardLayout>
-      <div className="flex flex-col items-center min-h-screen relative  max-w-sm md:max-w-2xl">
+      <div className="flex flex-col items-center min-h-screen relative  w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
         <div className="absolute top-4 right-4 flex space-x-4">
           <FontAwesomeIcon
             icon={faDumbbell}
@@ -545,13 +861,28 @@ const handleAssignExercise = async () => {
               className="block w-full mt-1 p-2 border-[var(--select-border-color)] bg-[var(--select-background-color)] text-[var(--select-text-color)] rounded-md"
             >
               <option value="" disabled>Select a client</option>
-              {clients.map((client: any) => (
+              {Array.isArray(clients) && clients.length > 0 && clients.map((client: any) => (
                 <option key={client.email} value={client.email}>
                   {client.fullName} ({client.email})
                 </option>
               ))}
             </select>
+
           </div>
+
+          <div className="flex items-center justify-between mb-4">
+            <label htmlFor="fetch-existing" className="mr-2">
+              Fetch existing exercises for client
+            </label>
+            <input
+              id="fetch-existing"
+              type="checkbox"
+              checked={fetchExisting}
+              onChange={(e) => setFetchExisting(e.target.checked)}
+              className="form-checkbox"
+            />
+          </div>
+
           <div className="mb-4 flex-col flex">
             <button
               onClick={handleToggleMode}
@@ -563,6 +894,26 @@ const handleAssignExercise = async () => {
           {isAutomatic ? renderAutomaticForm() : renderManualForm()}
           {showExercises && renderExerciseTable()}
         </div>
+        <div className="flex justify-around items-center w-full mt-6 mb-20">
+          <button
+            onClick={handleDownloadExercises}
+            className="bg-green-500 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-green-600 transition duration-200 flex items-center justify-center"
+            style={{ width: '200px' }} // Set a fixed width
+          >
+            <FontAwesomeIcon icon={faDownload} className="h-6 w-6 mr-2" />
+            Download Excel
+          </button>
+
+          <button
+            onClick={handleDownloadPDF}
+            className="bg-blue-500 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200 flex items-center justify-center"
+            style={{ width: '200px' }} // Set a fixed width
+          >
+            <FontAwesomeIcon icon={faDownload} className="h-6 w-6 mr-2" />
+            Download PDF
+          </button>
+        </div>
+
         {isGifModalOpen && renderGifModal()}
       </div>
     </DashboardLayout>

@@ -57,9 +57,49 @@
 
 
 
+// /** @type {import('next').NextConfig} */
+
+
+// const nextConfig = {}
+// module.exports = nextConfig
+// module.exports = {
+//     async rewrites() {
+//       return [
+//         {
+//           source: '/socket.io/:path*',
+//           destination: '/api/socket',
+//         },
+//       ];
+//     },
+//   };
+
+
+
+
 /** @type {import('next').NextConfig} */
 
+const nextConfig = {
+  env: {
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL,
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL,
+    NEXT_PUBLIC_CLERK_API_URL: process.env.NEXT_PUBLIC_CLERK_API_URL,
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_CLERK_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL,
+    NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL,
+    MONGODB_URI: process.env.MONGODB_URI,
+    // Add other environment variables here as needed
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/socket.io/:path*',
+        destination: '/api/socket',
+      },
+    ];
+  },
+};
 
+<<<<<<< HEAD
 
 /** @type {import('next').NextConfig} */
 
@@ -87,3 +127,6 @@ const nextConfig = {
 module.exports = nextConfig;
 
 
+=======
+module.exports = nextConfig;
+>>>>>>> eccdb1e (Add favicon with TypeScript)

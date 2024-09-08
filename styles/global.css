@@ -28,6 +28,85 @@ nav a {
     border-radius: .5rem;
 }
 
+.bg-gray-100 {
+    background-color: var(--background-color-light);
+}
+
+.bg-gray-700 {
+    background-color: var(--background-color-dark);
+}
+
+.text-gray-900 {
+    color: var(--text-color-dark);
+}
+
+.text-white {
+    color: var(--text-color-light);
+}
+
+
+input {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+  }
+  
+  input:focus {
+    border-color: var(--secondary-color);
+  }
+  
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+html {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+
+
+/* Custom styles for slider arrows */
+.slick-prev,
+.slick-next {
+  background-color: var(--button-bg-color); /* Use CSS variable for button color */
+  color: var(--button-text-color); /* Use CSS variable for text/icon color */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Adjust colors based on light/dark mode */
+[data-theme="light"] .slick-prev,
+[data-theme="light"] .slick-next {
+  background-color: var(--slider-arrow-bg-light);
+  color: var(--slider-arrow-color-light);
+}
+
+[data-theme="dark"] .slick-prev,
+[data-theme="dark"] .slick-next {
+  background-color: var(--slider-arrow-bg-dark);
+  color: var(--slider-arrow-color-dark);
+}
+
+/* Add hover effect */
+.slick-prev:hover,
+.slick-next:hover {
+  background-color: var(--hover-bg-color); /* Optional hover effect */
+  color: var(--hover-text-color); /* Optional hover effect */
+}
+
+
+
+
 /* Add these to your global.css or equivalent stylesheet */
 :root {
     --primary-color: #000000;
@@ -40,12 +119,22 @@ nav a {
     --select-border-color: #d1d5db;
     --sidebar-background-color: #2d3748;
     --sidebar-text-color: #ffffff;
+    --slider-bg-light: #000000; /* Black in light mode */
+    --slider-bg-dark: #ffffff; /* White in dark mode */
+
+    --slider-arrow-bg-light: #000000; /* Light theme arrow background */
+    --slider-arrow-color-light: #ffffff; /* Light theme arrow text */
+    --slider-arrow-bg-dark: #000000; /* Dark theme arrow background */
+    --slider-arrow-color-dark: #ffffff; /* Dark theme arrow text */
+    --hover-bg-color: #22c55e; /* Hover background color */
+    --hover-text-color: #ffffff; /* Hover text color */
 }
 
 [data-theme='dark'] {
     --primary-color: #ffffff;
-    --primary-button-color: rgb(255, 255, 255)
+    --primary-button-color: rgb(255, 255, 255);
     --secondary-color: #007bff;
+    --button-hover-color: rgb(185, 164, 255);
     --background-color: #1a202c;
     --text-color: #ffffff;
     --border-color: #374151;
@@ -54,12 +143,14 @@ nav a {
     --select-border-color: #4a5568;
     --sidebar-background-color: #1a202c;
     --sidebar-text-color: #ffffff;
+    --slider-bg-light: #ffffff; /* White in dark mode */
 }
 
 [data-theme='light'] {
     --primary-color: #000000;
     --secondary-color: #007bff;
     --background-color: #ffffff;
+    --button-hover-color: rgb(255, 193, 164);
     --text-color: #000000;
     --border-color: #d1d5db;
     --select-background-color: rgba(134, 172, 255, 0.161);
@@ -67,6 +158,8 @@ nav a {
     --select-border-color: #d1d5db;
     --sidebar-background-color: #ffffff;
     --sidebar-text-color: #000000;
+    --slider-bg-light: #000000; /* Black in light mode */
+    --slider-bg-dark: #ffffff; /* White in dark mode */
 }
 
 [data-theme='landing-dark'] {
@@ -159,19 +252,35 @@ nav a {
     color: #007bff;
 }
 
-.button {
+/* .button {
     background-color: var(--primary-button-color);
     color: #fff;
     border-radius: 30px;
     padding: 10px 20px;
     font-size: 16px;
     transition: color 0.3s, background-color 0.3s;
-}
+} */
 
+
+.button {
+    background-color: var(--primary-button-color);
+    color: var(--text-color);
+    border-radius: 0.375rem;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+
+
+  button:hover {
+    background-color: var(--button-hover-color);
+  }
+
+/* 
 .button:hover {
     background-color: var(--secondary-color);
     color: green;
-}
+} */
 
 .table th, .table td {
     border: none;
@@ -273,6 +382,12 @@ nav a:hover {
     padding: 2rem;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pricing-card h1 {
+    font-family: 'Montserrat', sans-serif;
+    color: #333;
+    margin-bottom: 1rem;
 }
 
 .pricing-card h3 {

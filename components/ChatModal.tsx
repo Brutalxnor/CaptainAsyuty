@@ -1,7 +1,5 @@
-
-
 import React, { useState, useEffect, useRef } from 'react';
-import { useUser } from '@clerk/nextjs';
+import { useAuth } from '@/contexts/AuthContext'; // Import your custom AuthContext
 import io from 'socket.io-client';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/avatar'; // Ensure these components are imported correctly
 
@@ -36,10 +34,9 @@ const getRandomColor = (userId: string) => {
 };
 
 const ChatModal: React.FC<ChatModalProps> = ({ onClose }) => {
-  const { user } = useUser();
+  const { user } = useAuth(); // Use your custom AuthContext
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [unreadMessages, setUnreadMessages] = useState(0);
   const socketRef = useRef<any>(null);
 
   useEffect(() => {
@@ -47,7 +44,6 @@ const ChatModal: React.FC<ChatModalProps> = ({ onClose }) => {
 
     socketRef.current.on('message', (message: Message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
-      setUnreadMessages((prev) => prev + 1);
     });
 
     return () => {

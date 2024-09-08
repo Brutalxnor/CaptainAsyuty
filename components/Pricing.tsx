@@ -11,46 +11,46 @@ const Pricing = () => {
 
   const plans = [
     {
-      title: { en: 'Monthly', ar: 'شهري' },
+      title: { en: '1 Month', ar: 'شهر 1' },
       price: { en: '499 EGP / month', ar: '499 جنيه / شهر' },
       features: [
         { en: 'Weekly Exercise Updates', ar: 'تحديثات التمرين أسبوعياً' },
         { en: 'Nutrition Plan', ar: 'خطة تغذية' },
         { en: 'Basic Support', ar: 'مساعدة أساسية' },
       ],
-      link: '/sign-up?plan=monthly',
+      link: '/sign-up?plan=1month',
       buttonColor: 'bg-gradient-to-r from-blue-400 to-blue-600',
       buttonHoverColor: 'hover:from-blue-500 hover:to-blue-700',
     },
     {
-      title: { en: 'Yearly', ar: 'سنوي' },
-      price: { en: '3999 EGP / year', ar: '3999 جنيه / سنة' },
+      title: { en: '3 Months', ar: '3 شهور' },
+      price: { en: '1199 EGP / 3 months', ar: '1199 جنيه / 3 شهور' },
       features: [
         { en: 'Weekly Exercise Updates', ar: 'تحديثات التمرين أسبوعياً' },
         { en: 'Nutrition Plan', ar: 'خطة تغذية' },
         { en: 'Priority Support', ar: 'مساعدة ذات أولوية' },
       ],
-      link: '/sign-up?plan=yearly',
+      link: '/sign-up?plan=3months',
       buttonColor: 'bg-gradient-to-r from-green-400 to-green-600',
       buttonHoverColor: 'hover:from-green-500 hover:to-green-700',
     },
     {
-      title: { en: 'Video Calls', ar: 'مكالمات فيديو' },
-      price: { en: '999 EGP / month', ar: '999 جنيه / شهر' },
+      title: { en: '6 Months', ar: '6 شهور' },
+      price: { en: '2299 EGP / 6 months', ar: '2299 جنيه / 6 شهور' },
       features: [
-        { en: 'Daily Exercise Updates', ar: 'تحديثات التمرين يومياً' },
+        { en: 'Weekly Exercise Updates', ar: 'تحديثات التمرين أسبوعياً' },
         { en: 'Nutrition Plan', ar: 'خطة تغذية' },
         { en: 'Personal Support', ar: 'مساعدة شخصية' },
       ],
-      link: '/sign-up?plan=video',
+      link: '/sign-up?plan=6months',
       buttonColor: 'bg-gradient-to-r from-red-400 to-red-600',
       buttonHoverColor: 'hover:from-red-500 hover:to-red-700',
     },
   ];
-
+  
   return (
     <div className={styles.pricingContainer + " py-12 mt-10"}>
-      <h2 className={styles.heading + " text-center text-4xl font-bold mb-8 text-gray-900 font-serif"}>
+      <h2 className={styles.heading + " text-center text-4xl font-bold mb-8 text-black font-serif"}>
         {language === 'en' ? 'Reasonable and Flexible Plans' : 'خطط معقولة ومرنة'}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
