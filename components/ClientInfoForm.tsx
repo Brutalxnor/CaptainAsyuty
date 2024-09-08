@@ -2402,96 +2402,190 @@ const ClientInfoForm: React.FC<ClientInfoFormProps> = ({ email, clientData = {} 
     },
   };
 
-  return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="w-full max-w-lg p-6 bg-white text-black border-gray-200 rounded-lg shadow-lg overflow-y-auto relative">
-        {isLoading && (
-          <div className="absolute inset-0 bg-white bg-opacity-75 flex justify-center items-center">
-            <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
-            <span className="ml-2">Uploading...</span>
-          </div>
-        )}
-        {/* Client's Full Name */}
-        <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {[
-              { label: content.weight[language as 'en' | 'ar'], name: 'weight', type: 'text' },
-              { label: content.height[language as 'en' | 'ar'], name: 'height', type: 'text' },
-              { label: content.age[language as 'en' | 'ar'], name: 'age', type: 'text' },
-              { label: content.fatWeight[language as 'en' | 'ar'], name: 'fatWeight', type: 'text' },
-              { label: content.muscleWeight[language as 'en' | 'ar'], name: 'muscleWeight', type: 'text' },
-              { label: content.musclePercentage[language as 'en' | 'ar'], name: 'musclePercentage', type: 'text' },
-              { label: content.fatPercentage[language as 'en' | 'ar'], name: 'fatPercentage', type: 'text' },
-              { label: content.waistMeasurement[language as 'en' | 'ar'], name: 'waistMeasurement', type: 'text' },
-              { label: content.rightArmMeasurement[language as 'en' | 'ar'], name: 'rightArmMeasurement', type: 'text' },
-              { label: content.leftArmMeasurement[language as 'en' | 'ar'], name: 'leftArmMeasurement', type: 'text' },
-              { label: content.rightLegMeasurement[language as 'en' | 'ar'], name: 'rightLegMeasurement', type: 'text' },
-              { label: content.leftLegMeasurement[language as 'en' | 'ar'], name: 'leftLegMeasurement', type: 'text' },
-              { label: content.sugarCravings[language as 'en' | 'ar'], name: 'sugarCravings', type: 'text' },
-            ].map((input) => (
-              <div className="flex flex-col" key={input.name}>
-                <label className="mb-1">{input.label}</label>
-                <input
-                  type={input.type}
-                  name={input.name}
-                  value={data[input.name as keyof ClientData] as string}
-                  onChange={handleChange}
-                  className="mt-1 block px-3 py-2 border rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500"
-                />
+//   return (
+//     <div className="flex justify-center items-center min-h-screen">
+//       <div className="w-full max-w-lg p-6 bg-white text-black border-gray-200 rounded-lg shadow-lg overflow-y-auto relative">
+//         {isLoading && (
+//           <div className="absolute inset-0 bg-white bg-opacity-75 flex justify-center items-center">
+//             <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+//             <span className="ml-2">Uploading...</span>
+//           </div>
+//         )}
+//         {/* Client's Full Name */}
+//         <form onSubmit={handleSubmit}>
+//           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+//             {[
+//               { label: content.weight[language as 'en' | 'ar'], name: 'weight', type: 'text' },
+//               { label: content.height[language as 'en' | 'ar'], name: 'height', type: 'text' },
+//               { label: content.age[language as 'en' | 'ar'], name: 'age', type: 'text' },
+//               { label: content.fatWeight[language as 'en' | 'ar'], name: 'fatWeight', type: 'text' },
+//               { label: content.muscleWeight[language as 'en' | 'ar'], name: 'muscleWeight', type: 'text' },
+//               { label: content.musclePercentage[language as 'en' | 'ar'], name: 'musclePercentage', type: 'text' },
+//               { label: content.fatPercentage[language as 'en' | 'ar'], name: 'fatPercentage', type: 'text' },
+//               { label: content.waistMeasurement[language as 'en' | 'ar'], name: 'waistMeasurement', type: 'text' },
+//               { label: content.rightArmMeasurement[language as 'en' | 'ar'], name: 'rightArmMeasurement', type: 'text' },
+//               { label: content.leftArmMeasurement[language as 'en' | 'ar'], name: 'leftArmMeasurement', type: 'text' },
+//               { label: content.rightLegMeasurement[language as 'en' | 'ar'], name: 'rightLegMeasurement', type: 'text' },
+//               { label: content.leftLegMeasurement[language as 'en' | 'ar'], name: 'leftLegMeasurement', type: 'text' },
+//               { label: content.sugarCravings[language as 'en' | 'ar'], name: 'sugarCravings', type: 'text' },
+//             ].map((input) => (
+//               <div className="flex flex-col" key={input.name}>
+//                 <label className="mb-1">{input.label}</label>
+//                 <input
+//                   type={input.type}
+//                   name={input.name}
+//                   value={data[input.name as keyof ClientData] as string}
+//                   onChange={handleChange}
+//                   className="mt-1 block px-3 py-2 border rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-0.5 focus:ring-sky-500"
+//                 />
+//               </div>
+//             ))}
+//             {[
+//               { label: content.previousInjuries[language as 'en' | 'ar'], name: 'previousInjuries' },
+//               { label: content.diabetes[language as 'en' | 'ar'], name: 'diabetes' },
+//               { label: content.bloodPressure[language as 'en' | 'ar'], name: 'bloodPressure' },
+//               { label: content.onlineTrainingExperience[language as 'en' | 'ar'], name: 'onlineTrainingExperience' },
+//               { label: content.trainingAge[language as 'en' | 'ar'], name: 'trainingAge' },
+//             ].map((select) => (
+//               <div className="flex flex-col" key={select.name}>
+//                 <label>{select.label}</label>
+//                 <div className="flex space-x-2">
+//                   <label className="flex items-center space-x-2">
+//                     <input
+//                       type="radio"
+//                       name={select.name}
+//                       value="Yes"
+//                       checked={data[select.name as keyof ClientData] === 'Yes'}
+//                       onChange={(e) => handleToggleChange(select.name as keyof ClientData, e.target.value)}
+//                       className="mt-1"
+//                     />
+//                     <span>Yes</span>
+//                   </label>
+//                   <label className="flex items-center space-x-2">
+//                     <input
+//                       type="radio"
+//                       name={select.name}
+//                       value="No"
+//                       checked={data[select.name as keyof ClientData] === 'No'}
+//                       onChange={(e) => handleToggleChange(select.name as keyof ClientData, e.target.value)}
+//                       className="mt-1"
+//                     />
+//                     <span>No</span>
+//                   </label>
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//           <div className="flex flex-col mt-4">
+//             <label className="mb-1">{content.uploadFrontImage[language as 'en' | 'ar']}</label>
+//             <input type="file" name="frontImage" onChange={(e) => handleFileChange(e, 'front')} className="mt-1" />
+//           </div>
+//           <div className="flex flex-col mt-4">
+//             <label className="mb-1">{content.uploadBackImage[language as 'en' | 'ar']}</label>
+//             <input type="file" name="backImage" onChange={(e) => handleFileChange(e, 'back')} className="mt-1" />
+//           </div>
+//           <button type="submit" className="mt-5 w-full bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition duration-200">
+//             {content.saveButton[language as 'en' | 'ar']}
+//           </button>
+//         </form>
+//         <ToastContainer />
+//       </div>
+//     </div>
+//   );
+// };
+
+
+return (
+  <div className="flex justify-center items-center min-h-screen">
+    <div className="w-full max-w-lg p-6 text-[var(--text-color)]  font-serif border-gray-200 rounded-lg shadow-lg overflow-y-auto relative">
+      {isLoading && (
+        <div className="absolute inset-0 bg-white bg-opacity-75 flex justify-center items-center">
+          <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+          <span className="ml-2">Uploading...</span>
+        </div>
+      )}
+      {/* Client's Full Name */}
+      <form onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-2 px-4 border-b text-left text-xl font-bold">
+          {[
+            { label: content.weight[language as 'en' | 'ar'], name: 'weight', type: 'text' },
+            { label: content.height[language as 'en' | 'ar'], name: 'height', type: 'text' },
+            { label: content.age[language as 'en' | 'ar'], name: 'age', type: 'text' },
+            { label: content.fatWeight[language as 'en' | 'ar'], name: 'fatWeight', type: 'text' },
+            { label: content.muscleWeight[language as 'en' | 'ar'], name: 'muscleWeight', type: 'text' },
+            { label: content.musclePercentage[language as 'en' | 'ar'], name: 'musclePercentage', type: 'text' },
+            { label: content.fatPercentage[language as 'en' | 'ar'], name: 'fatPercentage', type: 'text' },
+            { label: content.waistMeasurement[language as 'en' | 'ar'], name: 'waistMeasurement', type: 'text' },
+            { label: content.rightArmMeasurement[language as 'en' | 'ar'], name: 'rightArmMeasurement', type: 'text' },
+            { label: content.leftArmMeasurement[language as 'en' | 'ar'], name: 'leftArmMeasurement', type: 'text' },
+            { label: content.rightLegMeasurement[language as 'en' | 'ar'], name: 'rightLegMeasurement', type: 'text' },
+            { label: content.leftLegMeasurement[language as 'en' | 'ar'], name: 'leftLegMeasurement', type: 'text' },
+            { label: content.sugarCravings[language as 'en' | 'ar'], name: 'sugarCravings', type: 'text' },
+          ].map((input) => (
+            <div className="flex flex-col" key={input.name}>
+              <label className="mb-1">{input.label}</label>
+              <input
+                type={input.type}
+                name={input.name}
+                value={data[input.name as keyof ClientData] as string}
+                onChange={handleChange}
+                className="mt-1 block px-3 py-2 bg-[var(--select-background-color)] border border-gray-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+              />
+            </div>
+          ))}
+          {[
+            { label: content.previousInjuries[language as 'en' | 'ar'], name: 'previousInjuries' },
+            { label: content.diabetes[language as 'en' | 'ar'], name: 'diabetes' },
+            { label: content.bloodPressure[language as 'en' | 'ar'], name: 'bloodPressure' },
+            { label: content.onlineTrainingExperience[language as 'en' | 'ar'], name: 'onlineTrainingExperience' },
+            { label: content.trainingAge[language as 'en' | 'ar'], name: 'trainingAge' },
+          ].map((select) => (
+            <div className="flex flex-col" key={select.name}>
+              <label>{select.label}</label>
+              <div className="flex space-x-2">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name={select.name}
+                    value="Yes"
+                    checked={data[select.name as keyof ClientData] === 'Yes'}
+                    onChange={(e) => handleToggleChange(select.name as keyof ClientData, e.target.value)}
+                    className="mt-1"
+                  />
+                  <span>Yes</span>
+                </label>
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name={select.name}
+                    value="No"
+                    checked={data[select.name as keyof ClientData] === 'No'}
+                    onChange={(e) => handleToggleChange(select.name as keyof ClientData, e.target.value)}
+                    className="mt-1"
+                  />
+                  <span>No</span>
+                </label>
               </div>
-            ))}
-            {[
-              { label: content.previousInjuries[language as 'en' | 'ar'], name: 'previousInjuries' },
-              { label: content.diabetes[language as 'en' | 'ar'], name: 'diabetes' },
-              { label: content.bloodPressure[language as 'en' | 'ar'], name: 'bloodPressure' },
-              { label: content.onlineTrainingExperience[language as 'en' | 'ar'], name: 'onlineTrainingExperience' },
-              { label: content.trainingAge[language as 'en' | 'ar'], name: 'trainingAge' },
-            ].map((select) => (
-              <div className="flex flex-col" key={select.name}>
-                <label>{select.label}</label>
-                <div className="flex space-x-2">
-                  <label className="flex items-center space-x-2">
-                    <input
-                      type="radio"
-                      name={select.name}
-                      value="Yes"
-                      checked={data[select.name as keyof ClientData] === 'Yes'}
-                      onChange={(e) => handleToggleChange(select.name as keyof ClientData, e.target.value)}
-                      className="mt-1"
-                    />
-                    <span>Yes</span>
-                  </label>
-                  <label className="flex items-center space-x-2">
-                    <input
-                      type="radio"
-                      name={select.name}
-                      value="No"
-                      checked={data[select.name as keyof ClientData] === 'No'}
-                      onChange={(e) => handleToggleChange(select.name as keyof ClientData, e.target.value)}
-                      className="mt-1"
-                    />
-                    <span>No</span>
-                  </label>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-col mt-4">
-            <label className="mb-1">{content.uploadFrontImage[language as 'en' | 'ar']}</label>
-            <input type="file" name="frontImage" onChange={(e) => handleFileChange(e, 'front')} className="mt-1" />
-          </div>
-          <div className="flex flex-col mt-4">
-            <label className="mb-1">{content.uploadBackImage[language as 'en' | 'ar']}</label>
-            <input type="file" name="backImage" onChange={(e) => handleFileChange(e, 'back')} className="mt-1" />
-          </div>
-          <button type="submit" className="mt-5 w-full bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition duration-200">
-            {content.saveButton[language as 'en' | 'ar']}
-          </button>
-        </form>
-        <ToastContainer />
-      </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-col mt-4">
+          <label className="mb-1">{content.uploadFrontImage[language as 'en' | 'ar']}</label>
+          <input type="file" name="frontImage" onChange={(e) => handleFileChange(e, 'front')} className="mt-1" />
+        </div>
+        <div className="flex flex-col mt-4">
+          <label className="mb-1">{content.uploadBackImage[language as 'en' | 'ar']}</label>
+          <input type="file" name="backImage" onChange={(e) => handleFileChange(e, 'back')} className="mt-1" />
+        </div>
+        <button type="submit" className="mt-5 w-full bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition duration-200">
+          {content.saveButton[language as 'en' | 'ar']}
+        </button>
+      </form>
+      <ToastContainer />
     </div>
-  );
+  </div>
+);
 };
+
 
 export default ClientInfoForm;

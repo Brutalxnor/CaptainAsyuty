@@ -199,7 +199,7 @@
 
 
 
-
+//api/signup.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '@/lib/mongodb';
 import bcrypt from 'bcryptjs';
@@ -272,10 +272,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const token = jwt.sign(
         { email: newUser.email, role: newUser.role },
         process.env.JWT_SECRET!,
-        {
-          expiresIn: '1h',
-        }
+        { expiresIn: '1h' }
       );
+      
+      res.setHeader('Set-Cookie', `auth-token=${token}; HttpOnly; Path=/; Max-Age=3600`);
+      
 
       res.setHeader('Set-Cookie', `auth-token=${token}; HttpOnly; Path=/; Max-Age=3600`);
       res.status(201).json({ token, user: newUser });

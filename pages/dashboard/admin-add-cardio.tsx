@@ -5,22 +5,18 @@
 
 
 
+
+
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import { useAuth } from '@/contexts/AuthContext';
-import useExerciseData from '../../components/useExerciseData';
-import * as XLSX from 'xlsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExchangeAlt, faPlus, faTasks, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faExchangeAlt, faPlus, faTasks, faTrash, faHeartbeat } from '@fortawesome/free-solid-svg-icons';
 import Modal from '@/components/Modal';
 import { fa1, fa2, fa3, fa4, fa5, fa6 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-ChartJS.register(ArcElement, Tooltip, Legend);
-
-
+import { ClientData } from '@/types/ClientData';
 
 const dayIcons: Record<string, IconDefinition> = {
   'Day 1': fa1,
@@ -31,34 +27,33 @@ const dayIcons: Record<string, IconDefinition> = {
   'Day 6': fa6,
 };
 
+// Manually define GIFs available in the cardio folder
+const cardioGifOptions = [
+  'Running.gif',
+  'Burpees.gif',
+  'TREADMIL.gif',
+  'HighKnees.gif',
+  'BAT_ROPE.gif',
+  'PushUp.gif',
+  'jump-rope.gif',
+  'RowingMachine.gif',
+  'StairClimber.gif',
+  'StationaryBike.gif',
+];
+
 interface Exercise {
-  name: string;
   duration: string;
   day: string;
   gif?: string;
 }
 interface ExerciseOption {
-  name: string;
   duration?: string;
   day: string;
   gif?: string;
 }
 
-const cardioTypes = {
-  'Cardio 3 Days': 3,
-  'Cardio 4 Days': 4,
-  'Cardio 5 Days': 5,
-  'Cardio 6 Days': 6,
-};
-
-interface ClientData {
-  email: string;
-  exercises?: Exercise[];
-  cardio?: Exercise[];
-}
 
 const durationOptions = ['5 min', '10 min', '15 min', '20 min', '25 min', '30 min', '40 min', '50 min', '60 min', '120 min'];
-const cardioCategories = ['Running', 'Burpees', 'High Knees'];
 
 const AdminAddCardio = () => {
   const router = useRouter();
@@ -70,11 +65,11 @@ const AdminAddCardio = () => {
   const [exercises, setExercises] = useState<ExerciseOption[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isAutomatic, setIsAutomatic] = useState(true);
-  const [gifOptions, setGifOptions] = useState<string[]>([]);
   const [selectedDay, setSelectedDay] = useState<string>('Day 1');
-  const exerciseData = useExerciseData();
   const [selectedGif, setSelectedGif] = useState<string | null>(null);
   const [clientData, setClientData] = useState<ClientData | null>(null);
+  const [showExercises, setShowExercises] = useState(true);
+  const [isGifModalOpen, setIsGifModalOpen] = useState<boolean>(false); // Track modal state
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -90,55 +85,27 @@ const AdminAddCardio = () => {
     fetchClients();
   }, []);
 
+  // Fetch client-specific cardio exercises
   useEffect(() => {
-    if (selectedType) {
-      const fetchExerciseData = async () => {
+    const fetchClientCardio = async () => {
+      if (selectedClient) {
         try {
-          const response = await fetch(`/${selectedType}.xlsx`);
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+          const response = await fetch(`/api/adminAddCardio?email=${selectedClient}`);
+          const data = await response.json();
+          console.log("data.exercises", data.exercises); // Check if exercises exist
+          if (data.exercises) {
+            setExercises(data.exercises);
+          } else {
+            setExercises([]); // Default to an empty state if no cardio exercises
           }
-          const data = await response.arrayBuffer();
-          const workbook = XLSX.read(data, { type: 'array' });
-
-          const exercises: ExerciseOption[] = [];
-
-          workbook.SheetNames.forEach(sheetName => {
-            const sheet = workbook.Sheets[sheetName];
-            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as string[][];
-
-            rows.slice(1).forEach(row => {
-              row.forEach((exerciseName, dayIndex) => {
-                if (exerciseName) {
-                  exercises.push({
-                    name: exerciseName,
-                    duration: '30 min', // Default duration
-                    day: `Day ${dayIndex + 1}`,
-                  });
-                }
-              });
-            });
-          });
-
-          setExercises(exercises);
-          console.log('Exercises fetched and set:', exercises);
         } catch (error) {
-          console.error('Error fetching exercise data:', error);
+          console.error('Error fetching client cardio:', error);
         }
-      };
+      }
+    };
 
-      fetchExerciseData();
-    }
-  }, [selectedType]);
-
-  useEffect(() => {
-    const gifs = [
-      'Running.gif',
-      'Burpees.gif',
-      'HighKnees.gif',
-    ];
-    setGifOptions(gifs);
-  }, []);
+    fetchClientCardio();
+  }, [selectedClient]);
 
   const getGifPath = (gifName: string) => {
     return `/cardio/${gifName.replace(/ /g, '')}`;
@@ -146,7 +113,6 @@ const AdminAddCardio = () => {
 
   const handleAssignExercise = async () => {
     try {
-      console.log('Assigning exercises:', { email: selectedClient, exercises, type: selectedType });
       const response = await fetch('/api/adminAddCardio', {
         method: 'POST',
         headers: {
@@ -157,7 +123,6 @@ const AdminAddCardio = () => {
 
       if (!response.ok) throw new Error('Error assigning exercise');
       const data = await response.json();
-      console.log(data.message);
       router.push('/dashboard');
     } catch (error: any) {
       console.error('Error:', error);
@@ -185,7 +150,7 @@ const AdminAddCardio = () => {
   };
 
   const handleAddExercise = () => {
-    setExercises([...exercises, { name: '', duration: '', day: selectedDay }]);
+    setExercises([...exercises, { duration: '', day: selectedDay }]);
   };
 
   const handleRemoveExercise = (index: number) => {
@@ -204,7 +169,6 @@ const AdminAddCardio = () => {
     setExercises(newExercises);
   };
 
-
   const toggleDay = (day: string) => {
     setSelectedDay(day);
   };
@@ -213,6 +177,7 @@ const AdminAddCardio = () => {
     setSelectedGif(gif);
   };
 
+  // Render the exercise table and gif selection
   const renderExerciseTable = () => (
     <div className="w-full max-w-3xl p-6 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] rounded-lg shadow-lg md:p-6 sm:p-4 overflow-x-auto">
       <h2 className="text-2xl text-center mt-5 font-serif font-lg italic mb-4">Assigned Cardio Exercises</h2>
@@ -230,28 +195,14 @@ const AdminAddCardio = () => {
       <table className="min-w-full bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] text-center">
         <thead>
           <tr>
-            <th className="py-2 px-4 border-b">Exercise</th>
             <th className="py-2 px-4 border-b">Duration</th>
             <th className="py-2 px-4 border-b">GIF</th>
+            <th className="py-2 px-4 border-b">Remove</th>
           </tr>
         </thead>
         <tbody>
           {exercises.filter(exercise => exercise.day === selectedDay).map((exercise, index) => (
             <tr key={index}>
-              <td className="py-2 px-4 border-b">
-                <select
-                  value={exercise.name}
-                  onChange={(e) => handleExerciseChange(index, 'name', e.target.value)}
-                  className="block w-full mt-1 p-2 border-[var(--select-border-color)] bg-[var(--select-background-color)] text-[var(--select-text-color)] rounded-md"
-                >
-                  <option value="" disabled>Select Exercise</option>
-                  {cardioCategories.map((option: string) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </td>
               <td className="py-2 px-4 border-b">
                 <select
                   value={exercise.duration}
@@ -266,64 +217,56 @@ const AdminAddCardio = () => {
                   ))}
                 </select>
               </td>
-              {/* <td className="py-2 px-4 border-b min-w-32">
-                <select
-                  value={exercise.gif || ''}
-                  onChange={(e) => handleExerciseChange(index, 'gif', e.target.value)}
-                  className="block w-full mt-1 p-2 border-[var(--select-border-color)] bg-[var(--select-background-color)] text-[var(--select-text-color)] rounded-md"
+              <td className="py-2 px-4 border-b min-w-32">
+                <button
+                  className="bg-blue-500 text-white py-1 px-2 rounded-md"
+                  onClick={() => setIsGifModalOpen(true)} // Open GIF modal on click
                 >
-                  <option value="" disabled>Select GIF</option>
-                  {gifOptions.map((gif) => (
-                    <option key={gif} value={gif}>
-                      {gif}
-                    </option>
-                  ))}
-                </select>
+                  Select GIF
+                </button>
                 <div className="items-center justify-center flex flex-col">
                   {exercise.gif ? (
                     <img
-                      src={`/gifs/${exercise.gif}`}
-                      alt={exercise.name}
+                      src={getGifPath(exercise.gif)}
+                      alt={exercise.duration}
                       className="w-32 h-32 self-center min-w-half cursor-pointer"
-                      onClick={() => handleGifClick(`/gifs/${exercise.gif}`)}
+                      onClick={() => exercise.gif && handleGifClick(getGifPath(exercise.gif))}
                     />
                   ) : (
                     'No GIF'
                   )}
                 </div>
-              </td> */}
-<td className="py-2 px-4 border-b min-w-32">
-  <select
-    value={exercise.gif || ''}
-    onChange={(e) => handleExerciseChange(index, 'gif', e.target.value)}
-    className="block w-full mt-1 p-2 border-[var(--select-border-color)] bg-[var(--select-background-color)] text-[var(--select-text-color)] rounded-md"
-  >
-    <option value="" disabled>Select GIF</option>
-    {gifOptions.map((gif) => (
-      <option key={gif} value={gif}>
-        {gif.split('/').pop()}
-      </option>
-    ))}
-  </select>
-  <div className="items-center justify-center flex flex-col">
-    {exercise.gif ? (
-      <img
-        src={getGifPath(exercise.gif)}
-        alt={exercise.name}
-        className="w-32 h-32 self-center min-w-half cursor-pointer"
-        onClick={() => exercise.gif && handleGifClick(getGifPath(exercise.gif))}
-      />
-    ) : (
-      'No GIF'
-    )}
-  </div>
-</td>
-
+              </td>
+              <td className="border-b items-center justify-center relative left-11">
+                <button
+                  onClick={() => handleRemoveExercise(index)}
+                  className="bg-red-500 text-white px-2 py-1 rounded-md flex items-center justify-center"
+                >
+                  <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
+  );
+
+  // Render the GIF selection modal
+  const renderGifModal = () => (
+    <Modal onClose={() => setIsGifModalOpen(false)}>
+      <div className="max-h-screen overflow-y-auto p-4">
+        <h3 className="text-xl font-semibold mb-4">Select a GIF</h3>
+        <div className="grid grid-cols-4 gap-4">
+          {cardioGifOptions.map((gif) => (
+            <div key={gif} className="cursor-pointer" onClick={() => handleGifClick(gif)}>
+              <img src={getGifPath(gif)} alt={gif} className="w-24 h-24 mx-auto" />
+              <p className="text-center">{gif}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Modal>
   );
 
   const handleToggleMode = () => {
@@ -332,28 +275,16 @@ const AdminAddCardio = () => {
 
   const renderAutomaticForm = () => (
     <>
-    <div>
       <div className="mb-4">
-        <label>Select Cardio Type:</label>
-        <select
-          value={selectedType}
-          onChange={(e) => setSelectedType(e.target.value)}
-          className="block w-full mt-1 p-2 border-[var(--select-border-color)] bg-[var(--select-background-color)] text-[var(--select-text-color)] rounded-md"
-        >
-          {Object.keys(cardioTypes).map((type: string) => (
-            <option key={type} value={type}>
-              {type}
-            </option>
-          ))}
-        </select>
+
       </div>
       <button
         onClick={handleAssignExercise}
         className="bg-blue-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-blue-600 transition duration-200 mt-4 min-w-full flex-col flex items-center"
       >
         <FontAwesomeIcon icon={faTasks} className="h-6 w-6" />
+        Assign Exercises
       </button>
-    </div>
     </>
   );
 
@@ -370,65 +301,78 @@ const AdminAddCardio = () => {
           </button>
         ))}
       </div>
-      {exercises.filter(exercise => exercise.day === selectedDay).map((exercise, index) => (
-        <div key={index} className="mb-4">
-          <div className="flex items-center">
-            <select
-              value={exercise.name}
-              onChange={(e) => handleExerciseChange(index, 'name', e.target.value)}
-              className="block w-1/3 mt-1 p-2 border-[var(--select-border-color)] bg-[var(--select-background-color)] text-[var(--select-text-color)] rounded-md"
-            >
-              <option value="" disabled>Select Exercise</option>
-              {cardioCategories.map((option: string) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-            <select
-              value={exercise.duration}
-              onChange={(e) => handleExerciseChange(index, 'duration', e.target.value)}
-              className="block w-1/3 mt-1 p-2 border-[var(--select-border-color)] bg-[var(--select-background-color)] text-[var(--select-text-color)] rounded-md"
-            >
-              <option value="" disabled>Select Duration</option>
-              {durationOptions.map((option: string) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-            <select
-              value={exercise.gif || ''}
-              onChange={(e) => handleExerciseChange(index, 'gif', e.target.value)}
-              className="block w-1/3 mt-1 p-2 border-[var(--select-border-color)] bg-[var(--select-background-color)] text-[var(--select-text-color)] rounded-md"
-            >
-              <option value="" disabled>Select GIF</option>
-              {gifOptions.map((gif) => (
-                <option key={gif} value={gif}>
-                  {gif}
-                </option>
-              ))}
-            </select>
-            <button
-              onClick={() => handleRemoveExercise(index)}
-              className="ml-2 bg-red-500 text-white px-2 py-1 rounded-md flex items-center justify-center"
-            >
-              <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
-      ))}
+
+      <table className="min-w-full bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] text-center">
+        <thead>
+          <tr>
+            <th className="py-2 px-4 border-b">Duration</th>
+            <th className="py-2 px-4 border-b">GIF</th>
+            <th className="py-2 px-4 border-b">Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          {exercises.filter(exercise => exercise.day === selectedDay).map((exercise, index) => (
+            <tr key={index}>
+              <td className="py-2 px-4 border-b">
+                <select
+                  value={exercise.duration}
+                  onChange={(e) => handleExerciseChange(index, 'duration', e.target.value)}
+                  className="block w-full mt-1 p-2 border-[var(--select-border-color)] bg-[var(--select-background-color)] text-[var(--select-text-color)] rounded-md"
+                >
+                  <option value="" disabled>Select Duration</option>
+                  {durationOptions.map((option: string) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </td>
+              <td className="py-2 px-4 border-b min-w-32">
+                <button
+                  className="bg-blue-500 text-white py-1 px-2 rounded-md"
+                  onClick={() => setIsGifModalOpen(true)} // Open GIF modal on click
+                >
+                  Select GIF
+                </button>
+                <div className="items-center justify-center flex flex-col">
+                  {exercise.gif ? (
+                    <img
+                      src={getGifPath(exercise.gif)}
+                      alt={exercise.duration}
+                      className="w-32 h-32 self-center min-w-half cursor-pointer"
+                      onClick={() => exercise.gif && handleGifClick(getGifPath(exercise.gif))}
+                    />
+                  ) : (
+                    'No GIF'
+                  )}
+                </div>
+              </td>
+              <td className="border-b items-center justify-center relative left-11">
+                <button
+                  onClick={() => handleRemoveExercise(index)}
+                  className="bg-red-500 text-white px-2 py-1 rounded-md flex items-center justify-center"
+                >
+                  <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
       <button
         onClick={handleAddExercise}
         className="bg-green-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-600 transition duration-200 min-w-full flex-col flex items-center"
       >
         <FontAwesomeIcon icon={faPlus} className="h-6 w-6" />
+        Add Exercise
       </button>
       <button
         onClick={handleAssignExercise}
         className="bg-blue-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-blue-600 transition duration-200 mt-4 min-w-full flex-col flex items-center"
       >
         <FontAwesomeIcon icon={faTasks} className="h-6 w-6" />
+        Assign Exercises
       </button>
       {error && <p className="text-red-500 mt-2">Error: {error}</p>}
     </>
@@ -437,7 +381,14 @@ const AdminAddCardio = () => {
   return (
     <DashboardLayout>
       <div className="flex flex-col justify-center items-center min-h-screen relative">
-        <div className="w-full max-w-3xl p-6 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] rounded-lg shadow-lg md:p-6 sm:p-4 overflow-x-auto">
+        <div className="absolute top-4 right-4 flex space-x-4">
+            <FontAwesomeIcon
+              icon={faHeartbeat}
+              className={`h-8 w-8 cursor-pointer ${showExercises ? 'text-blue-500' : 'text-gray-500'}`}
+              onClick={() => setShowExercises(!showExercises)}
+            />
+          </div>
+        <div className="w-full max-w-3xl p-6 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] rounded-lg shadow-lg w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
           <h1 className="text-2xl font-lg italic font-serif mt-5 text-center mb-4">Assign Cardio Exercise</h1>
           <div className="min-w-full font-serif bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] mb-4">
             <label>Select Client:</label>
@@ -453,18 +404,13 @@ const AdminAddCardio = () => {
                 </option>
               ))}
             </select>
+            {renderManualForm()}
+            {showExercises && renderExerciseTable()}
+
           </div>
-          <div className="mb-4 flex-col flex">
-            <button
-              onClick={handleToggleMode}
-              className="bg-purple-500 text-white mt-4 py-3 px-4 rounded-md shadow-md hover:bg-purple-600 transition duration-200"
-            >
-              <FontAwesomeIcon icon={faExchangeAlt} />
-            </button>
+
           </div>
-          {isAutomatic ? renderAutomaticForm() : renderManualForm()}
-          {renderExerciseTable()}
-        </div>
+        {isGifModalOpen && renderGifModal()}
         {selectedGif && (
           <Modal onClose={() => handleGifClick(null)}>
             <img src={selectedGif} alt="Exercise GIF" className="w-full h-auto" />
@@ -476,3 +422,14 @@ const AdminAddCardio = () => {
 };
 
 export default AdminAddCardio;
+
+
+
+
+
+
+
+
+
+
+

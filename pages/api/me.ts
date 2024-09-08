@@ -1,3 +1,5 @@
+
+//api/me.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 import clientPromise from '@/lib/mongodb';

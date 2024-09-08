@@ -24,16 +24,17 @@ import React, { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/router';
-import { Line, Bar } from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
 import Modal from '@/components/Modal';
-import { faChevronDown, faChevronUp, faDollarSign, faEye, faEyeSlash, faUser, faUserShield, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faChevronUp, faChevronRight, faChevronLeft, faDollarSign, faEye, faEyeSlash, faUser, faUserShield, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fa1, fa2, fa3, fa4, fa5, fa6, faWeightHanging, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import LoadingSpinner from '@/components/LoadingSpinner'; // Import the new component
 import { useTranslation } from 'react-i18next';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { ClientData } from '@/types/ClientData';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -72,35 +73,35 @@ interface Cardio {
   gif?: string;
 }
 
-interface ClientData {
-  email: string;
-  fullName?: string;
-  weight?: string;
-  height?: string;
-  age?: string;
-  fatWeight?: string;
-  muscleWeight?: string;
-  musclePercentage?: string;
-  fatPercentage?: string;
-  waistMeasurement?: string;
-  rightArmMeasurement?: string;
-  leftArmMeasurement?: string;
-  rightLegMeasurement?: string;
-  leftLegMeasurement?: string;
-  sugarCravings?: string;
-  previousInjuries?: string;
-  diabetes?: string;
-  bloodPressure?: string;
-  onlineTrainingExperience?: string;
-  trainingAge?: string;
-  workoutSets?: string;
-  exercises?: Exercise[];
-  cardio?: Cardio[];
-  hasPaid: boolean;
-  paymentDate?: string; 
-  admin: boolean;
-  client: boolean;
-}
+// interface ClientData {
+//   email: string;
+//   fullName?: string;
+//   weight?: string;
+//   height?: string;
+//   age?: string;
+//   fatWeight?: string;
+//   muscleWeight?: string;
+//   musclePercentage?: string;
+//   fatPercentage?: string;
+//   waistMeasurement?: string;
+//   rightArmMeasurement?: string;
+//   leftArmMeasurement?: string;
+//   rightLegMeasurement?: string;
+//   leftLegMeasurement?: string;
+//   sugarCravings?: string;
+//   previousInjuries?: string;
+//   diabetes?: string;
+//   bloodPressure?: string;
+//   onlineTrainingExperience?: string;
+//   trainingAge?: string;
+//   workoutSets?: string;
+//   exercises?: Exercise[];
+//   cardio?: Cardio[];
+//   hasPaid: boolean;
+//   paymentDate?: string; 
+//   admin: boolean;
+//   client: boolean;
+// }
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -113,11 +114,14 @@ const AdminDashboard: React.FC = () => {
   const [selectedGif, setSelectedGif] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const router = useRouter();
-  const [showEmails, setShowEmails] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const clientsPerPage = 10; // Number of clients to show per page
 
-  const toggleEmails = () => {
-    setShowEmails(!showEmails);
-  };
+  // Calculate total pages
+  const totalPages = Math.ceil(clientData.length / clientsPerPage);
+
 
   useEffect(() => {
     const fetchClientData = async () => {
@@ -178,6 +182,10 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+  const handleToggleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+  
   const toggleRow = (index: number) => {
     const client = clientData[index];
 
@@ -198,9 +206,36 @@ const AdminDashboard: React.FC = () => {
     setSelectedGif(gif);
   };
 
+  // const filteredClients = clientData.filter(client =>
+  //     client.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     client.fullName?.toLowerCase().includes(searchTerm.toLowerCase())
+  //   );
+
+    
+  // const filteredClients = clientData
+  // .filter(client => !client.admin)
+  // .filter(client => 
+  //   client.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //   client.fullName?.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
+
+
+  const handlePageChange = (direction: 'next' | 'prev') => {
+    if (direction === 'next' && currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    } else if (direction === 'prev' && currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const filteredClientsTenMax = clientData
+    .filter(client => client.email?.toLowerCase().includes(searchTerm.toLowerCase()) || client.fullName?.toLowerCase().includes(searchTerm.toLowerCase()))
+    .slice((currentPage - 1) * clientsPerPage, currentPage * clientsPerPage); // Show clients based on pagination
+
   const filteredClients = clientData.filter(client =>
-    client.fullName?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      client.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      client.fullName?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
   if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>;
@@ -211,39 +246,36 @@ const AdminDashboard: React.FC = () => {
     return date.toISOString().split('T')[0];
   }).reverse();
 
-  const data = {
-    labels: ['Total Clients', 'Paid Clients', 'Admin Clients', 'Client Users'],
+
+
+  const pieData = {
+    labels: ['Paid Clients', 'Not Paid Clients'],
     datasets: [
       {
-        label: 'Number of Clients',
+        label: 'Client Statistics',
         data: [
           filteredClients.length,
           filteredClients.filter(client => client.hasPaid).length,
-          filteredClients.filter(client => client.admin).length,
-          filteredClients.filter(client => client.client).length,
         ],
         backgroundColor: [
           'rgba(54, 162, 235, 0.6)',
-          'rgba(75, 192, 192, 0.6)',
           'rgba(255, 99, 132, 0.6)',
-          'rgba(255, 206, 86, 0.6)',
         ],
         borderColor: [
           'rgba(54, 162, 235, 1)',
-          'rgba(75, 192, 192, 1)',
           'rgba(255, 99, 132, 1)',
-          'rgba(255, 206, 86, 1)',
         ],
         borderWidth: 1,
       },
     ],
   };
 
-  const options = {
+  const pieOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: 'top' as const, // Ensure that the position is a valid enum value
       },
       title: {
         display: true,
@@ -252,10 +284,6 @@ const AdminDashboard: React.FC = () => {
     },
   };
 
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-  };
 
   const isCardio = (exercise: Exercise | Cardio): exercise is Cardio => {
     return (exercise as Cardio).duration !== undefined;
@@ -359,7 +387,7 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div className="max-w-screen "> 
+      <div className="max-w-screen w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto"> 
         <h1 className="text-2xl font-bold mb-4 text-center font-serif italic font-xl">{t('Admin Dashboard')}</h1>
         <div className="flex flex-col items-center justify-center ">
           <div className="bg-[var(--background-color)] text-[var(--text-color)] rounded-lg shadow-md p-4 mt-4 w-full max-w-4xl font-serif">
@@ -380,10 +408,10 @@ const AdminDashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredClients.map((client, index) => (
+                  {filteredClientsTenMax.map((client, index) => (
                     <React.Fragment key={index}>
                       <tr className="border-b border-[var(--border-color)]">
-                        <td className="py-2 px-4 text-xl font-bold min-w-full">{client.fullName}</td>
+                        <td className="py-2 px-4 text-xl font-bold min-w-full">{client.fullName? client.fullName : client.email}</td>
                         <td className="py-2 px-4">
                           <button
                             onClick={() => toggleRow(index)}
@@ -412,12 +440,45 @@ const AdminDashboard: React.FC = () => {
                 </tbody>
               </table>
             </div>
-          </div>
-          <div className="flex flex-col items-center mb-10 mt-10 w-full">
-            <div className="w-full max-w-6xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-lg shadow-lg p-6 overflow-y-auto max-w-sm md:max-w-2xl" >
-              <h1 className="text-3xl font-bold text-center mb-6">{t('Client Dashboard')}</h1>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            {/* Pagination Controls */}
+
+            <div className="flex justify-between items-center mt-4">
+              <button
+                onClick={() => handlePageChange('prev')}
+                className="bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 transition duration-200"
+                disabled={currentPage === 1} // Disable if on first page
+              >
+                <FontAwesomeIcon icon={faChevronLeft} />
+              </button>
+              <span className="text-lg font-semibold">{`Page ${currentPage} of ${totalPages}`}</span>
+              <button
+                onClick={() => handlePageChange('next')}
+                className="bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-600 transition duration-200"
+                disabled={currentPage === totalPages} // Disable if on last page
+              >
+                <FontAwesomeIcon icon={faChevronRight} />
+              </button>
+            </div>
+
+          </div>
+          <div className="mt-10 flex flex-col items-center justify-center">
+            <h2 className="text-3xl font-bold text-center mb-6 text-[var(--text-color)]">{t('Client Statistics')}</h2>
+            <div className="flex justify-center items-center">
+              <div
+                className="bg-[var(--background-color)] rounded-lg shadow-md p-4"
+                style={{ width: '400px', height: '400px' }}
+              >
+                <Pie data={pieData} options={pieOptions} />
+              </div>
+            </div>
+          </div>
+
+
+          <div className="flex flex-col items-center mb-10 mt-10 w-full">
+            <div className="w-full max-w-6xl  from-indigo-500 to-purple-500 text-white rounded-lg shadow-lg p-6 overflow-y-auto sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl">
+
+              <div className="grid grid-cols-1 gap-4 mb-6">
                 <div className="bg-blue-700 p-4 rounded-lg shadow-md text-center hover:bg-blue-800 transition-transform transform hover:scale-105">
                   <FontAwesomeIcon icon={faUsers} className="h-6 w-6 mb-2" />
                   <h2 className="text-xl font-bold">{t('Total Clients')}</h2>
@@ -428,79 +489,86 @@ const AdminDashboard: React.FC = () => {
                   <h2 className="text-xl font-bold">{t('Paid Clients')}</h2>
                   <p className="text-3xl">{filteredClients.filter(client => client.hasPaid).length}</p>
                 </div>
-                <div className="bg-red-700 p-4 rounded-lg shadow-md text-center hover:bg-red-800 transition-transform transform hover:scale-105">
-                  <FontAwesomeIcon icon={faUserShield} className="h-6 w-6 mb-2" />
-                  <h2 className="text-xl font-bold">{t('Admin Clients')}</h2>
-                  <p className="text-3xl">{filteredClients.filter(client => client.admin).length}</p>
-                </div>
-                <div className="bg-yellow-700 p-4 rounded-lg shadow-md text-center hover:bg-yellow-800 transition-transform transform hover:scale-105">
-                  <FontAwesomeIcon icon={faUser} className="h-6 w-6 mb-2" />
-                  <h2 className="text-xl font-bold">{t('Client Users')}</h2>
-                  <p className="text-3xl">{filteredClients.filter(client => client.client).length}</p>
-                </div>
               </div>
 
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">{t('Client List')}</h2>
+                <button
+                  onClick={handleToggleCollapse}
+                  className="bg-blue-500 text-white py-2 px-4 rounded-full shadow hover:bg-blue-600 transition duration-200 flex items-center justify-center"
+                >
+                  <FontAwesomeIcon icon={isCollapsed ? faChevronDown : faChevronUp} className="h-5 w-5" />
+                </button>
+              </div>
+
+              {!isCollapsed && (
+                <div className="overflow-x-auto ">
+                  <table className="min-w-full text-[var(--text-color)] shadow-lg">
+                    <thead>
+                      <tr className="bg-gray-100 text-left py-2 px-4 border-b text-left text-xl font-bold">
+                        <th className="py-3 px-4 font-semibold">{t('Name')}</th>
+                        <th className="py-3 px-4 font-semibold text-center">{t('Has Paid')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredClients.map((client, index) => (
+                        <tr key={index} className="border-b border-gray-200 hover:text-blue-600 hover:bg-blue-100 transition-colors">
+                          <td className="py-2 px-4 text-lg font-semibold bg-transparent text-black-800 flex items-center">
+                            <div className={`w-10 h-10 flex items-center justify-center text-white mr-3`}>
+                              {client.fullName ? client.fullName.charAt(0).toUpperCase() : client.email.charAt(0).toUpperCase()}
+                            </div>
+                            {client.fullName ? client.fullName : client.email}
+                          </td>
+                          <td className="py-3 px-4 text-center">
+                            <span
+                              className={`inline-block py-1 px-3 text-sm font-medium ${
+                                client.hasPaid ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
+                              }`}
+                            >
+                              {client.hasPaid ? t('Yes') : t('No')}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+
+{/* 
               <div className="overflow-x-auto">
-                <table className="min-w-full bg-white text-gray-800 border border-gray-200 rounded-lg shadow-lg">
+                <table className="min-w-full text-[var(--text-color)] rounded-lg shadow-lg">
                   <thead>
-                    <tr className="bg-gray-100 text-left">
+                    <tr className="bg-gray-100 text-left py-2 px-4 border-b text-left text-xl font-bold">
                       <th className="py-3 px-4 font-semibold">{t('Name')}</th>
-                      {showEmails && <th className="py-3 px-4 font-semibold text-center">{t('Email')}</th>}
                       <th className="py-3 px-4 font-semibold text-center">{t('Has Paid')}</th>
-                      <th className="py-3 px-4 font-semibold text-center">{t('Is Admin')}</th>
-                      <th className="py-3 px-4 font-semibold text-center">{t('Is Client')}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredClients.map((client, index) => (
                       <tr key={index} className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
-                        <td className="py-3 px-4 text-lg font-semibold flex items-center">
-                          <div className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white rounded-full mr-3">
+                        <td className="py-2 px-4 text-lg font-semibold bg-transparent text-black-800 rounded-md flex items-center">
+                          <div className={`w-10 h-10 flex items-center justify-center text-white rounded-full mr-3`}>
                             {client.fullName ? client.fullName.charAt(0).toUpperCase() : client.email.charAt(0).toUpperCase()}
                           </div>
                           {client.fullName ? client.fullName : client.email}
                         </td>
-                        {showEmails && <td className="py-3 px-4 text-center">{client.email}</td>}
                         <td className="py-3 px-4 text-center">
                           <span className={`inline-block py-1 px-3 rounded-full text-sm font-medium ${client.hasPaid ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
                             {client.hasPaid ? t('Yes') : t('No')}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 text-center">
-                          <span className={`inline-block py-1 px-3 rounded-full text-sm font-medium ${client.admin ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
-                            {client.admin ? t('Yes') : t('No')}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 text-center">
-                          <span className={`inline-block py-1 px-3 rounded-full text-sm font-medium ${client.client ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
-                            {client.client ? t('Yes') : t('No')}
                           </span>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </div> */}
 
-              <div className="mt-10">
-                <h2 className="text-2xl font-bold mb-4">{t('Client Statistics')}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                  
-                </div>
 
-                <div className="bg-white rounded-lg shadow-md p-4 min-h-64">
-                  <Bar data={data} options={options} />
-                </div>
-              </div>
 
-              <div className="text-center mb-4">
-                <button
-                  onClick={toggleEmails}
-                  className="bg-white text-blue-500 p-3 rounded-full shadow-md hover:bg-gray-200 transition duration-200"
-                >
-                  <FontAwesomeIcon icon={showEmails ? faEyeSlash : faEye} className="h-6 w-6" />
-                </button>
-              </div>
+
+
             </div>
       </div>
     </div>

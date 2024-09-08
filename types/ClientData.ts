@@ -12,6 +12,13 @@ export interface Exercise {
   reps: number[]; // Array of reps
   started?: boolean;
   finished?: boolean;
+  date: string;
+}
+
+export interface Referral {
+  referrerEmail: string;
+  referredEmail: string;
+  date: string;
 }
 
 export interface Cardio {
@@ -22,6 +29,7 @@ export interface Cardio {
 }
 
 export interface ClientData {
+  referrals: Referral[];
   email: string;
   fullName?: string;
   hasPaid: boolean;
@@ -66,7 +74,6 @@ export interface ClientData {
   previousOnlineTrainingExperience?: string;
 
   exercises?: Exercise[];
-  date?:string;
   exerciseType?: string;
   cardio?: Cardio[];
 
