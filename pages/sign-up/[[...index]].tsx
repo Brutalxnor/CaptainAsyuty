@@ -496,7 +496,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
-<<<<<<< HEAD
   
   const SignUpPage = () => {
     const [username, setUsername] = useState(''); 
@@ -505,15 +504,7 @@ import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icon
     const [referralCode, setReferralCode] = useState(''); // For referral code
     const [isLoading, setIsLoading] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false); // For toggling password visibility
-=======
-const SignUpPage = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [referralCode, setReferralCode] = useState(''); // For referral code
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // For toggling password visibility
-  const [isLoading, setIsLoading] = useState(false);
->>>>>>> c7cdd42 (Final V1)
+
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const router = useRouter();
   const { signUp } = useAuth();
@@ -537,10 +528,6 @@ const SignUpPage = () => {
         pauseOnHover: true,
         draggable: true,
       });
-<<<<<<< HEAD
-
-=======
->>>>>>> c7cdd42 (Final V1)
       return;
     }
     setIsLoading(true);
@@ -565,10 +552,7 @@ const SignUpPage = () => {
         pauseOnHover: true,
         draggable: true,
       });
-<<<<<<< HEAD
 
-=======
->>>>>>> c7cdd42 (Final V1)
     } finally {
       setIsLoading(false);
     }
@@ -631,10 +615,7 @@ const SignUpPage = () => {
                 <FontAwesomeIcon icon={isPasswordVisible ? faEyeSlash : faEye} />
               </button>
             </div>
-<<<<<<< HEAD
 
-=======
->>>>>>> c7cdd42 (Final V1)
             <input
               type="text"
               value={referralCode}
@@ -646,10 +627,7 @@ const SignUpPage = () => {
               sitekey="YOUR_RECAPTCHA_SITE_KEY" // Add your reCAPTCHA site key here
               onChange={handleCaptcha}
               className="mb-4"
-<<<<<<< HEAD
 
-=======
->>>>>>> c7cdd42 (Final V1)
             />
             <button
               type="submit"
@@ -672,10 +650,6 @@ const SignUpPage = () => {
       )}
       {/* Toast container to show notifications */}
       <ToastContainer />
-<<<<<<< HEAD
-
-=======
->>>>>>> c7cdd42 (Final V1)
     </div>
   );
 };

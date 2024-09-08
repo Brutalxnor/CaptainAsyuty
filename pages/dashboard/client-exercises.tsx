@@ -224,10 +224,6 @@
 //   reps: number[]; // Array of reps
 //   started?: boolean;
 //   finished?: boolean;
-<<<<<<< HEAD
-=======
-//   date: string;
->>>>>>> c7cdd42 (Final V1)
 // }
 
 // interface Cardio {
@@ -281,7 +277,6 @@
 
 //   const router = useRouter();
 
-<<<<<<< HEAD
 //   useEffect(() => {
 //     const checkAndAddEmail = async (email: string): Promise<boolean> => {
 //       try {
@@ -304,7 +299,7 @@
 //         console.error('Error checking/adding email:', error);
 //         return false;
 //       }
-=======
+
 //   // useEffect(() => {
 //   //   const checkAndAddEmail = async (email: string): Promise<boolean> => {
 //   //     try {
@@ -421,13 +416,10 @@
 //             console.error('Error checking/adding email:', error);
 //             return false;
 //         }
->>>>>>> c7cdd42 (Final V1)
 //     };
 
 //     const fetchClientData = async () => {
 //       if (!user) {
-<<<<<<< HEAD
-//         router.push('/sign-in');
 //         return;
 //       }
 
@@ -1023,15 +1015,11 @@
   
 //       const userEmail = user.primaryEmailAddress?.emailAddress || user.email;
   
-=======
-//           router.push('/sign-in');
 //           return;
 //       }
   
 //       const userEmail = user.primaryEmailAddress?.emailAddress || user.email;
   
->>>>>>> c7cdd42 (Final V1)
-//       if (!userEmail) {
 //           setLoading(false);
 //           return;
 //       }
@@ -1385,63 +1373,6 @@
 
 //             updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
 //             updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
-<<<<<<< HEAD
-
-
-//             const response = await fetch('/api/assign-weights', {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//                 body: JSON.stringify({
-//                     email: clientData.email,
-//                     exerciseId: selectedExercise.id,
-//                     weights: updatedWeights,
-//                     reps: updatedReps,
-//                 }),
-//             });
-
-
-//             if (!response.ok) {
-//                 const errorData = await response.json();
-//                 console.error('Error data:', errorData);
-//                 throw new Error(errorData.message || 'Failed to assign weights and reps');
-//             }
-
-//             // Update the local state to reflect the changes
-//             const updatedExercises = clientData.exercises?.map(exercise =>
-//                 exercise.id === selectedExercise.id
-//                     ? { ...exercise, weights: updatedWeights, reps: updatedReps }
-//                     : exercise
-//             );
-
-//             console.log('Updated Exercises:', updatedExercises);
-
-//             setClientData({
-//                 ...clientData,
-//                 exercises: updatedExercises,
-//             });
-
-//             setShowWeightsModal(false); // Close the modal after saving
-//             // setSelectedExercise(null); // Do not reset the selected exercise
-//             setSets([]); // Clear the sets array
-//             // console.log('Weights and reps assigned successfully');
-//         } catch (error: any) {
-//             console.error('Error assigning weights and reps:', error);
-//         }
-//     } else {
-//         if (!selectedExercise) console.error('selectedExercise is null or undefined');
-//         if (activeSetIndex === null) console.error('activeSetIndex is null');
-//         if (!clientData) console.error('clientData is null or undefined');
-//     }
-// };
-
-
-
-//   const currentExercise = clientData?.exercises?.[unlockedExerciseIndices[currentUnlockedIndex]];
-
-=======
-
 //             // console.log('Weights:', updatedWeights);
 //             // console.log('Reps:', updatedReps);
 //             // console.log('Selected Exercise:', selectedExercise);
@@ -1501,7 +1432,6 @@
 
 //   const currentExercise = clientData?.exercises?.[unlockedExerciseIndices[currentUnlockedIndex]];
 
->>>>>>> c7cdd42 (Final V1)
 //   return (
 //     <DashboardLayout>
 //       <div className="flex flex-col justify-center items-center min-h-screen relative" style={containerStyle}>
