@@ -200,7 +200,10 @@
 
 
 //api/signup.ts
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7cdd42 (Final V1)
 import { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '@/lib/mongodb';
 import bcrypt from 'bcryptjs';

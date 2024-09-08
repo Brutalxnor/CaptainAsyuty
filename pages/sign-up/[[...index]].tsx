@@ -373,6 +373,119 @@
 
 
 
+// import { useRouter } from 'next/router';
+// import React, { useState } from 'react';
+// import { useAuth } from '@/contexts/AuthContext';
+// import LoadingSpinner from '@/components/LoadingSpinner';
+// import ReCAPTCHA from "react-google-recaptcha";
+
+// const SignUpPage = () => {
+//   const [username, setUsername] = useState(''); 
+//   const [email, setEmail] = useState('');
+//   const [password, setPassword] = useState('');
+//   const [referralCode, setReferralCode] = useState(''); // For referral code
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [captchaVerified, setCaptchaVerified] = useState(false);
+//   const router = useRouter();
+//   const { signUp } = useAuth();
+
+//   const handleCaptcha = (value: string | null) => {
+//     setCaptchaVerified(!!value);
+//   };
+
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     if (!captchaVerified) {
+//       alert('Please verify you are not a robot.');
+//       return;
+//     }
+//     setIsLoading(true);
+//     try {
+//       await signUp(username, email, password, referralCode); // Assuming signUp function handles referral code
+//       router.push('/dashboard');
+//     } catch (error) {
+//       console.error('Error signing up:', error);
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+
+//   const handleBackToLanding = () => {
+//     router.push('/'); // Redirect to landing page
+//   };
+
+//   return (
+//     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+//       {isLoading ? (
+//         <LoadingSpinner />
+//       ) : (
+//         <>
+//           <form onSubmit={handleSubmit} className="w-full max-w-sm">
+//             <input
+//               type="text"
+//               value={username}
+//               onChange={(e) => setUsername(e.target.value)}
+//               placeholder="Username"
+//               className="mb-4 w-full p-2 border border-gray-300 rounded"
+//               required
+//             />
+//             <input
+//               type="email"
+//               value={email}
+//               onChange={(e) => setEmail(e.target.value)}
+//               placeholder="Email"
+//               className="mb-4 w-full p-2 border border-gray-300 rounded"
+//               required
+//             />
+//             <input
+//               type="password"
+//               value={password}
+//               onChange={(e) => setPassword(e.target.value)}
+//               placeholder="Password"
+//               className="mb-4 w-full p-2 border border-gray-300 rounded"
+//               required
+//             />
+//             <input
+//               type="text"
+//               value={referralCode}
+//               onChange={(e) => setReferralCode(e.target.value)}
+//               placeholder="Referral Code (optional)"
+//               className="mb-4 w-full p-2 border border-gray-300 rounded"
+//             />
+//             <ReCAPTCHA
+//               sitekey="YOUR_RECAPTCHA_SITE_KEY"
+//               onChange={handleCaptcha}
+//             />
+//             <button
+//               type="submit"
+//               className="w-full bg-blue-500 text-white p-2 rounded mb-4"
+//               disabled={!captchaVerified}
+//             >
+//               Sign Up
+//             </button>
+//           </form>
+//           <button
+//             type="button"
+//             onClick={handleBackToLanding}
+//             className="mt-4 text-blue-500 hover:underline"
+//           >
+//             Back to Home Page
+//           </button>
+//         </>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default SignUpPage;
+
+
+
+
+
+
+
+
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -383,6 +496,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
+<<<<<<< HEAD
   
   const SignUpPage = () => {
     const [username, setUsername] = useState(''); 
@@ -391,6 +505,15 @@ import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icon
     const [referralCode, setReferralCode] = useState(''); // For referral code
     const [isLoading, setIsLoading] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false); // For toggling password visibility
+=======
+const SignUpPage = () => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [referralCode, setReferralCode] = useState(''); // For referral code
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // For toggling password visibility
+  const [isLoading, setIsLoading] = useState(false);
+>>>>>>> c7cdd42 (Final V1)
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const router = useRouter();
   const { signUp } = useAuth();
@@ -414,7 +537,10 @@ import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icon
         pauseOnHover: true,
         draggable: true,
       });
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7cdd42 (Final V1)
       return;
     }
     setIsLoading(true);
@@ -439,7 +565,10 @@ import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icon
         pauseOnHover: true,
         draggable: true,
       });
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7cdd42 (Final V1)
     } finally {
       setIsLoading(false);
     }
@@ -502,7 +631,10 @@ import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icon
                 <FontAwesomeIcon icon={isPasswordVisible ? faEyeSlash : faEye} />
               </button>
             </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7cdd42 (Final V1)
             <input
               type="text"
               value={referralCode}
@@ -514,7 +646,10 @@ import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icon
               sitekey="YOUR_RECAPTCHA_SITE_KEY" // Add your reCAPTCHA site key here
               onChange={handleCaptcha}
               className="mb-4"
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7cdd42 (Final V1)
             />
             <button
               type="submit"
@@ -537,7 +672,10 @@ import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icon
       )}
       {/* Toast container to show notifications */}
       <ToastContainer />
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7cdd42 (Final V1)
     </div>
   );
 };

@@ -75,7 +75,10 @@
     "html2canvas": "^1.4.1",
 
     "i18next": "^23.14.0",
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7cdd42 (Final V1)
 
     "i18next-browser-languagedetector": "^8.0.0",
 
@@ -85,7 +88,10 @@
 
     "jspdf": "^2.5.1",
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7cdd42 (Final V1)
     "lucide-react": "^0.379.0",
 
     "mongodb": "^6.8.0",
@@ -113,7 +119,10 @@
     "react-google-recaptcha": "^3.1.0",
 
     "react-i18next": "^15.0.1",
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7cdd42 (Final V1)
 
     "react-icons": "^5.2.1",
 

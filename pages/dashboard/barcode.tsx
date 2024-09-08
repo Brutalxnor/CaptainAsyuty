@@ -542,7 +542,10 @@ const AffiliateBarcode: React.FC = () => {
     <DashboardLayout>
       <div className="flex flex-col items-center justify-center min-h-screen text-center bg-[var(--background-color)] text-[var(--text-color)] p-6 border-b text-left text-lg font-bold">
         <h1 className="text-2xl font-bold mb-4 py-2 px-4 border-b text-left text-xl font-bold">
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7cdd42 (Final V1)
           {content.title[language as 'en' | 'ar']}
         </h1>
         <p className="mb-4">

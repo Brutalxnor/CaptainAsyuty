@@ -85,7 +85,10 @@ const AdminAddExercises = () => {
   const clientEmail = user?.primaryEmailAddress?.emailAddress || user?.email || '';
   // const [clients, setClients] = useState([]);
   const [clients, setClients] = useState<any[]>([]); 
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7cdd42 (Final V1)
   const [selectedClient, setSelectedClient] = useState(clientEmail);
   const [selectedType, setSelectedType] = useState('Upper-Lower 3 Days');
   const [exercises, setExercises] = useState<ExerciseOption[]>([]);

@@ -73,7 +73,10 @@
         "html2canvas": "^1.4.1",
 
         "i18next": "^23.14.0",
+<<<<<<< HEAD:package-lock - Copy.json
 
+=======
+>>>>>>> c7cdd42 (Final V1):package-lock.json
 
         "i18next-browser-languagedetector": "^8.0.0",
 
@@ -110,7 +113,10 @@
         "react-google-recaptcha": "^3.1.0",
 
         "react-i18next": "^15.0.1",
+<<<<<<< HEAD:package-lock - Copy.json
 
+=======
+>>>>>>> c7cdd42 (Final V1):package-lock.json
 
         "react-icons": "^5.2.1",
 
@@ -4496,7 +4502,10 @@
 
     },
 
+<<<<<<< HEAD:package-lock - Copy.json
 
+=======
+>>>>>>> c7cdd42 (Final V1):package-lock.json
     "node_modules/@types/range-parser": {
 
       "version": "1.2.7",
@@ -14112,7 +14121,10 @@
 
     },
 
+<<<<<<< HEAD:package-lock - Copy.json
 
+=======
+>>>>>>> c7cdd42 (Final V1):package-lock.json
     "node_modules/domutils": {
 
       "version": "3.1.0",
@@ -17295,7 +17307,10 @@
 
     },
 
+<<<<<<< HEAD:package-lock - Copy.json
 
+=======
+>>>>>>> c7cdd42 (Final V1):package-lock.json
     "node_modules/figures": {
 
       "version": "1.7.0",
@@ -20630,7 +20645,10 @@
 
     },
 
+<<<<<<< HEAD:package-lock - Copy.json
 
+=======
+>>>>>>> c7cdd42 (Final V1):package-lock.json
     "node_modules/html2canvas": {
 
       "version": "1.4.1",
@@ -20655,7 +20673,10 @@
 
     },
 
+<<<<<<< HEAD:package-lock - Copy.json
 
+=======
+>>>>>>> c7cdd42 (Final V1):package-lock.json
     "node_modules/htmlparser2": {
 
       "version": "8.0.2",
@@ -20799,9 +20820,14 @@
       "version": "23.14.0",
 
       "resolved": "https://registry.npmjs.org/i18next/-/i18next-23.14.0.tgz",
+<<<<<<< HEAD:package-lock - Copy.json
 
       "integrity": "sha512-Y5GL4OdA8IU2geRrt2+Uc1iIhsjICdHZzT9tNwQ3TVqdNzgxHToGCKf/TPRP80vTCAP6svg2WbbJL+Gx5MFQVA==",
 
+=======
+
+      "integrity": "sha512-Y5GL4OdA8IU2geRrt2+Uc1iIhsjICdHZzT9tNwQ3TVqdNzgxHToGCKf/TPRP80vTCAP6svg2WbbJL+Gx5MFQVA==",
+>>>>>>> c7cdd42 (Final V1):package-lock.json
 
       "funding": [
 
@@ -27933,7 +27959,10 @@
 
     },
 
+<<<<<<< HEAD:package-lock - Copy.json
 
+=======
+>>>>>>> c7cdd42 (Final V1):package-lock.json
     "node_modules/performance-now": {
 
       "version": "2.1.0",
@@ -29683,9 +29712,14 @@
       "version": "15.0.1",
 
       "resolved": "https://registry.npmjs.org/react-i18next/-/react-i18next-15.0.1.tgz",
+<<<<<<< HEAD:package-lock - Copy.json
 
       "integrity": "sha512-NwxLqNM6CLbeGA9xPsjits0EnXdKgCRSS6cgkgOdNcPXqL+1fYNl8fBg1wmnnHvFy812Bt4IWTPE9zjoPmFj3w==",
 
+=======
+
+      "integrity": "sha512-NwxLqNM6CLbeGA9xPsjits0EnXdKgCRSS6cgkgOdNcPXqL+1fYNl8fBg1wmnnHvFy812Bt4IWTPE9zjoPmFj3w==",
+>>>>>>> c7cdd42 (Final V1):package-lock.json
 
       "dependencies": {
 
@@ -32187,7 +32221,10 @@
 
     },
 
+<<<<<<< HEAD:package-lock - Copy.json
 
+=======
+>>>>>>> c7cdd42 (Final V1):package-lock.json
     "node_modules/static-extend": {
 
       "version": "0.1.2",
@@ -33098,7 +33135,10 @@
 
     },
 
+<<<<<<< HEAD:package-lock - Copy.json
 
+=======
+>>>>>>> c7cdd42 (Final V1):package-lock.json
     "node_modules/tableize-object": {
 
       "version": "0.1.0",
@@ -33605,7 +33645,10 @@
 
     },
 
+<<<<<<< HEAD:package-lock - Copy.json
 
+=======
+>>>>>>> c7cdd42 (Final V1):package-lock.json
     "node_modules/text-table": {
 
       "version": "0.2.0",

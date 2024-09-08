@@ -224,6 +224,10 @@
 //   reps: number[]; // Array of reps
 //   started?: boolean;
 //   finished?: boolean;
+<<<<<<< HEAD
+=======
+//   date: string;
+>>>>>>> c7cdd42 (Final V1)
 // }
 
 // interface Cardio {
@@ -277,6 +281,7 @@
 
 //   const router = useRouter();
 
+<<<<<<< HEAD
 //   useEffect(() => {
 //     const checkAndAddEmail = async (email: string): Promise<boolean> => {
 //       try {
@@ -299,10 +304,129 @@
 //         console.error('Error checking/adding email:', error);
 //         return false;
 //       }
+=======
+//   // useEffect(() => {
+//   //   const checkAndAddEmail = async (email: string): Promise<boolean> => {
+//   //     try {
+//   //       const response = await fetch('/api/addEmail', {
+//   //         method: 'POST',
+//   //         headers: {
+//   //           'Content-Type': 'application/json',
+//   //         },
+//   //         body: JSON.stringify({ email }),
+//   //       });
+
+//   //       if (!response.ok) {
+//   //         throw new Error('Error checking/adding email');
+//   //       }
+
+//   //       const data = await response.json();
+//   //       // console.log(data.message);
+//   //       return !data.exists;
+//   //     } catch (error) {
+//   //       console.error('Error checking/adding email:', error);
+//   //       return false;
+//   //     }
+//   //   };
+
+//   //   const fetchClientData = async () => {
+//   //     if (!user) {
+//   //       router.push('/sign-in');
+//   //       return;
+//   //     }
+
+//   //     const userEmail = user.primaryEmailAddress?.emailAddress || user.email;
+
+//   //     if (!userEmail) {
+//   //       setLoading(false);
+//   //       return;
+//   //     }
+
+//   //     const isNew = await checkAndAddEmail(userEmail);
+
+//   //     try {
+//   //       const [clientResponse, cardioResponse] = await Promise.all([
+//   //         fetch(`/api/client?email=${userEmail}`, {
+//   //           method: 'GET',
+//   //         }),
+//   //         fetch(`/api/adminAddCardio?email=${userEmail}`, {
+//   //           method: 'GET',
+//   //         }),
+//   //       ]);
+
+//   //       if (!clientResponse.ok) {
+//   //         const errorData = await clientResponse.json();
+//   //         throw new Error(errorData.message || 'Failed to fetch client data');
+//   //       }
+
+//   //       if (!cardioResponse.ok) {
+//   //         const errorData = await cardioResponse.json();
+//   //         throw new Error(errorData.message || 'Failed to fetch cardio data');
+//   //       }
+
+//   //       const client = await clientResponse.json();
+//   //       const cardio = await cardioResponse.json();
+
+//   //       if ((isNew && !client.hasPaid) || !client.hasPaid) {
+//   //         router.push('/dashboard/payments');
+//   //         return;
+//   //       }
+
+//   //       setClientData({ ...client, cardio: cardio.exercises });
+//   //     } catch (error: any) {
+//   //       console.error('Error fetching client data:', error);
+//   //       setError(error.message);
+//   //     } finally {
+//   //       setLoading(false);
+//   //     }
+//   //   };
+
+//   //   fetchClientData();
+//   // }, [user, router]);
+
+
+//   // useEffect(() => {
+//   //   if (clientData?.exercises) {
+//   //     const unlockedIndices = clientData.exercises.map((exercise, index) => 
+//   //       isCurrentDay(exercise.day, clientData.date || '') ? index : -1
+//   //     ).filter(index => index !== -1);
+//   //     setUnlockedExerciseIndices(unlockedIndices);
+//   //     setCurrentUnlockedIndex(0); // Reset to the first unlocked exercise
+//   //   }
+//   // }, [clientData, clientData?.date]);
+
+
+
+
+
+
+//   useEffect(() => {
+//     const checkAndAddEmail = async (email: string): Promise<boolean> => {
+//         try {
+//             const response = await fetch('/api/addEmail', {
+//                 method: 'POST',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                 },
+//                 body: JSON.stringify({ email }),
+//             });
+
+//             if (!response.ok) {
+//                 throw new Error('Error checking/adding email');
+//             }
+
+//             const data = await response.json();
+//             return !data.exists;
+//         } catch (error) {
+//             console.error('Error checking/adding email:', error);
+//             return false;
+//         }
+>>>>>>> c7cdd42 (Final V1)
 //     };
 
 //     const fetchClientData = async () => {
 //       if (!user) {
+<<<<<<< HEAD
 //         router.push('/sign-in');
 //         return;
 //       }
@@ -899,6 +1023,14 @@
   
 //       const userEmail = user.primaryEmailAddress?.emailAddress || user.email;
   
+=======
+//           router.push('/sign-in');
+//           return;
+//       }
+  
+//       const userEmail = user.primaryEmailAddress?.emailAddress || user.email;
+  
+>>>>>>> c7cdd42 (Final V1)
 //       if (!userEmail) {
 //           setLoading(false);
 //           return;
@@ -1253,6 +1385,7 @@
 
 //             updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
 //             updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
+<<<<<<< HEAD
 
 
 //             const response = await fetch('/api/assign-weights', {
@@ -1307,6 +1440,68 @@
 
 //   const currentExercise = clientData?.exercises?.[unlockedExerciseIndices[currentUnlockedIndex]];
 
+=======
+
+//             // console.log('Weights:', updatedWeights);
+//             // console.log('Reps:', updatedReps);
+//             // console.log('Selected Exercise:', selectedExercise);
+//             // console.log('Active Set Index:', activeSetIndex);
+//             // console.log('Client Data:', clientData);
+
+//             const response = await fetch('/api/assign-weights', {
+//                 method: 'POST',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                 },
+//                 body: JSON.stringify({
+//                     email: clientData.email,
+//                     exerciseId: selectedExercise.id,
+//                     weights: updatedWeights,
+//                     reps: updatedReps,
+//                 }),
+//             });
+
+//             // console.log('Response status:', response.status);
+//             // console.log('Response:', response);
+
+//             if (!response.ok) {
+//                 const errorData = await response.json();
+//                 console.error('Error data:', errorData);
+//                 throw new Error(errorData.message || 'Failed to assign weights and reps');
+//             }
+
+//             // Update the local state to reflect the changes
+//             const updatedExercises = clientData.exercises?.map(exercise =>
+//                 exercise.id === selectedExercise.id
+//                     ? { ...exercise, weights: updatedWeights, reps: updatedReps }
+//                     : exercise
+//             );
+
+//             console.log('Updated Exercises:', updatedExercises);
+
+//             setClientData({
+//                 ...clientData,
+//                 exercises: updatedExercises,
+//             });
+
+//             setShowWeightsModal(false); // Close the modal after saving
+//             // setSelectedExercise(null); // Do not reset the selected exercise
+//             setSets([]); // Clear the sets array
+//             // console.log('Weights and reps assigned successfully');
+//         } catch (error: any) {
+//             console.error('Error assigning weights and reps:', error);
+//         }
+//     } else {
+//         if (!selectedExercise) console.error('selectedExercise is null or undefined');
+//         if (activeSetIndex === null) console.error('activeSetIndex is null');
+//         if (!clientData) console.error('clientData is null or undefined');
+//     }
+// };
+
+
+//   const currentExercise = clientData?.exercises?.[unlockedExerciseIndices[currentUnlockedIndex]];
+
+>>>>>>> c7cdd42 (Final V1)
 //   return (
 //     <DashboardLayout>
 //       <div className="flex flex-col justify-center items-center min-h-screen relative" style={containerStyle}>
