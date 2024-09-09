@@ -54,8 +54,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 import clientPromise from '@/lib/mongodb';
-import bcrypt from 'bcryptjs';
 import { parse } from 'cookie';
+
+const bcrypt = require('bcryptjs'); // CommonJS syntax
 
 interface DecodedToken {
   email: string;
