@@ -32,7 +32,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fa1, fa2, fa3, fa4, fa5, fa6, faWeightHanging, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import LoadingSpinner from '@/components/LoadingSpinner'; // Import the new component
-import { useTranslation } from 'react-i18next';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { ClientData } from '@/types/ClientData';
 
@@ -105,7 +104,6 @@ interface Cardio {
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
-  const { t, i18n } = useTranslation();
   const [clientData, setClientData] = useState<ClientData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -336,7 +334,7 @@ const AdminDashboard: React.FC = () => {
                   {exercises.map((exercise, i) => (
                     <React.Fragment key={i}>
                       <tr>
-                        <td className="py-2 px-4 border-b text-center justify-center font-serif font-bold text-xl">{t(exercise.name)}</td>
+                        <td className="py-2 px-4 border-b text-center justify-center font-serif font-bold text-xl">{exercise.name}</td>
                         <td className="py-2 px-4 border-b text-center justify-center">
                           {isCardio(exercise) ? (
                             exercise.duration
@@ -525,7 +523,7 @@ const AdminDashboard: React.FC = () => {
                                 client.hasPaid ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
                               }`}
                             >
-                              {client.hasPaid ? t('Yes') : 'No'}
+                              {client.hasPaid ? 'Yes' : 'No'}
                             </span>
                           </td>
                         </tr>
