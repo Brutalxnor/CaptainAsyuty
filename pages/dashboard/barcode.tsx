@@ -463,7 +463,7 @@ const AffiliateBarcode: React.FC = () => {
     if (user) {
       const userEmail = user.primaryEmailAddress?.emailAddress || user.email;
       if (userEmail) {
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
         const uniqueAffiliateLink = `${baseUrl}/signup?referralCode=${encodeURIComponent(userEmail)}`;
         setAffiliateLink(uniqueAffiliateLink);
         setQrValue(uniqueAffiliateLink);

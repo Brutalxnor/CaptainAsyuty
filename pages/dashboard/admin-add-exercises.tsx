@@ -88,7 +88,6 @@ const AdminAddExercises = () => {
   const clientEmail = user?.primaryEmailAddress?.emailAddress || user?.email || '';
   // const [clients, setClients] = useState([]);
   const [clients, setClients] = useState<any[]>([]); 
-const { v4: uuidv4 } = require('uuid'); // CommonJS syntax
 
   const [selectedClient, setSelectedClient] = useState(clientEmail);
   const [selectedType, setSelectedType] = useState('Upper-Lower 3 Days');
