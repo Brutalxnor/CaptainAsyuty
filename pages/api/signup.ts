@@ -202,8 +202,10 @@
 //api/signup.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '@/lib/mongodb';
-import bcrypt from 'bcryptjs';
+// import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+
+const bcrypt = require('bcryptjs'); // CommonJS syntax
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {

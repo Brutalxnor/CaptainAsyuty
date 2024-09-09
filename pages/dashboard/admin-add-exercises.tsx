@@ -18,9 +18,12 @@ import Modal from '@/components/Modal';
 import { fa1, fa2, fa3, fa4, fa5, fa6 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { format } from 'date-fns';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+
+
+const { v4: uuidv4 } = require('uuid'); // CommonJS syntax
 
 const dayIcons: Record<string, IconDefinition> = {
   'Day 1': fa1,
@@ -85,6 +88,7 @@ const AdminAddExercises = () => {
   const clientEmail = user?.primaryEmailAddress?.emailAddress || user?.email || '';
   // const [clients, setClients] = useState([]);
   const [clients, setClients] = useState<any[]>([]); 
+const { v4: uuidv4 } = require('uuid'); // CommonJS syntax
 
   const [selectedClient, setSelectedClient] = useState(clientEmail);
   const [selectedType, setSelectedType] = useState('Upper-Lower 3 Days');
