@@ -279,7 +279,7 @@ const AdminDashboard: React.FC = () => {
       },
       title: {
         display: true,
-        text: t('Client Statistics'),
+        text: 'Client Statistics',
       },
     },
   };
@@ -291,7 +291,7 @@ const AdminDashboard: React.FC = () => {
 
   const renderExercisesByDay = (exercises: Exercise[] | undefined, cardio: Cardio[] | undefined) => {
     if ((!exercises || exercises.length === 0) && (!cardio || cardio.length === 0)) {
-      return <p>{t('No exercises assigned.')}</p>;
+      return <p>{'No exercises assigned.'}</p>;
     }
 
     const combinedExercises = [...(exercises || []), ...(cardio || [])];
@@ -327,8 +327,8 @@ const AdminDashboard: React.FC = () => {
               <table className="min-w-full bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] mb-4">
                 <thead>
                   <tr>
-                    <th className="py-2 px-4 border-b font-sans">{t('Exercise')}</th>
-                    <th className="py-2 px-4 border-b font-sans">{t('Reps/Duration')}</th>
+                    <th className="py-2 px-4 border-b font-sans">{'Exercise'}</th>
+                    <th className="py-2 px-4 border-b font-sans">{'Reps/Duration'}</th>
                     <th className="py-2 px-4 border-b font-sans">GIF</th>
                   </tr>
                 </thead>
@@ -347,17 +347,17 @@ const AdminDashboard: React.FC = () => {
                                   {exercise.reps.map((rep, index) => (
                                     <tr key={index}>
                                       <td className="py-2 px-4 text-center">
-                                        <FontAwesomeIcon icon={faRedoAlt} className="mr-2" /> {rep} {t('reps')}
+                                        <FontAwesomeIcon icon={faRedoAlt} className="mr-2" /> {rep} {'reps'}
                                       </td>
                                       <td className="py-2 px-4 text-center">
-                                        <FontAwesomeIcon icon={faWeightHanging} className="mr-2" /> {exercise.weights[index]} {t('kg')}
+                                        <FontAwesomeIcon icon={faWeightHanging} className="mr-2" /> {exercise.weights[index]} {'kg'}
                                       </td>
                                     </tr>
                                   ))}
                                 </tbody>
                               </table>
                             ) : (
-                              t('No sets')
+                              'No sets'
                             )
                           )}
                         </td>
@@ -370,7 +370,7 @@ const AdminDashboard: React.FC = () => {
                               onClick={() => handleGifClick(`${exercise.gif}`)}
                             />
                           ) : (
-                            t('No GIF')
+                            'No GIF'
                           )}
                         </td>
                       </tr>
@@ -388,13 +388,13 @@ const AdminDashboard: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="max-w-screen w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto"> 
-        <h1 className="text-2xl font-bold mb-4 text-center font-serif italic font-xl">{t('Admin Dashboard')}</h1>
+        <h1 className="text-2xl font-bold mb-4 text-center font-serif italic font-xl">{'Admin Dashboard'}</h1>
         <div className="flex flex-col items-center justify-center ">
           <div className="bg-[var(--background-color)] text-[var(--text-color)] rounded-lg shadow-md p-4 mt-4 w-full max-w-4xl font-serif">
-            <h2 className="text-xl font-semibold mb-4 font-serif italic font-xl">{t('Client Data')}</h2>
+            <h2 className="text-xl font-semibold mb-4 font-serif italic font-xl">{'Client Data'}</h2>
             <input
               type="text"
-              placeholder={t('Search by name')}
+              placeholder={'Search by name'}
               value={searchTerm}
               onChange={handleSearch}
               className="mb-4 p-2 border rounded"
@@ -403,8 +403,8 @@ const AdminDashboard: React.FC = () => {
               <table className="min-w-full bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)]">
                 <thead>
                   <tr>
-                    <th className="py-2 px-4 text-left font-serif italic font-xl">{t('Name')}:</th>
-                    <th className="py-2 px-4 text-left text-center font-serif italic font-xl">{t('Actions')}:</th>
+                    <th className="py-2 px-4 text-left font-serif italic font-xl">{'Name'}:</th>
+                    <th className="py-2 px-4 text-left text-center font-serif italic font-xl">{'Actions'}:</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -429,7 +429,7 @@ const AdminDashboard: React.FC = () => {
                         <tr>
                           <td colSpan={2} className="py-2 px-4">
                             <div>
-                              <strong>{t('Exercises')}:</strong>
+                              <strong>{'Exercises'}:</strong>
                               {renderExercisesByDay(client.exercises, client.cardio)}
                             </div>
                           </td>
@@ -463,7 +463,7 @@ const AdminDashboard: React.FC = () => {
 
           </div>
           <div className="mt-10 flex flex-col items-center justify-center">
-            <h2 className="text-3xl font-bold text-center mb-6 text-[var(--text-color)]">{t('Client Statistics')}</h2>
+            <h2 className="text-3xl font-bold text-center mb-6 text-[var(--text-color)]">{'Client Statistics'}</h2>
             <div className="flex justify-center items-center">
               <div
                 className="bg-[var(--background-color)] rounded-lg shadow-md p-4"
@@ -481,18 +481,18 @@ const AdminDashboard: React.FC = () => {
               <div className="grid grid-cols-1 gap-4 mb-6">
                 <div className="bg-blue-700 p-4 rounded-lg shadow-md text-center hover:bg-blue-800 transition-transform transform hover:scale-105">
                   <FontAwesomeIcon icon={faUsers} className="h-6 w-6 mb-2" />
-                  <h2 className="text-xl font-bold">{t('Total Clients')}</h2>
+                  <h2 className="text-xl font-bold">{'Total Clients'}</h2>
                   <p className="text-3xl">{filteredClients.length}</p>
                 </div>
                 <div className="bg-green-700 p-4 rounded-lg shadow-md text-center hover:bg-green-800 transition-transform transform hover:scale-105">
                   <FontAwesomeIcon icon={faDollarSign} className="h-6 w-6 mb-2" />
-                  <h2 className="text-xl font-bold">{t('Paid Clients')}</h2>
+                  <h2 className="text-xl font-bold">{'Paid Clients'}</h2>
                   <p className="text-3xl">{filteredClients.filter(client => client.hasPaid).length}</p>
                 </div>
               </div>
 
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">{t('Client List')}</h2>
+                <h2 className="text-2xl font-bold">{'Client List'}</h2>
                 <button
                   onClick={handleToggleCollapse}
                   className="bg-blue-500 text-white py-2 px-4 rounded-full shadow hover:bg-blue-600 transition duration-200 flex items-center justify-center"
@@ -506,8 +506,8 @@ const AdminDashboard: React.FC = () => {
                   <table className="min-w-full text-[var(--text-color)] shadow-lg">
                     <thead>
                       <tr className="bg-gray-100 text-left py-2 px-4 border-b text-left text-xl font-bold">
-                        <th className="py-3 px-4 font-semibold">{t('Name')}</th>
-                        <th className="py-3 px-4 font-semibold text-center">{t('Has Paid')}</th>
+                        <th className="py-3 px-4 font-semibold">{'Name'}</th>
+                        <th className="py-3 px-4 font-semibold text-center">{'Has Paid'}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -525,7 +525,7 @@ const AdminDashboard: React.FC = () => {
                                 client.hasPaid ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
                               }`}
                             >
-                              {client.hasPaid ? t('Yes') : t('No')}
+                              {client.hasPaid ? t('Yes') : 'No'}
                             </span>
                           </td>
                         </tr>
