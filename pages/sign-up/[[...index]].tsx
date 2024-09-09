@@ -836,13 +836,13 @@
 
 
 
-
-import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { ToastContainer, toast } from 'react-toastify';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
@@ -854,16 +854,12 @@ const SignUpPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [captchaVerified, setCaptchaVerified] = useState(false);
+  const [isClient, setIsClient] = useState(false); // To check if the component is running on client-side
   const router = useRouter();
   const { signUp } = useAuth();
 
-  // Only run ReCAPTCHA and other window-dependent logic on the client side
-  const [isClient, setIsClient] = useState(false);
-
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsClient(true); // Now we know we're in the browser
-    }
+    setIsClient(typeof window !== 'undefined'); // Ensure this only runs in the browser
   }, []);
 
   const handleCaptcha = (value: string | null) => {
@@ -895,8 +891,14 @@ const SignUpPage = () => {
       ) : (
         <>
           <div className="flex flex-col items-center mb-6">
-            <img src="/logo.png" alt="Logo" className="w-20 h-20 rounded-full mb-4" />
-            <h1 className="py-2 px-4 border-b text-left text-xl font-bold">Captain Asyuty</h1>
+            <img
+              src="/logo.png"
+              alt="Logo"
+              className="w-20 h-20 rounded-full mb-4"
+            />
+            <h1 className="py-2 px-4 border-b text-left text-xl font-bold font-serif">
+              Captain Asyuty
+            </h1>
           </div>
 
           <form onSubmit={handleSubmit} className="w-full max-w-sm">
@@ -933,6 +935,7 @@ const SignUpPage = () => {
                 <FontAwesomeIcon icon={isPasswordVisible ? faEyeSlash : faEye} />
               </button>
             </div>
+
             <input
               type="text"
               value={referralCode}
@@ -940,7 +943,7 @@ const SignUpPage = () => {
               placeholder="Referral Code (optional)"
               className="mb-4 w-full p-2 border border-gray-300 rounded"
             />
-            {/* Only render the reCAPTCHA if we're on the client */}
+            {/* Render ReCAPTCHA only on the client side */}
             {isClient && (
               <ReCAPTCHA
                 sitekey="YOUR_RECAPTCHA_SITE_KEY"
@@ -948,7 +951,11 @@ const SignUpPage = () => {
                 className="mb-4"
               />
             )}
-            <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded" disabled={!captchaVerified}>
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white p-2 rounded"
+              disabled={!captchaVerified}
+            >
               Sign Up
             </button>
           </form>
