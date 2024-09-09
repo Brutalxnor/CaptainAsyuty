@@ -7142,6 +7142,35 @@ const ClientExercises: React.FC = () => {
   const [exercisesLoaded, setExercisesLoaded] = useState(false);
 
   const router = useRouter();
+  
+  // useEffect(() => {
+  //   const checkPaymentStatus = async () => {
+  //     if (!user) {
+  //       router.push('/sign-in');
+  //       return;
+  //     }
+
+  //     const userEmail = user.primaryEmailAddress?.emailAddress || user.email;
+  //     try {
+  //       const res = await fetch('/api/checkPaymentStatus', {
+  //         method: 'POST',
+  //         headers: { 'Content-Type': 'application/json' },
+  //         body: JSON.stringify({ email: userEmail }),
+  //       });
+  //       const data = await res.json();
+
+  //       if (!data.hasPaid) {
+  //         router.push('/dashboard/payments'); // Redirect to payments page if not paid
+  //         return;
+  //       }
+  //     } catch (error) {
+  //       console.error('Error checking payment status:', error);
+  //     }
+  //   };
+  //   checkPaymentStatus();
+  // }, [user, router]);
+
+
 
   useEffect(() => {
     const checkAndAddEmail = async (email: string): Promise<boolean> => {
@@ -7165,63 +7194,131 @@ const ClientExercises: React.FC = () => {
         return false;
       }
     };
+    
+    // const fetchClientData = async () => {
+    //   if (!user) {
+    //     router.push('/sign-in');
+    //     return;
+    //   }
+
+    //   const userEmail = user.primaryEmailAddress?.emailAddress || user.email;
+
+    //   if (!userEmail) {
+    //     setLoading(false);
+    //     return;
+    //   }
+
+    //   try {
+    //     const isNew = await checkAndAddEmail(userEmail);
+
+    //     const [clientResponse, cardioResponse, exercisesResponse] = await Promise.all([
+    //       fetch(`/api/client?email=${userEmail}`, { method: 'GET' }),
+    //       fetch(`/api/adminAddCardio?email=${userEmail}`, { method: 'GET' }),
+    //       fetch(`/api/fetchExercises?email=${userEmail}`, { method: 'GET' }),
+    //     ]);
+
+    //     if (!clientResponse.ok || !cardioResponse.ok || !exercisesResponse.ok) {
+    //       const errorData = await clientResponse.json();
+    //       throw new Error(errorData.message || 'Failed to fetch client data');
+    //     }
+
+    //     const client = await clientResponse.json();
+    //     const cardio = await cardioResponse.json();
+    //     const exercisesData = await exercisesResponse.json();
+    //     console.log("exercisesData", exercisesData);
+
+    //     if (exercisesData.exercises && exercisesData.exercises.length > 0) {
+    //       setExercises(exercisesData.exercises);
+    //       setExercisesLoaded(true);  
+    //       setClientData({ ...client, exercises: exercisesData.exercises, cardio: cardio.exercises, date: exercisesData.date });
+    //     } else {
+    //       setError('No exercises data found for this client.');
+    //       setExercisesLoaded(false);  
+    //     }
+
+    //     if ((isNew && !client.hasPaid) || !client.hasPaid) {
+    //       router.push('/dashboard/payments');
+    //       return;
+    //     }
+
+    //   } catch (error: any) {
+    //     console.error('Error fetching client data:', error);
+    //     setError(error.message);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+
+    // };
 
     const fetchClientData = async () => {
       if (!user) {
         router.push('/sign-in');
         return;
       }
-
+    
       const userEmail = user.primaryEmailAddress?.emailAddress || user.email;
-
+    
       if (!userEmail) {
         setLoading(false);
         return;
       }
-
+    
       try {
         const isNew = await checkAndAddEmail(userEmail);
-
+    
+        // Fetch client, cardio, and exercises data
         const [clientResponse, cardioResponse, exercisesResponse] = await Promise.all([
           fetch(`/api/client?email=${userEmail}`, { method: 'GET' }),
           fetch(`/api/adminAddCardio?email=${userEmail}`, { method: 'GET' }),
           fetch(`/api/fetchExercises?email=${userEmail}`, { method: 'GET' }),
         ]);
-
-        if (!clientResponse.ok || !cardioResponse.ok || !exercisesResponse.ok) {
-          const errorData = await clientResponse.json();
-          throw new Error(errorData.message || 'Failed to fetch client data');
-        }
-
-        const client = await clientResponse.json();
-        const cardio = await cardioResponse.json();
-        const exercisesData = await exercisesResponse.json();
-        console.log("exercisesData", exercisesData);
-
-        if (exercisesData.exercises && exercisesData.exercises.length > 0) {
-          setExercises(exercisesData.exercises);
-          setExercisesLoaded(true);  
-          setClientData({ ...client, exercises: exercisesData.exercises, cardio: cardio.exercises, date: exercisesData.date });
-        } else {
-          setError('No exercises data found for this client.');
-          setExercisesLoaded(false);  
-        }
-
+    
+        // Process client data
+        const client = clientResponse.ok ? await clientResponse.json() : { email: userEmail };
+        
+        // Process cardio data (default to empty array if not available)
+        const cardio = cardioResponse.ok ? await cardioResponse.json() : { exercises: [] };
+        
+        // Process exercises data (default to empty array if not available)
+        const exercisesData = exercisesResponse.ok ? await exercisesResponse.json() : { exercises: [], date: new Date().toISOString() };
+    
+        // Assign data, even if some parts are missing
+        setClientData({
+          ...client,
+          exercises: exercisesData.exercises || [], // Default to empty array if no exercises
+          cardio: cardio.exercises || [],           // Default to empty array if no cardio
+          date: exercisesData.date || new Date().toISOString(),
+        });
+    
+        // Check if the client has paid
         if ((isNew && !client.hasPaid) || !client.hasPaid) {
           router.push('/dashboard/payments');
           return;
         }
-
-      } catch (error: any) {
+    
+      } catch (error) {
+        // Log the error and set default values to allow the app to proceed
         console.error('Error fetching client data:', error);
-        setError(error.message);
+        setClientData({
+          email: userEmail,
+          exercises: [],   // Proceed with no exercises assigned
+          cardio: [],      // Proceed with no cardio assigned
+          date: new Date().toISOString(),
+        });
       } finally {
-        setLoading(false);
+        setLoading(false); // Always stop loading once the data is processed or failed
       }
     };
+    
 
     fetchClientData();
   }, [user, router]);
+
+
+
+
+
+
 
   useEffect(() => {
     if (exercisesLoaded && exercises.length > 0) {

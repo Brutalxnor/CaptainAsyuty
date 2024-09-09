@@ -1206,7 +1206,7 @@ const SignUpPage = () => {
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.toLowerCase())} 
               placeholder="Email"
               className="mb-4 w-full p-2 border border-gray-300 rounded"
               required
