@@ -2496,8 +2496,10 @@ const ClientInfoForm: React.FC<ClientInfoFormProps> = ({ email, clientData = {} 
 
 
 return (
-  <div className="flex justify-center items-center min-h-screen">
-    <div className="w-full max-w-lg p-6 text-[var(--text-color)]  font-serif border-gray-200 rounded-lg shadow-lg overflow-y-auto relative">
+  // <div className="flex justify-center items-center min-h-screen">
+  <div className="container mx-auto text-center w-full max-w-3xl p-6 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] rounded-lg shadow-lg md:p-6 sm:p-4">
+  
+    <div className=" p-6 text-[var(--text-color)]  font-serif border-gray-200 rounded-lg shadow-lg overflow-y-auto relative">
       {isLoading && (
         <div className="absolute inset-0 bg-[var(--background-color)] bg-opacity-75 flex justify-center items-center">
 

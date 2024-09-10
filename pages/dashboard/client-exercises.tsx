@@ -12487,30 +12487,30 @@ const ClientExercises: React.FC = () => {
           {language === 'en' ? 'Your Exercises' : 'تمارينك'}
         </h1>
 
-        {/* Day Selection */}
-        <div className="flex justify-center mb-4">
-          {unlockedDays.map((dayNumber) => {
-            const dayName = `Day ${dayNumber}`;
-            return (
-              <button
-                key={dayName}
-                className={`mx-2 py-2 px-4 rounded ${dayNumber === currentDayInCycle ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'} ${selectedDay === dayName ? 'border-2 border-blue-500' : ''}`}
-                onClick={() => dayNumber === currentDayInCycle && handleDaySelection(dayName)}
-                disabled={dayNumber !== currentDayInCycle}
-              >
-                {dayNumber === currentDayInCycle ? (
-                  <>
-                    {dayName} <FontAwesomeIcon icon={dayIcons[dayName]} className="h-6 w-6" />
-                  </>
-                ) : (
-                  <>
-                    {dayName} <FontAwesomeIcon icon={faLock} />
-                  </>
-                )}
-              </button>
-            );
-          })}
-        </div>
+      {/* Day Selection */}
+      <div className="flex justify-center mb-4">
+        {unlockedDays.map((dayNumber) => {
+          const dayName = `Day ${dayNumber}`;
+          return (
+            <button
+              key={dayName}
+              className={`mx-2 py-2 px-4 rounded ${dayNumber === currentDayInCycle ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'} ${selectedDay === dayName ? 'border-2 border-blue-500' : ''}`}
+              onClick={() => dayNumber === currentDayInCycle && handleDaySelection(dayName)}
+              disabled={dayNumber !== currentDayInCycle}
+            >
+              {dayNumber === currentDayInCycle ? (
+                <>
+                  {dayName} <FontAwesomeIcon icon={dayIcons[dayName]} className="h-6 w-6" />
+                </>
+              ) : (
+                <>
+                  {dayName} <FontAwesomeIcon icon={faLock} />
+                </>
+              )}
+            </button>
+          );
+        })}
+      </div>
 
         {/* Exercise Section */}
         {currentExercise && showExercises ? (
