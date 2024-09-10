@@ -34,6 +34,8 @@ export interface ClientData {
   fullName?: string;
   hasPaid: boolean;
   paymentDate?: string; // Add paymentDate field
+  registrationEndDate?:string;
+  monthsRegistered?:number;
   admin: boolean;
   client: boolean;
   weight?: string;

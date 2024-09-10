@@ -272,8 +272,12 @@ const SignInPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+
+    const isEmail = identifier.includes('@');
+    const normalizedIdentifier = isEmail ? identifier.toLowerCase() : identifier;
+
     try {
-      await signIn(identifier, password);
+      await signIn(normalizedIdentifier, password);
       // Show a success toast notification for successful login
       toast.success('Successfully logged in', {
         position: "top-right",

@@ -985,41 +985,35 @@
 
 
 
-
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import dynamic from 'next/dynamic'; // Dynamically load components
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-
-// Dynamically import ReCAPTCHA since it requires the 'window' object
-const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), { ssr: false });
 
 const SignUpPage = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [referralCode, setReferralCode] = useState('');
+  const [honeypot, setHoneypot] = useState(''); // Honeypot field state
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [captchaVerified, setCaptchaVerified] = useState(false);
   const router = useRouter();
   const { signUp } = useAuth();
 
-  const handleCaptcha = (value: string | null) => {
-    setCaptchaVerified(!!value);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!captchaVerified) {
-      toast.error('Please verify you are not a robot.');
+
+    // If honeypot field is filled, it's likely a bot
+    if (honeypot) {
+      toast.error('Bot detected! Sign up failed.');
       return;
     }
+
     setIsLoading(true);
     try {
       await signUp(username, email, password, referralCode);
@@ -1095,17 +1089,19 @@ const SignUpPage = () => {
               placeholder="Referral Code (optional)"
               className="mb-4 w-full p-2 border border-gray-300 rounded"
             />
-            
-            {/* Render ReCAPTCHA only on the client side */}
-            <ReCAPTCHA
-              sitekey="YOUR_RECAPTCHA_SITE_KEY"
-              onChange={handleCaptcha}
-              className="mb-4"
+
+            {/* Honeypot input field (invisible to humans) */}
+            <input
+              type="text"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+              className="hidden"
+              placeholder="Leave this field empty"
             />
+
             <button
               type="submit"
               className="w-full bg-blue-500 text-white p-2 rounded"
-              disabled={!captchaVerified}
             >
               Sign Up
             </button>

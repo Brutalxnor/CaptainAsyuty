@@ -1227,11 +1227,10 @@ import { useRouter } from 'next/router';
 import { ClientData, Exercise } from '@/types/ClientData';
 import Modal from '@/components/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faChevronUp, faDumbbell, faHeartbeat, faDollarSign, faDrumstickBite, faHeartCircleBolt, faUsers, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faChevronUp, faDumbbell, faWeightHanging, faHeartbeat, faDollarSign, faDrumstickBite, faHeartCircleBolt, faUsers, faEyeSlash, faEye, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
 import { fa1, fa2, fa3, fa4, fa5, fa6 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import LoadingSpinner from '@/components/LoadingSpinner';
-
 const dayIcons: Record<string, IconDefinition> = {
   'Day 1': fa1,
   'Day 2': fa2,
@@ -1271,7 +1270,7 @@ const AdminClientList: React.FC = () => {
   const [showReferredUsers, setShowReferredUsers] = useState(false);
   const clientsPerPage = 3;
   const router = useRouter();
-
+  const [months, setMonths] = useState(1); // default 1 month
 
 
   useEffect(() => {
@@ -1351,32 +1350,71 @@ const AdminClientList: React.FC = () => {
     setClientToToggle(clientEmail);
   };
 
-  const confirmTogglePaymentStatus = async () => {
-    if (!clientToToggle) return;
+  // const confirmTogglePaymentStatus = async () => {
+  //   if (!clientToToggle) return;
 
+  //   try {
+  //     const response = await fetch('/api/togglePaymentStatus', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ email: clientToToggle }),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error('Error toggling payment status');
+  //     }
+
+  //     const currentDate = new Date().toISOString().split('T')[0];
+
+  //     setClients(prevClients => 
+  //       prevClients.map(client => 
+  //         client.email === clientToToggle 
+  //           ? { ...client, hasPaid: !client.hasPaid, paymentDate: currentDate } 
+  //           : client
+  //       )
+  //     );
+
+  //   } catch (error) {
+  //     console.error('Error toggling payment status:', error);
+  //   } finally {
+  //     setShowConfirmation(false);
+  //     setClientToToggle(null);
+  //   }
+  // };
+
+
+  const confirmTogglePaymentStatus = async () => {
+    if (!clientToToggle || months <= 0) return;
+  
     try {
       const response = await fetch('/api/togglePaymentStatus', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: clientToToggle }),
+        body: JSON.stringify({ email: clientToToggle, months }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Error toggling payment status');
       }
-
-      const currentDate = new Date().toISOString().split('T')[0];
-
-      setClients(prevClients => 
-        prevClients.map(client => 
-          client.email === clientToToggle 
-            ? { ...client, hasPaid: !client.hasPaid, paymentDate: currentDate } 
+  
+      const result = await response.json();
+      setClients((prevClients) =>
+        prevClients.map((client) =>
+          client.email === clientToToggle
+            ? {
+                ...client,
+                hasPaid: !client.hasPaid,
+                paymentDate: result.paymentDate,
+                registrationEndDate: result.registrationEndDate,
+                monthsRegistered: months,
+              }
             : client
         )
       );
-
     } catch (error) {
       console.error('Error toggling payment status:', error);
     } finally {
@@ -1384,6 +1422,7 @@ const AdminClientList: React.FC = () => {
       setClientToToggle(null);
     }
   };
+
 
   const filteredClients = clients
     .filter(client => !client.admin)
@@ -1449,16 +1488,14 @@ const AdminClientList: React.FC = () => {
                   {exercises.map((exercise, i) => (
                     <tr key={i}>
                       <td className="py-2 px-4 border-b">{exercise.name}</td>
-                      <td className="py-2 px-4 border-b">
-                        {exercise.weights?.map((weight, index) => (
-                          <div key={index}>{weight} kg</div>
-                        ))}
-                      </td>
+
                       <td className="py-2 px-4 border-b">
                         {Array.isArray(exercise.reps) ? (
                           exercise.reps.map((rep, index) => (
                             <div key={index}>
-                              {rep} reps, {exercise.weights ? exercise.weights[index] : 'Not Started'} kg
+                              <FontAwesomeIcon icon={faRedoAlt} className="mr-2" /> {rep} {'reps'}
+                              <FontAwesomeIcon icon={faWeightHanging} className="mr-2" /> {exercise.weights[index]} {'kg'}
+                              {/* {exercise.weights ? exercise.weights[index] : 'Not Started'}  */}
                             </div>
                           ))
                         ) : (
@@ -1732,8 +1769,28 @@ const AdminClientList: React.FC = () => {
                               </div>
                               <div className="mt-4 bg-gradient-to-r from-blue-200 to-purple-200 p-4 rounded-lg shadow-lg">
                                 <strong className="block text-lg mb-2">Payment Date:</strong>
-                                <p className="text-lg">{client.paymentDate ? new Date(client.paymentDate).toLocaleDateString() : 'No payment date'}</p>
+                                <p className="text-lg">
+                                  {client.paymentDate
+                                    ? new Date(client.paymentDate).toLocaleDateString()
+                                    : 'No payment date'}
+                                </p>
+                                <p className="text-lg">
+                                  {client.registrationEndDate
+                                    ? new Date(client.registrationEndDate).toLocaleDateString()
+                                    : 'No registration End Date'}
+                                </p>
+                                <p className="text-lg">{client.monthsRegistered} Months</p>
+
+                                {/* New Active/Inactive Status */}
+                                <p className="text-lg font-bold">
+                                  Status: {client.registrationEndDate && new Date(client.registrationEndDate) > new Date() ? (
+                                    <span className="text-green-500">Active</span>
+                                  ) : (
+                                    <span className="text-red-500">Inactive</span>
+                                  )}
+                                </p>
                               </div>
+
 
                               <div className="mt-4 ">
                                 <strong className="block text-lg mb-2">Client Images:</strong>
@@ -1830,7 +1887,7 @@ const AdminClientList: React.FC = () => {
           <img src={selectedGif} alt="Exercise GIF" className="w-full h-auto" />
         </Modal>
       )}
-      {showConfirmation && (
+      {/* {showConfirmation && (
         <Modal onClose={() => setShowConfirmation(false)}>
           <div className="p-4">
             <h2 className="text-xl font-bold mb-4">Confirm Action</h2>
@@ -1851,7 +1908,52 @@ const AdminClientList: React.FC = () => {
             </div>
           </div>
         </Modal>
-      )}
+      )} */}
+
+
+    {showConfirmation && (
+      <Modal onClose={() => setShowConfirmation(false)}>
+        <div className="p-4">
+          <h2 className="text-xl font-bold mb-4">Confirm Action</h2>
+          <p>Are you sure you want to toggle the payment status for this client?</p>
+
+          {/* Conditionally show the month selection if the client has not paid */}
+          {!clients.find((client) => client.email === clientToToggle)?.hasPaid && (
+            <div className="mb-4 bg-[var(--background-color)]">
+              <label className="block mb-2">Number of Months:</label>
+              <select
+                value={months}
+                onChange={(e) => setMonths(parseInt(e.target.value, 10))}
+                className="p-2 border bg-[var(--background-color)] rounded w-full"
+              >
+                {[...Array(12)].map((_, i) => (
+                  <option key={i + 1} value={i + 1} className='bg-[var(--background-color)]'>
+                    {i + 1} Month{i > 0 ? 's' : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={confirmTogglePaymentStatus}
+              className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+            >
+              Yes
+            </button>
+            <button
+              onClick={() => setShowConfirmation(false)}
+              className="text-white px-4 py-2 rounded"
+            >
+              No
+            </button>
+          </div>
+        </div>
+      </Modal>
+    )}
+
+
     </DashboardLayout>
   );
 };
