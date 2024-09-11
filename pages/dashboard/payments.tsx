@@ -14,6 +14,9 @@ import DashboardLayout from '@/components/DashboardLayout';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { format, differenceInDays } from 'date-fns';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendarAlt, faClock, faCalendarCheck, faCalendarTimes } from '@fortawesome/free-solid-svg-icons';
 
 const PaymentsPage: React.FC = () => {
   const { language } = useLanguage();
@@ -21,6 +24,11 @@ const PaymentsPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
   const isSignedIn = !!user;
+  const [paymentDate, setPaymentDate] = useState<string | null>(null);
+  const [registrationEndDate, setRegistrationEndDate] = useState<string | null>(null);
+  const [monthsRegistered, setMonthsRegistered] = useState<number | null>(null);
+  const [daysLeft, setDaysLeft] = useState<number | null>(null);
+  const [todayDate, setTodayDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
 
   useEffect(() => {
     const checkPaymentStatus = async () => {
@@ -38,6 +46,13 @@ const PaymentsPage: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           setHasPaid(data.hasPaid);
+          setPaymentDate(data.paymentDate);
+          setRegistrationEndDate(data.registrationEndDate);
+          setMonthsRegistered(data.monthsRegistered);
+          const today = new Date();
+          const endDate = new Date(data.registrationEndDate);
+          const calculatedDaysLeft = differenceInDays(endDate, today);
+          setDaysLeft(calculatedDaysLeft);
         } else {
           throw new Error('Failed to check payment status');
         }
@@ -81,6 +96,27 @@ const PaymentsPage: React.FC = () => {
             <>
               <h1 className="text-2xl text-center font-lg italic font-serif mb-4 text-green-500">{language === 'en' ? 'Payment Confirmed!' : 'تم تأكيد الدفع!'}</h1>
               <p className="text-center mb-4 text-[var(--text-color)]">{language === 'en' ? 'Thank you for your payment. You can now access your exercises.' : 'شكرًا لك على الدفع. يمكنك الآن الوصول إلى تمارينك.'}</p>
+              <div className="text-center mt-6">
+                <p className="font-bold text-[var(--text-color)] flex items-center justify-center gap-2">
+                  <FontAwesomeIcon icon={faCalendarAlt} className="text-[var(--text-color)]" />
+                  {language === 'en' ? 'Payment Date' : 'تاريخ الدفع'}: {paymentDate}
+                </p>
+                <p className="font-bold text-[var(--text-color)] flex items-center justify-center gap-2">
+                  <FontAwesomeIcon icon={faCalendarCheck} className="text-[var(--text-color)]" />
+                  {language === 'en' ? 'Registration End Date' : 'تاريخ انتهاء التسجيل'}: {registrationEndDate}
+                </p>
+                <p className="font-bold text-[var(--text-color)] flex items-center justify-center gap-2">
+                  <FontAwesomeIcon icon={faCalendarTimes} className="text-[var(--text-color)]" />
+                  {language === 'en' ? 'Months Registered' : 'الأشهر المسجلة'}: {monthsRegistered}
+                </p>
+                <p className="font-bold text-[var(--text-color)] flex items-center justify-center gap-2">
+                  <FontAwesomeIcon icon={faClock} className="text-[var(--text-color)]" />
+                  {language === 'en' ? 'Days Left' : 'الأيام المتبقية'}: {daysLeft}
+                </p>
+                <p className="font-bold text-[var(--text-color)]">
+                  {language === 'en' ? "Today's Date" : 'تاريخ اليوم'}: {todayDate}
+                </p>
+              </div>
             </>
           ) : (
             <>

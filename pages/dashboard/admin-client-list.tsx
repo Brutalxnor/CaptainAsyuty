@@ -1271,7 +1271,7 @@ const AdminClientList: React.FC = () => {
   const clientsPerPage = 3;
   const router = useRouter();
   const [months, setMonths] = useState(1); // default 1 month
-
+  const [filteredClients, setFilteredClients] = useState<ClientData[]>([]); // Separate state for filtered clients
 
   useEffect(() => {
     const fetchClientData = async () => {
@@ -1350,40 +1350,6 @@ const AdminClientList: React.FC = () => {
     setClientToToggle(clientEmail);
   };
 
-  // const confirmTogglePaymentStatus = async () => {
-  //   if (!clientToToggle) return;
-
-  //   try {
-  //     const response = await fetch('/api/togglePaymentStatus', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ email: clientToToggle }),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Error toggling payment status');
-  //     }
-
-  //     const currentDate = new Date().toISOString().split('T')[0];
-
-  //     setClients(prevClients => 
-  //       prevClients.map(client => 
-  //         client.email === clientToToggle 
-  //           ? { ...client, hasPaid: !client.hasPaid, paymentDate: currentDate } 
-  //           : client
-  //       )
-  //     );
-
-  //   } catch (error) {
-  //     console.error('Error toggling payment status:', error);
-  //   } finally {
-  //     setShowConfirmation(false);
-  //     setClientToToggle(null);
-  //   }
-  // };
-
 
   const confirmTogglePaymentStatus = async () => {
     if (!clientToToggle || months <= 0) return;
@@ -1424,12 +1390,14 @@ const AdminClientList: React.FC = () => {
   };
 
 
-  const filteredClients = clients
-    .filter(client => !client.admin)
-    .filter(client => 
-      client.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      client.fullName?.toLowerCase().includes(searchTerm.toLowerCase())
+  // Filter clients based on search term
+  useEffect(() => {
+    const searchFilteredClients = clients.filter(client =>
+      client.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      client.email?.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    setFilteredClients(searchFilteredClients);
+  }, [clients, searchTerm]); // Update when `clients` or `searchTerm` changes
 
   const totalPages = Math.ceil(filteredClients.length / clientsPerPage);
 
@@ -1887,28 +1855,6 @@ const AdminClientList: React.FC = () => {
           <img src={selectedGif} alt="Exercise GIF" className="w-full h-auto" />
         </Modal>
       )}
-      {/* {showConfirmation && (
-        <Modal onClose={() => setShowConfirmation(false)}>
-          <div className="p-4">
-            <h2 className="text-xl font-bold mb-4">Confirm Action</h2>
-            <p>Are you sure you want to toggle the payment status for this client?</p>
-            <div className="flex justify-end mt-4">
-              <button
-                onClick={confirmTogglePaymentStatus}
-                className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-              >
-                Yes
-              </button>
-              <button
-                onClick={() => setShowConfirmation(false)}
-                className="bg-gray-500 text-white px-4 py-2 rounded"
-              >
-                No
-              </button>
-            </div>
-          </div>
-        </Modal>
-      )} */}
 
 
     {showConfirmation && (

@@ -3269,7 +3269,7 @@ import React, { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faCheck, faBowlFood, faDrumstickBite, faCarrot, faBreadSlice, faCheese, faAppleAlt, faSeedling } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faCheck, faInfoCircle, faBowlFood, faDrumstickBite, faCarrot, faBreadSlice, faCheese, faAppleAlt, faSeedling } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { library, IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -3407,6 +3407,8 @@ const ClientNutritionPage: React.FC = () => {
   const [clientNutrition, setClientNutrition] = useState<Nutrition[]>([]);
   const [selectedMeals, setSelectedMeals] = useState<FoodOption[][]>([]);
   const [dailyMeals, setDailyMeals] = useState(3);
+  const [showInfo, setShowInfo] = useState<{ [key: string]: boolean }>({});
+
   // const [remainingNutrition, setRemainingNutrition] = useState<Nutrition[]>([
   //   { type: 'Calories', quantity: 0 },
   //   { type: 'Fats', quantity: 0 },
@@ -3543,6 +3545,14 @@ const ClientNutritionPage: React.FC = () => {
 
     fetchNutritionData();
   }, [user, router]);
+
+
+  const toggleInfo = (foodName: string) => {
+    setShowInfo((prev) => ({
+      ...prev,
+      [foodName]: !prev[foodName], // Toggle the visibility for this food
+    }));
+  };
 
   const ensureNumber = (value: any, defaultValue: number = 0): number => {
     const number = Number(value);
@@ -3865,7 +3875,21 @@ const ClientNutritionPage: React.FC = () => {
                       <span>{food.calories} {language === 'en' ? 'Calories' : 'سعرات حرارية'}</span>
                     </div>
                   </div>
+                    {/* Info button to show more nutrition details */}
+                    <div className="relative">
+                      <button onClick={() => toggleInfo(food.name)} className="ml-2 text-white">
+                        <FontAwesomeIcon icon={faInfoCircle} />
+                      </button>
 
+                      {/* Tooltip-like popup that shows extra nutrition details */}
+                      {showInfo[food.name] && (
+                        <div className="absolute top-8 left-0 bg-white text-black p-2 rounded shadow-lg z-10 w-48">
+                          <p>{language === 'en' ? 'Fats' : 'دهون'}: {food.fats}g</p>
+                          <p>{language === 'en' ? 'Carbs' : 'كربوهيدرات'}: {food.carbs}g</p>
+                          <p>{language === 'en' ? 'Protein' : 'بروتين'}: {food.protein}g</p>
+                        </div>
+                      )}
+                    </div>
                   <button onClick={() => handleFoodSelect(food)} className="ml-4 bg-blue-500 text-white py-2 px-4 rounded-md shadow hover:bg-blue-700 transition duration-200">
                     <FontAwesomeIcon icon={faCheck} />
                   </button>

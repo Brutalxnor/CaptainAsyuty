@@ -25,13 +25,18 @@ const colors = [
   'bg-teal-500',
 ];
 
-const getRandomColor = (userId: string) => {
+const getRandomColor = (userId: string | undefined) => {
+  if (!userId) {
+    // Return a default color if userId is undefined
+    return 'bg-gray-500'; // Default fallback color
+  }
   let sum = 0;
   for (let i = 0; i < userId.length; i++) {
     sum += userId.charCodeAt(i);
   }
   return colors[sum % colors.length];
 };
+
 
 const ChatModal: React.FC<ChatModalProps> = ({ onClose }) => {
   const { user } = useAuth(); // Use your custom AuthContext
@@ -91,6 +96,25 @@ const ChatModal: React.FC<ChatModalProps> = ({ onClose }) => {
           <button onClick={onClose} className="text-xl font-bold">×</button>
         </div>
         <div className="overflow-y-auto h-64 mb-4">
+          {/* {messages.map((msg, index) => (
+            <div key={index} className={`p-2 rounded-lg mb-2 ${msg.userId === user?.id ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}>
+              <div className="flex items-center">
+                <Avatar className={`w-8 h-8 mr-2 ${getRandomColor(msg.userId)}`}>
+                  <AvatarImage
+                    alt={msg.username || 'U'}
+                    onError={(e) => { e.currentTarget.src = '/avatar-placeholder.png'; }}
+                  />
+                  <AvatarFallback>{msg.username?.[0] || 'U'}</AvatarFallback>
+                </Avatar>
+                <span>{msg.username || 'Unknown'}</span>
+              </div>
+              <div className="flex justify-between">
+                <div>{msg.text}</div>
+                <div>{new Date(msg.timestamp).toLocaleTimeString()}</div>
+              </div>
+            </div>
+          ))} */}
+
           {messages.map((msg, index) => (
             <div key={index} className={`p-2 rounded-lg mb-2 ${msg.userId === user?.id ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}>
               <div className="flex items-center">
@@ -109,6 +133,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ onClose }) => {
               </div>
             </div>
           ))}
+
         </div>
         <input
           type="text"

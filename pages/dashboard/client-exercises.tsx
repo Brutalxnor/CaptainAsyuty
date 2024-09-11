@@ -12297,6 +12297,7 @@ const ClientExercises: React.FC = () => {
       setCurrentExerciseIndex((prevIndex) => (prevIndex + 1) % exercisesForDay.length);
     }
   };
+  
 
   const handlePreviousExercise = () => {
     if (clientData && selectedDay) {
@@ -12309,6 +12310,24 @@ const ClientExercises: React.FC = () => {
     setSelectedDay(day);
     setCurrentExerciseIndex(0);
   };
+
+
+  const handleToggleExercise = (exerciseId: string) => {
+    if (!clientData) return;
+  
+    const updatedExercises = clientData.exercises.map((exercise) =>
+      exercise.id === exerciseId
+        ? { ...exercise, started: !exercise.started } // Toggle the clicked exercise
+        : { ...exercise, started: false } // Close all other exercises
+    );
+  
+    setClientData({
+      ...clientData,
+      exercises: updatedExercises,
+    });
+  };
+  
+
 
   // const handleSaveWeights = async () => {
   //   if (selectedExercise && activeSetIndex !== null && clientData) {
@@ -12354,53 +12373,129 @@ const ClientExercises: React.FC = () => {
   //   }
   // };
 
-  const handleSaveWeights = async () => {
-    if (selectedExercise && activeSetIndex !== null && clientData) {
-        try {
-            const updatedWeights = selectedExercise.weights ? [...selectedExercise.weights] : [];
-            const updatedReps = selectedExercise.reps ? [...selectedExercise.reps] : [];
+//   const handleSaveWeights = async () => {
+//     if (selectedExercise && activeSetIndex !== null && clientData) {
+//         try {
+//             const updatedWeights = selectedExercise.weights ? [...selectedExercise.weights] : [];
+//             const updatedReps = selectedExercise.reps ? [...selectedExercise.reps] : [];
 
-            updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
-            updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
+//             updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
+//             updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
 
-            const response = await fetch('/api/assign-weights', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    fullname: clientData.fullName,
-                    exerciseId: selectedExercise.id,
-                    weights: updatedWeights,
-                    reps: updatedReps,
-                }),
-            });
+//             const response = await fetch('/api/assign-weights', {
+//                 method: 'POST',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                 },
+//                 body: JSON.stringify({
+//                     fullname: clientData.fullName,
+//                     exerciseId: selectedExercise.id,
+//                     weights: updatedWeights,
+//                     reps: updatedReps,
+//                 }),
+//             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error('Error data:', errorData);
-                throw new Error(errorData.message || 'Failed to assign weights and reps');
-            }
+//             if (!response.ok) {
+//                 const errorData = await response.json();
+//                 console.error('Error data:', errorData);
+//                 throw new Error(errorData.message || 'Failed to assign weights and reps');
+//             }
 
-            // Update the local state to reflect the changes
-            const updatedExercises = clientData.exercises?.map(exercise =>
-                exercise.id === selectedExercise.id
-                    ? { ...exercise, weights: updatedWeights, reps: updatedReps }
-                    : exercise
-            );
+//             // Update the local state to reflect the changes
+//             const updatedExercises = clientData.exercises?.map(exercise =>
+//                 exercise.id === selectedExercise.id
+//                     ? { ...exercise, weights: updatedWeights, reps: updatedReps }
+//                     : exercise
+//             );
 
-            setClientData({
-                ...clientData,
-                exercises: updatedExercises,
-            });
+//             setClientData({
+//                 ...clientData,
+//                 exercises: updatedExercises,
+//             });
 
-            setShowWeightsModal(false); // Close the modal after saving
-            setSets([]); // Clear the sets array
-        } catch (error: any) {
-            console.error('Error assigning weights and reps:', error);
+//             setShowWeightsModal(false); // Close the modal after saving
+//             setSets([]); // Clear the sets array
+//         } catch (error: any) {
+//             console.error('Error assigning weights and reps:', error);
+//         }
+//     }
+// };
+
+
+const handleSaveWeights = async () => {
+  if (selectedExercise && activeSetIndex !== null && clientData) {
+    try {
+      // Initialize the weights and reps arrays if they are not defined or if they are too short
+      const updatedWeights = selectedExercise.weights ? [...selectedExercise.weights] : [];
+      const updatedReps = selectedExercise.reps ? [...selectedExercise.reps] : [];
+
+      // Ensure the updatedWeights and updatedReps arrays have enough elements
+      while (updatedWeights.length < selectedExercise.sets) {
+        updatedWeights.push(0); // default weight for new sets
+      }
+      while (updatedReps.length < selectedExercise.sets) {
+        updatedReps.push(0); // default reps for new sets
+      }
+
+      // Ensure that sets array is initialized and has enough elements
+      if (sets.length < selectedExercise.sets) {
+        sets.length = selectedExercise.sets;
+        for (let i = 0; i < selectedExercise.sets; i++) {
+          sets[i] = sets[i] || { weight: 0, reps: 0, started: false, finished: false };
         }
+      }
+
+      // Update the weights and reps for the current set
+      updatedWeights[activeSetIndex] = sets[activeSetIndex].weight || 0;
+      updatedReps[activeSetIndex] = sets[activeSetIndex].reps || 0;
+
+      // Make the API request to save the updated weights and reps
+      const response = await fetch('/api/assign-weights', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullname: clientData.fullName,
+          exerciseId: selectedExercise.id,
+          weights: updatedWeights,
+          reps: updatedReps,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to assign weights and reps');
+      }
+
+      // Update the local state with the updated exercise
+      const updatedExercises = clientData.exercises.map((exercise) =>
+        exercise.id === selectedExercise.id
+          ? { ...exercise, weights: updatedWeights, reps: updatedReps }
+          : exercise
+      );
+
+      setClientData({
+        ...clientData,
+        exercises: updatedExercises,
+      });
+      console.log('Sets:', sets);
+      console.log('Updated Weights:', updatedWeights);
+      console.log('Updated Reps:', updatedReps);
+      
+      // Close the modal and reset the sets array
+      setShowWeightsModal(false);
+      setSets([]); // Clear the sets array
+    } catch (error) {
+      console.error('Error assigning weights and reps:', error);
     }
+  } else {
+    console.error('Missing required data for saving weights');
+  }
 };
+
+
+
 
 
   const handleStartRestTimer = (exerciseId: string, setIndex: number, duration: number) => {
@@ -12451,11 +12546,30 @@ const ClientExercises: React.FC = () => {
     setCurrentDayInCycle(currentDay);
   };
 
+  // const openWeightsModal = (exercise: Exercise, setIndex: number) => {
+  //   setSelectedExercise(exercise);
+  //   setActiveSetIndex(setIndex);
+  //   setShowWeightsModal(true);
+  // };
+
   const openWeightsModal = (exercise: Exercise, setIndex: number) => {
     setSelectedExercise(exercise);
     setActiveSetIndex(setIndex);
+  
+    // Initialize the sets state if it doesn't already exist for the selected exercise
+    if (sets.length === 0) {
+      const initialSets = Array.from({ length: exercise.sets }).map(() => ({
+        weight: 0,  // Initialize to 0
+        reps: 0,    // Initialize to 0
+        started: false,
+        finished: false,
+      }));
+      setSets(initialSets);
+    }
+  
     setShowWeightsModal(true);
   };
+  
 
   const handleGifClick = (gif: string) => {
     setSelectedGif(gif);
@@ -12536,8 +12650,8 @@ const ClientExercises: React.FC = () => {
                       <img
                         src={`${currentExercise.gif}`}
                         alt={currentExercise.name}
-                        className={`w-32 h-32 rounded-md cursor-pointer transition-all duration-300 ease-in-out ${!currentExercise.started ? 'blur-sm' : ''}`}
-                        onClick={() => handleGifClick(`${currentExercise.gif}` || "")}
+                        className={`w-32 h-32 rounded-md cursor-pointer transition-all duration-300 ease-in-out ${!currentExercise.started ? 'blur-lg' : ''}`}
+                        onClick={() => currentExercise.started && handleGifClick(`${currentExercise.gif}`)}
                       />
                     ) : (
                       'No GIF'
@@ -12598,13 +12712,13 @@ const ClientExercises: React.FC = () => {
                   ))}
                 <tr>
                   <td colSpan={3} className="py-2 px-4 text-center">
-                    <button
-                      className="w-full bg-green-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-600 transition-all duration-200"
-                      onClick={() => null /* Handle Start/Stop Exercise */}
-                    >
-                      <FontAwesomeIcon icon={currentExercise.started ? faStop : faPlay} className="mr-2" />
-                      {currentExercise.started ? (language === 'en' ? 'Stop Exercise' : 'أوقف التمرين') : (language === 'en' ? 'Start Exercise' : 'ابدأ التمرين')}
-                    </button>
+                  <button
+                    onClick={() => handleToggleExercise(currentExercise.id)}
+                    className="w-full bg-blue-500 text-white py-2 mt-4"
+                  >
+                    <FontAwesomeIcon icon={currentExercise.started ? faStop : faPlay} className="mr-2" />
+                    {currentExercise.started ? 'Stop Exercise' : 'Start Exercise'}
+                  </button>
                   </td>
                 </tr>
               </tbody>
@@ -12760,10 +12874,7 @@ const ClientExercises: React.FC = () => {
           activeSetIndex={activeSetIndex}
           clientData={clientData} // Ensure clientData is passed correctly
           onClose={() => setShowWeightsModal(false)}
-          onSave={(updatedExercise) => {
-            // Handle saving the updated exercise
-            handleSaveWeights();
-          }}
+          onSave={handleSaveWeights}
         />
       )}
 

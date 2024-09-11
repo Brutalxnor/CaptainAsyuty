@@ -17,6 +17,8 @@ import Modal from '@/components/Modal';
 import { fa1, fa2, fa3, fa4, fa5, fa6 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { ClientData } from '@/types/ClientData';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';  // Import the default styles
 
 const dayIcons: Record<string, IconDefinition> = {
   'Day 1': fa1,
@@ -70,6 +72,9 @@ const AdminAddCardio = () => {
   const [clientData, setClientData] = useState<ClientData | null>(null);
   const [showExercises, setShowExercises] = useState(true);
   const [isGifModalOpen, setIsGifModalOpen] = useState<boolean>(false); // Track modal state
+  const [currentGifExerciseIndex, setCurrentGifExerciseIndex] = useState<number | null>(null); // Track the current exercise index being edited for GIF selection
+
+
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -107,6 +112,11 @@ const AdminAddCardio = () => {
     fetchClientCardio();
   }, [selectedClient]);
 
+  const openGifModal = (exerciseIndex: number) => {
+    setCurrentGifExerciseIndex(exerciseIndex); // Track which exercise is being edited
+    setIsGifModalOpen(true);
+  };
+
   const getGifPath = (gifName: string) => {
     return `/cardio/${gifName.replace(/ /g, '')}`;
   };
@@ -123,9 +133,11 @@ const AdminAddCardio = () => {
 
       if (!response.ok) throw new Error('Error assigning exercise');
       const data = await response.json();
+      toast.success('Exercises successfully assigned!');
       router.push('/dashboard');
     } catch (error: any) {
       console.error('Error:', error);
+      toast.error('Failed to assign exercises.');
       setError(error.message);
     }
   };
@@ -173,10 +185,19 @@ const AdminAddCardio = () => {
     setSelectedDay(day);
   };
 
-  const handleGifClick = (gif: string | null) => {
-    setSelectedGif(gif);
-  };
+  const handleGifClick = (gif: string) => {
+    if (currentGifExerciseIndex !== null) {
+      const updatedExercises = [...exercises];
+      updatedExercises[currentGifExerciseIndex].gif = gif;
+      setExercises(updatedExercises);
+      setIsGifModalOpen(false);
+    }
+  }
 
+  const handleGifDeselect = () => {
+    setSelectedGif(null);
+    setIsGifModalOpen(false);
+  };
   // Render the exercise table and gif selection
   const renderExerciseTable = () => (
     <div className="w-full max-w-3xl p-6 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] rounded-lg shadow-lg md:p-6 sm:p-4 overflow-x-auto">
@@ -330,7 +351,7 @@ const AdminAddCardio = () => {
               <td className="py-2 px-4 border-b min-w-32">
                 <button
                   className="bg-blue-500 text-white py-1 px-2 rounded-md"
-                  onClick={() => setIsGifModalOpen(true)} // Open GIF modal on click
+                  onClick={() => openGifModal(index)}
                 >
                   Select GIF
                 </button>
@@ -340,7 +361,7 @@ const AdminAddCardio = () => {
                       src={getGifPath(exercise.gif)}
                       alt={exercise.duration}
                       className="w-32 h-32 self-center min-w-half cursor-pointer"
-                      onClick={() => exercise.gif && handleGifClick(getGifPath(exercise.gif))}
+                      onClick={() => openGifModal(index)}
                     />
                   ) : (
                     'No GIF'
@@ -381,6 +402,7 @@ const AdminAddCardio = () => {
   return (
     <DashboardLayout>
       <div className="flex flex-col justify-center items-center min-h-screen relative">
+      <ToastContainer />
         <div className="absolute top-4 right-4 flex space-x-4">
             <FontAwesomeIcon
               icon={faHeartbeat}
@@ -412,7 +434,7 @@ const AdminAddCardio = () => {
           </div>
         {isGifModalOpen && renderGifModal()}
         {selectedGif && (
-          <Modal onClose={() => handleGifClick(null)}>
+          <Modal onClose={handleGifDeselect}>
             <img src={selectedGif} alt="Exercise GIF" className="w-full h-auto" />
           </Modal>
         )}
@@ -422,6 +444,17 @@ const AdminAddCardio = () => {
 };
 
 export default AdminAddCardio;
+
+
+
+
+
+
+
+
+
+
+
 
 
 

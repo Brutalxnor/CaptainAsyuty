@@ -11,8 +11,8 @@ const Pricing = () => {
 
   const plans = [
     {
-      title: { en: '1 Month', ar: 'شهر 1' },
-      price: { en: '499 EGP / month', ar: '499 جنيه / شهر' },
+      title: { en: '1 Month', ar: 'شهر 2' },
+      price: { en: '999 EGP / month', ar: '999 جنيه / شهرين' },
       features: [
         { en: 'Weekly Exercise Updates', ar: 'تحديثات التمرين أسبوعياً' },
         { en: 'Nutrition Plan', ar: 'خطة تغذية' },
@@ -24,7 +24,7 @@ const Pricing = () => {
     },
     {
       title: { en: '3 Months', ar: '3 شهور' },
-      price: { en: '1199 EGP / 3 months', ar: '1199 جنيه / 3 شهور' },
+      price: { en: '1299 EGP / 3 months', ar: '1199 جنيه / 3 شهور' },
       features: [
         { en: 'Weekly Exercise Updates', ar: 'تحديثات التمرين أسبوعياً' },
         { en: 'Nutrition Plan', ar: 'خطة تغذية' },
@@ -36,7 +36,7 @@ const Pricing = () => {
     },
     {
       title: { en: '6 Months', ar: '6 شهور' },
-      price: { en: '2299 EGP / 6 months', ar: '2299 جنيه / 6 شهور' },
+      price: { en: '2399 EGP / 6 months', ar: '2299 جنيه / 6 شهور' },
       features: [
         { en: 'Weekly Exercise Updates', ar: 'تحديثات التمرين أسبوعياً' },
         { en: 'Nutrition Plan', ar: 'خطة تغذية' },

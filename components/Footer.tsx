@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { faFacebook, faTwitter, faYoutube, faTiktok } from '@fortawesome/free-brands-svg-icons';
+import { faFacebook, faInstagram, faYoutube, faTiktok } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Footer: React.FC = () => {
@@ -9,16 +9,16 @@ const Footer: React.FC = () => {
       <div className="container mx-auto flex flex-col items-center">
         
         <div className="flex space-x-4 mb-4 mt-5">
-          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.facebook.com/profile.php?id=100005772551245&mibextid=LQQJ4d" target="_blank" rel="noopener noreferrer">
             <FontAwesomeIcon icon={faFacebook} size="2x" />
           </a>
-          <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faTwitter} size="2x" />
+          <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+            <FontAwesomeIcon icon={faInstagram} size="2x" />
           </a>
-          <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://youtube.com/@abdelrahmanshehata1205?si=nDEzI39x-pYsuf7d" target="_blank" rel="noopener noreferrer">
             <FontAwesomeIcon icon={faYoutube} size="2x" />
           </a>
-          <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.tiktok.com/@abdelrahmanshehata?_t=8pcSmojGOu7&_r=1" target="_blank" rel="noopener noreferrer">
             <FontAwesomeIcon icon={faTiktok} size="2x" />
           </a>
         </div>
@@ -30,7 +30,6 @@ const Footer: React.FC = () => {
           <span className="ml-4">&copy; 2024 Captain El Asyuty</span>
         </div>
       </div>
-
     </footer>
   );
 };

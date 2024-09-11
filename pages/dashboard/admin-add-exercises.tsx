@@ -21,7 +21,8 @@ import { format } from 'date-fns';
 // import { v4 as uuidv4 } from 'uuid';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';  // Import the default styles
 
 const { v4: uuidv4 } = require('uuid'); // CommonJS syntax
 
@@ -118,105 +119,6 @@ const AdminAddExercises = () => {
     fetchClients();
   }, []);
 
-  // useEffect(() => {
-  //   if (selectedType) {
-  //     const fetchExerciseData = async () => {
-  //       try {
-  //         const response = await fetch(`/${selectedType}.xlsx`);
-  //         if (!response.ok) {
-  //           throw new Error(`HTTP error! Status: ${response.status}`);
-  //         }
-  //         const data = await response.arrayBuffer();
-  //         const workbook = XLSX.read(data, { type: 'array' });
-
-  //         const exercises: ExerciseOption[] = [];
-
-  //         workbook.SheetNames.forEach(sheetName => {
-  //           const sheet = workbook.Sheets[sheetName];
-  //           const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as string[][];
-
-  //           rows.slice(1).forEach(row => {
-  //             row.forEach((exerciseName, dayIndex) => {
-  //               if (exerciseName) {
-  //                 exercises.push({
-  //                   id: uuidv4(), // Generate unique id
-  //                   name: exerciseName,
-  //                   sets: '1', // Default sets
-  //                   day: `Day ${dayIndex + 1}`,
-  //                   restTime: 30, // Default rest time
-  //                 });
-  //               }
-  //             });
-  //           });
-  //         });
-
-  //         setExercises(exercises);
-  //         console.log('Exercises fetched and set:', exercises);
-  //       } catch (error) {
-  //         console.error('Error fetching exercise data:', error);
-  //       }
-  //     };
-
-  //     fetchExerciseData();
-  //   }
-  // }, [selectedType]);
-
-  // useEffect(() => {
-  //   const fetchClientExercises = async () => {
-  //     try {
-  //       const response = await fetch(`/api/adminAddExercise?email=${selectedClient}`);
-  //       const data = await response.json();
-  //       console.log('Fetched client exercises:', data); // Debugging log
-  
-  //       // If exercises are available in the database, use them
-  //       if (data.exercises.length > 0) {
-  //         setExercises(data.exercises);
-  //       } else {
-  //         console.log('No exercises in DB, fetching from Excel');
-  //         fetchExerciseDataFromExcel(); // Fetch from Excel if no exercises
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching client exercises:', error);
-  //     }
-  //   };
-  
-  //   if (selectedClient) {
-  //     fetchClientExercises();
-  //   }
-  // }, [selectedClient]);
-
-  // useEffect(() => {
-  //   const fetchClientExercises = async () => {
-  //     try {
-  //       const response = await fetch(`/api/adminAddExercise?email=${selectedClient}`);
-  //       const data = await response.json();
-        
-  //       console.log('Fetched data:', data); // Log the entire fetched data for inspection
-  //       console.log('Selected client email:', selectedClient); // Log the selected client email
-  
-  //       // Check if the selected client exists in the fetched data
-  //       const client = data.exercises.find((c: any) => c.email === selectedClient);
-  //       console.log('Found client:', client); // Log the client found
-  
-  //       // If client and exercises are found, set exercises
-  //       if (client && client.exercises && client.exercises.length > 0) {
-  //         console.log('Client exercises:', client.exercises); // Log exercises
-  //         setExercises(client.exercises);
-  //       } else {
-  //         console.log('No exercises found for the selected client');
-  //         fetchExerciseDataFromExcel(); // Fetch from Excel if no exercises
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching client exercises:', error);
-  //     }
-  //   };
-  
-  //   if (selectedClient) {
-  //     fetchClientExercises();
-  //   }
-  // }, [selectedClient]);
-  
-
   useEffect(() => {
     const fetchClientExercises = async () => {
       if (fetchExisting && selectedClient) {
@@ -236,12 +138,6 @@ const AdminAddExercises = () => {
 
     fetchClientExercises();
   }, [selectedClient, fetchExisting]);
-
-
-
-
-  
-
 
   const handleDownloadPDF = async () => {
     const doc = new jsPDF('p', 'mm', 'a4');
@@ -339,51 +235,6 @@ const AdminAddExercises = () => {
   
   
 
-  // // Function to fetch exercises from Excel
-  // const fetchExerciseDataFromExcel = async () => {
-  //   try {
-  //     const response = await fetch(`/${selectedType}.xlsx`);
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-  //     const data = await response.arrayBuffer();
-  //     const workbook = XLSX.read(data, { type: 'array' });
-  //     console.log('Workbook data:', workbook); // Debugging log
-  
-  //     const exercises: ExerciseOption[] = [];
-  //     workbook.SheetNames.forEach(sheetName => {
-  //       const sheet = workbook.Sheets[sheetName];
-  //       const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as string[][];
-  
-  //       rows.slice(1).forEach(row => {
-  //         row.forEach((exerciseName, dayIndex) => {
-  //           if (exerciseName) {
-  //             exercises.push({
-  //               id: uuidv4(),
-  //               name: exerciseName,
-  //               sets: '1', // Default sets
-  //               day: `Day ${dayIndex + 1}`,
-  //               restTime: 30, // Default rest time
-  //             });
-  //           }
-  //         });
-  //       });
-  //     });
-  
-  //     console.log('Exercises loaded from Excel:', exercises); // Debugging log
-  //     setExercises(exercises);
-  //   } catch (error) {
-  //     console.error('Error fetching exercise data from Excel:', error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (!fetchExisting) {
-  //     fetchExerciseDataFromExcel();
-  //   }
-  // }, [fetchExisting, selectedType]);
-  
-
   useEffect(() => {
     if (!fetchExisting) {
       const fetchExerciseDataFromExcel = async () => {
@@ -441,36 +292,6 @@ const AdminAddExercises = () => {
     fetchGifOptions();
   }, []);
 
-//   const handleAssignExercise = async () => {
-//     try {
-//       const currentDate = format(new Date(), 'yyyy-MM-dd');
-//       const payload = {
-//         email: selectedClient,
-//         exercises,
-//         type: selectedType,
-//         date: currentDate,
-//       };
-//       console.log('Assigning exercises:', payload); // Debug log
-//       const response = await fetch('/api/adminAddExercise', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(payload),
-//       });
-
-//       if (!response.ok) throw new Error('Error assigning exercise');
-//       const data = await response.json();
-//       console.log(data.message);
-//       router.push('/dashboard');
-//     } catch (error: any) {
-//       console.error('Error:', error);
-//       setError(error.message);
-//     }
-//   };
-
-
-
 
 const handleAssignExercise = async () => {
     try {
@@ -492,10 +313,12 @@ const handleAssignExercise = async () => {
   
       if (!response.ok) throw new Error('Error assigning exercise');
       const data = await response.json();
+      toast.success('Exercises successfully assigned!');
       // console.log(data.message);
       router.push('/dashboard');
     } catch (error: any) {
       console.error('Error:', error);
+      toast.error('Failed to assign exercises.');
       setError(error.message);
     }
   };
@@ -847,6 +670,7 @@ const handleAssignExercise = async () => {
   return (
     <DashboardLayout>
       <div className="flex flex-col items-center min-h-screen relative  w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
+        <ToastContainer />
         <div className="absolute top-4 right-4 flex space-x-4">
           <FontAwesomeIcon
             icon={faDumbbell}
