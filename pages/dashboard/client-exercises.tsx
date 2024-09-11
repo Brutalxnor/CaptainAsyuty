@@ -12167,7 +12167,7 @@ const ClientExercises: React.FC = () => {
   const [showGifModal, setShowGifModal] = useState(false);
   const cardioContainerRef = useRef<HTMLDivElement | null>(null);
   const [cardioIntervals, setCardioIntervals] = useState<CardioIntervals>({});
-
+  
   // Function to handle horizontal scroll
   const scrollCardio = (direction: 'left' | 'right') => {
     if (cardioContainerRef.current) {
@@ -12230,12 +12230,30 @@ const ClientExercises: React.FC = () => {
         const cardio = cardioResponse.ok ? await cardioResponse.json() : { exercises: [] };
         const exercisesData = exercisesResponse.ok ? await exercisesResponse.json() : { exercises: [], date: new Date().toISOString() };
 
-        setClientData({
+        const initializedExercises = (exercisesData.exercises || []).map((exercise: Exercise) => ({
+          ...exercise,
+          weights: Array.isArray(exercise.weights) ? exercise.weights : Array(exercise.sets).fill(0),
+          reps: Array.isArray(exercise.reps) ? exercise.reps : Array(exercise.sets).fill(0),
+        }));
+
+        const initializedClientData: ClientData = {
           fullName: client.fullName || userEmail,
-          exercises: exercisesData.exercises || [],
+          exercises: initializedExercises,
           cardio: cardio.exercises || [],
           date: exercisesData.date || new Date().toISOString(),
-        });
+        };
+
+        setClientData(initializedClientData);
+        setExercises(initializedExercises);
+        
+        // setClientData({
+        //   fullName: client.fullName || userEmail,
+        //   exercises: exercisesData.exercises || [],
+        //   cardio: cardio.exercises || [],
+        //   date: exercisesData.date || new Date().toISOString(),
+        // });
+        
+
 
         calculateUnlockedDays(exercisesData.exercises, exercisesData.date);
       } catch (error: any) {
@@ -12421,78 +12439,51 @@ const ClientExercises: React.FC = () => {
 //     }
 // };
 
+  const handleSaveWeights = async () => {
+    if (selectedExercise && activeSetIndex !== null && clientData) {
+      try {
+        const updatedExercises = exercises.map((exercise) => {
+          if (exercise.id === selectedExercise.id) {
+            const updatedWeights = [...exercise.weights];
+            const updatedReps = [...exercise.reps];
+            updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
+            updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
+            return { ...exercise, weights: updatedWeights, reps: updatedReps };
+          }
+          return exercise;
+        });
 
-const handleSaveWeights = async () => {
-  if (selectedExercise && activeSetIndex !== null && clientData) {
-    try {
-      // Initialize the weights and reps arrays if they are not defined or if they are too short
-      const updatedWeights = selectedExercise.weights ? [...selectedExercise.weights] : [];
-      const updatedReps = selectedExercise.reps ? [...selectedExercise.reps] : [];
+        const response = await fetch('/api/assign-weights', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            fullname: clientData.fullName,
+            exerciseId: selectedExercise.id,
+            weights: updatedExercises.find(ex => ex.id === selectedExercise.id)?.weights,
+            reps: updatedExercises.find(ex => ex.id === selectedExercise.id)?.reps,
+          }),
+        });
 
-      // Ensure the updatedWeights and updatedReps arrays have enough elements
-      while (updatedWeights.length < selectedExercise.sets) {
-        updatedWeights.push(0); // default weight for new sets
-      }
-      while (updatedReps.length < selectedExercise.sets) {
-        updatedReps.push(0); // default reps for new sets
-      }
-
-      // Ensure that sets array is initialized and has enough elements
-      if (sets.length < selectedExercise.sets) {
-        sets.length = selectedExercise.sets;
-        for (let i = 0; i < selectedExercise.sets; i++) {
-          sets[i] = sets[i] || { weight: 0, reps: 0, started: false, finished: false };
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to assign weights and reps');
         }
+
+        setExercises(updatedExercises);
+        setClientData({
+          ...clientData,
+          exercises: updatedExercises,
+        });
+
+        setShowWeightsModal(false);
+        setSets([]);
+      } catch (error) {
+        console.error('Error assigning weights and reps:', error);
       }
-
-      // Update the weights and reps for the current set
-      updatedWeights[activeSetIndex] = sets[activeSetIndex].weight || 0;
-      updatedReps[activeSetIndex] = sets[activeSetIndex].reps || 0;
-
-      // Make the API request to save the updated weights and reps
-      const response = await fetch('/api/assign-weights', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          fullname: clientData.fullName,
-          exerciseId: selectedExercise.id,
-          weights: updatedWeights,
-          reps: updatedReps,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to assign weights and reps');
-      }
-
-      // Update the local state with the updated exercise
-      const updatedExercises = clientData.exercises.map((exercise) =>
-        exercise.id === selectedExercise.id
-          ? { ...exercise, weights: updatedWeights, reps: updatedReps }
-          : exercise
-      );
-
-      setClientData({
-        ...clientData,
-        exercises: updatedExercises,
-      });
-      console.log('Sets:', sets);
-      console.log('Updated Weights:', updatedWeights);
-      console.log('Updated Reps:', updatedReps);
-      
-      // Close the modal and reset the sets array
-      setShowWeightsModal(false);
-      setSets([]); // Clear the sets array
-    } catch (error) {
-      console.error('Error assigning weights and reps:', error);
     }
-  } else {
-    console.error('Missing required data for saving weights');
-  }
-};
+  };
 
 
 
@@ -12556,16 +12547,13 @@ const handleSaveWeights = async () => {
     setSelectedExercise(exercise);
     setActiveSetIndex(setIndex);
   
-    // Initialize the sets state if it doesn't already exist for the selected exercise
-    if (sets.length === 0) {
-      const initialSets = Array.from({ length: exercise.sets }).map(() => ({
-        weight: 0,  // Initialize to 0
-        reps: 0,    // Initialize to 0
-        started: false,
-        finished: false,
-      }));
-      setSets(initialSets);
-    }
+    const initialSets = Array.from({ length: exercise.sets }).map((_, index) => ({
+      weight: exercise.weights[index] || 0,
+      reps: exercise.reps[index] || 0,
+      started: false,
+      finished: false,
+    }));
+    setSets(initialSets);
   
     setShowWeightsModal(true);
   };
@@ -12826,47 +12814,6 @@ const handleSaveWeights = async () => {
       )}
 
       </div>
-
-      {/* Weights and Reps Modal */}
-      {/* {showWeightsModal && (
-        <Modal onClose={() => setShowWeightsModal(false)}>
-          <h2 className="text-2xl font-bold mb-4">{language === 'en' ? 'Set Weights and Reps' : 'تعيين الأوزان والتكرارات'}</h2>
-          <div className="mb-4">
-            <label className="block mb-2">{language === 'en' ? 'Weight (kg):' : 'الوزن (كجم):'}</label>
-            <input
-              type="number"
-              min="0"
-              value={sets[activeSetIndex || 0]?.weight || 0}
-              onChange={(e) => {
-                const newSets = [...sets];
-                newSets[activeSetIndex || 0] = { ...newSets[activeSetIndex || 0], weight: Number(e.target.value) };
-                setSets(newSets);
-              }}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block mb-2">{language === 'en' ? 'Reps:' : 'التكرارات:'}</label>
-            <input
-              type="number"
-              min="0"
-              value={sets[activeSetIndex || 0]?.reps || 0}
-              onChange={(e) => {
-                const newSets = [...sets];
-                newSets[activeSetIndex || 0] = { ...newSets[activeSetIndex || 0], reps: Number(e.target.value) };
-                setSets(newSets);
-              }}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <button
-            onClick={handleSaveWeights}
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-          >
-            {language === 'en' ? 'Save' : 'حفظ'}
-          </button>
-        </Modal>
-      )} */}
 
       {showWeightsModal && selectedExercise && (
         <WeightsModal

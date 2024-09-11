@@ -11,7 +11,7 @@ const Pricing = () => {
 
   const plans = [
     {
-      title: { en: '1 Month', ar: 'شهر 2' },
+      title: { en: '2 Month', ar: 'شهر 2' },
       price: { en: '999 EGP / month', ar: '999 جنيه / شهرين' },
       features: [
         { en: 'Weekly Exercise Updates', ar: 'تحديثات التمرين أسبوعياً' },
