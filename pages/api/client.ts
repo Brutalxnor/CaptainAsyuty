@@ -576,17 +576,328 @@
 
 
 
+// import { NextApiRequest, NextApiResponse } from 'next';
+// import clientPromise from '@/lib/mongodb';
+
+// export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+//   const { method } = req;
+
+//   if (method === 'POST') {
+//     const { email, ...newData } = req.body;
+
+//     if (!email) {
+//       console.error('No email provided in the request');
+//       return res.status(400).json({ message: 'Email is required' });
+//     }
+
+//     try {
+//       const client = await clientPromise;
+//       const db = client.db('ClientsDB');
+//       const clientData = await db.collection('Clients').findOne({ email });
+
+//       if (!clientData) {
+//         console.error('Client not found for email:', email);
+//         return res.status(404).json({ message: 'Client not found' });
+//       }
+
+//       // Capture previous data
+//       const previousValues = {
+//         previousFullName: clientData.fullName || '',
+//         previousWeight: clientData.weight || '',
+//         previousHeight: clientData.height || '',
+//         previousAge: clientData.age || '',
+//         previousFatWeight: clientData.fatWeight || '',
+//         previousMuscleWeight: clientData.muscleWeight || '',
+//         previousMusclePercentage: clientData.musclePercentage || '',
+//         previousFatPercentage: clientData.fatPercentage || '',
+//         previousWaistMeasurement: clientData.waistMeasurement || '',
+//         previousRightArmMeasurement: clientData.rightArmMeasurement || '',
+//         previousLeftArmMeasurement: clientData.leftArmMeasurement || '',
+//         previousRightLegMeasurement: clientData.rightLegMeasurement || '',
+//         previousLeftLegMeasurement: clientData.leftLegMeasurement || '',
+//         previousSugarCravings: clientData.sugarCravings || '',
+//         previousInjuries: clientData.previousInjuries || '',
+//         previousDiabetes: clientData.diabetes || '',
+//         previousBloodPressure: clientData.bloodPressure || '',
+//         previousOnlineTrainingExperience: clientData.onlineTrainingExperience || '',
+//         previousTrainingAge: clientData.trainingAge || '',
+//       };
+
+//       // Update client data with new and previous values
+//       const updatedClientData = {
+//         ...previousValues,
+//         ...newData,
+//       };
+
+//       await db.collection('Clients').updateOne({ email }, { $set: updatedClientData });
+
+//       console.log('Client data updated successfully for email:', email);
+//       res.status(200).json({ message: 'Client data updated successfully' });
+//     } catch (error: any) {
+//       console.error('Error updating client data:', error.message);
+//       res.status(500).json({ message: 'Error updating client data', error: error.message });
+//     }
+//   } else if (method === 'GET') {
+//     const { email } = req.query;
+
+//     if (!email) {
+//       console.error('No email provided in the request');
+//       return res.status(400).json({ message: 'Email is required' });
+//     }
+
+//     try {
+//       const client = await clientPromise;
+//       const db = client.db('ClientsDB');
+      
+//       // Fetch client data
+//       const clientData = await db.collection('Clients').findOne({ email: email.toString() });
+
+//       if (!clientData) {
+//         console.error('Client not found for email:', email);
+//         return res.status(404).json({ message: 'Client not found' });
+//       }
+
+//       // Fetch exercises for the client
+//       const exercisesData = await db.collection('Exercises').find({ email: email.toString() }).toArray();
+      
+//       // Include exercises in the client data response
+//       clientData.exercises = exercisesData.length ? exercisesData[0].exercises : [];
+
+//       res.status(200).json(clientData);
+//     } catch (error: any) {
+//       console.error('Error fetching client data:', error.message);
+//       res.status(500).json({ message: 'Error fetching client data', error: error.message });
+//     }
+//   } else {
+//     res.status(405).json({ message: `Method ${method} not allowed` });
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+// // /pages/api/client.ts
+// import { NextApiRequest, NextApiResponse } from 'next';
+// import clientPromise from '@/lib/mongodb';
+
+// export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+//   const { method } = req;
+
+//   if (method === 'POST') {
+//     // Create new client data
+//     const { email, ...newData } = req.body;
+
+//     if (!email) {
+//       console.error('No email provided in the request');
+//       return res.status(400).json({ message: 'Email is required' });
+//     }
+
+//     try {
+//       const client = await clientPromise;
+//       const db = client.db('ClientsDB');
+
+//       // Check if client already exists
+//       const existingClient = await db.collection('Clients').findOne({ email });
+
+//       if (existingClient) {
+//         console.error('Client already exists for email:', email);
+//         return res.status(400).json({ message: 'Client already exists' });
+//       }
+
+//       // Create new client data
+//       const newClientData = {
+//         email,
+//         ...newData,
+//       };
+
+//       await db.collection('Clients').insertOne(newClientData);
+
+//       console.log('New client data created successfully for email:', email);
+//       res.status(201).json({ message: 'Client data created successfully' });
+//     } catch (error: any) {
+//       console.error('Error creating client data:', error.message);
+//       res.status(500).json({ message: 'Error creating client data', error: error.message });
+//     }
+//   } else if (method === 'PUT') {
+//     // Update existing client data
+//     const { email, ...newData } = req.body;
+
+//     if (!email) {
+//       console.error('No email provided in the request');
+//       return res.status(400).json({ message: 'Email is required' });
+//     }
+
+//     try {
+//       const client = await clientPromise;
+//       const db = client.db('ClientsDB');
+//       const clientData = await db.collection('Clients').findOne({ email });
+
+//       if (!clientData) {
+//         console.error('Client not found for email:', email);
+//         return res.status(404).json({ message: 'Client not found' });
+//       }
+
+//       // Capture previous data
+//       const previousValues = {
+//         previousFullName: clientData.fullName || '',
+//         previousWeight: clientData.weight || '',
+//         previousHeight: clientData.height || '',
+//         previousAge: clientData.age || '',
+//         previousFatWeight: clientData.fatWeight || '',
+//         previousMuscleWeight: clientData.muscleWeight || '',
+//         previousMusclePercentage: clientData.musclePercentage || '',
+//         previousFatPercentage: clientData.fatPercentage || '',
+//         previousWaistMeasurement: clientData.waistMeasurement || '',
+//         previousRightArmMeasurement: clientData.rightArmMeasurement || '',
+//         previousLeftArmMeasurement: clientData.leftArmMeasurement || '',
+//         previousRightLegMeasurement: clientData.rightLegMeasurement || '',
+//         previousLeftLegMeasurement: clientData.leftLegMeasurement || '',
+//         previousSugarCravings: clientData.sugarCravings || '',
+//         previousInjuries: clientData.previousInjuries || '',
+//         previousDiabetes: clientData.diabetes || '',
+//         previousBloodPressure: clientData.bloodPressure || '',
+//         previousOnlineTrainingExperience: clientData.onlineTrainingExperience || '',
+//         previousTrainingAge: clientData.trainingAge || '',
+//       };
+
+//       // Update client data with new and previous values
+//       const updatedClientData = {
+//         ...clientData,
+//         ...previousValues,
+//         ...newData,
+//       };
+
+//       await db.collection('Clients').updateOne({ email }, { $set: updatedClientData });
+
+//       console.log('Client data updated successfully for email:', email);
+//       res.status(200).json({ message: 'Client data updated successfully' });
+//     } catch (error: any) {
+//       console.error('Error updating client data:', error.message);
+//       res.status(500).json({ message: 'Error updating client data', error: error.message });
+//     }
+//   } else if (method === 'GET') {
+//     const { email } = req.query;
+
+//     if (!email) {
+//       console.error('No email provided in the request');
+//       return res.status(400).json({ message: 'Email is required' });
+//     }
+
+//     try {
+//       const client = await clientPromise;
+//       const db = client.db('ClientsDB');
+
+//       // Fetch client data
+//       const clientData = await db.collection('Clients').findOne({ email: email.toString() });
+
+//       if (!clientData) {
+//         console.error('Client not found for email:', email);
+//         return res.status(404).json({ message: 'Client not found' });
+//       }
+
+//       // Fetch exercises for the client
+//       const exercisesData = await db.collection('Exercises').find({ email: email.toString() }).toArray();
+
+//       // Include exercises in the client data response
+//       clientData.exercises = exercisesData.length ? exercisesData[0].exercises : [];
+
+//       res.status(200).json(clientData);
+//     } catch (error: any) {
+//       console.error('Error fetching client data:', error.message);
+//       res.status(500).json({ message: 'Error fetching client data', error: error.message });
+//     }
+//   } else {
+//     res.status(405).json({ message: `Method ${method} not allowed` });
+//   }
+// }
+
+
+
+
+
+
 import { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '@/lib/mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
 
+  // if (method === 'POST') {
+  //   // Create new client data
+  //   const { email, ...newData } = req.body;
+
+  //   if (!email) {
+  //     return res.status(400).json({ message: 'Email is required' });
+  //   }
+
+  //   try {
+  //     const client = await clientPromise;
+  //     const db = client.db('ClientsDB');
+
+  //     // Check if client already exists
+  //     const existingClient = await db.collection('Clients').findOne({ email });
+
+  //     if (existingClient) {
+  //       return res.status(409).json({ message: 'Client already exists' });
+  //     }
+
+  //     // Create new client data
+  //     const newClientData = {
+  //       email,
+  //       ...newData,
+  //     };
+
+  //     await db.collection('Clients').insertOne(newClientData);
+
+  //     return res.status(201).json({ message: 'Client data created successfully' });
+  //   } catch (error: any) {
+  //     return res.status(500).json({ message: 'Error creating client data', error: error.message });
+  //   }
+  // } 
+
   if (method === 'POST') {
+    const { email, ...newData } = req.body;
+  
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
+  
+    try {
+      const client = await clientPromise;
+      const db = client.db('ClientsDB');
+  
+      // Check if client already exists
+      const existingClient = await db.collection('Clients').findOne({ email });
+  
+      if (existingClient) {
+        // Instead of throwing an error, update the existing client
+        await db.collection('Clients').updateOne({ email }, { $set: newData });
+        return res.status(200).json({ message: 'Client data updated successfully' });
+      }
+  
+      // If no client exists, create a new one
+      await db.collection('Clients').insertOne({ email, ...newData });
+      return res.status(201).json({ message: 'Client created successfully' });
+    } catch (error: any) {
+      return res.status(500).json({ message: 'Error creating/updating client data', error: error.message });
+    }
+  }
+  
+
+
+  else if (method === 'PUT') {
+    // Update existing client data
     const { email, ...newData } = req.body;
 
     if (!email) {
-      console.error('No email provided in the request');
       return res.status(400).json({ message: 'Email is required' });
     }
 
@@ -596,7 +907,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const clientData = await db.collection('Clients').findOne({ email });
 
       if (!clientData) {
-        console.error('Client not found for email:', email);
         return res.status(404).json({ message: 'Client not found' });
       }
 
@@ -625,50 +935,54 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       // Update client data with new and previous values
       const updatedClientData = {
+        ...clientData,
         ...previousValues,
         ...newData,
       };
 
       await db.collection('Clients').updateOne({ email }, { $set: updatedClientData });
 
-      console.log('Client data updated successfully for email:', email);
-      res.status(200).json({ message: 'Client data updated successfully' });
+      return res.status(200).json({ message: 'Client data updated successfully' });
     } catch (error: any) {
-      console.error('Error updating client data:', error.message);
-      res.status(500).json({ message: 'Error updating client data', error: error.message });
+      return res.status(500).json({ message: 'Error updating client data', error: error.message });
     }
-  } else if (method === 'GET') {
+  } 
+
+  else if (method === 'GET') {
     const { email } = req.query;
 
     if (!email) {
-      console.error('No email provided in the request');
       return res.status(400).json({ message: 'Email is required' });
     }
 
     try {
       const client = await clientPromise;
       const db = client.db('ClientsDB');
-      
+
       // Fetch client data
       const clientData = await db.collection('Clients').findOne({ email: email.toString() });
 
       if (!clientData) {
-        console.error('Client not found for email:', email);
         return res.status(404).json({ message: 'Client not found' });
       }
+      if (!clientData.images) {
+        clientData.images = { front: null, back: null }; // Ensure 'images' field exists
+      }
+      
 
       // Fetch exercises for the client
       const exercisesData = await db.collection('Exercises').find({ email: email.toString() }).toArray();
-      
+
       // Include exercises in the client data response
       clientData.exercises = exercisesData.length ? exercisesData[0].exercises : [];
 
-      res.status(200).json(clientData);
+      return res.status(200).json(clientData);
     } catch (error: any) {
-      console.error('Error fetching client data:', error.message);
-      res.status(500).json({ message: 'Error fetching client data', error: error.message });
+      return res.status(500).json({ message: 'Error fetching client data', error: error.message });
     }
-  } else {
-    res.status(405).json({ message: `Method ${method} not allowed` });
+  } 
+
+  else {
+    return res.status(405).json({ message: `Method ${method} not allowed` });
   }
 }

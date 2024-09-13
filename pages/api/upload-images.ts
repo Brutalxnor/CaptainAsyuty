@@ -428,46 +428,6 @@
 
 
 
-// api/upload-images.ts
-import { NextApiRequest, NextApiResponse } from 'next';
-import { v2 as cloudinary } from 'cloudinary';
-import multer from 'multer';
-import { Readable } from 'stream';
-
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-// Multer setup for handling image uploads
-const storage = multer.memoryStorage(); // Fix: Ensure correct multer usage with storage
-const upload = multer({
-  storage,
-  limits: {
-    fileSize: 5 * 1024 * 1024, // 5 MB limit per file
-  },
-}).fields([
-  { name: 'front', maxCount: 1 },
-  { name: 'back', maxCount: 1 }
-]);
-
-// Disable Next.js default body parser
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-// Custom MulterRequest interface
-interface MulterRequest extends NextApiRequest {
-  files: {
-    front?: Express.Multer.File[];
-    back?: Express.Multer.File[];
-  };
-}
-
 // Main handler function
 // export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 //   if (req.method === 'POST') {
@@ -514,18 +474,173 @@ interface MulterRequest extends NextApiRequest {
 //   }
 // }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // api/upload-images.ts
+// import { NextApiRequest, NextApiResponse } from 'next';
+// import { v2 as cloudinary } from 'cloudinary';
+// import multer from 'multer';
+// import { Readable } from 'stream';
+
+// // Configure Cloudinary
+// cloudinary.config({
+//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//   api_key: process.env.CLOUDINARY_API_KEY,
+//   api_secret: process.env.CLOUDINARY_API_SECRET,
+// });
+
+// // Multer setup for handling image uploads
+// const storage = multer.memoryStorage();
+// const upload = multer({
+//   storage,
+//   limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB limit per file
+// }).fields([
+//   { name: 'front', maxCount: 1 },
+//   { name: 'back', maxCount: 1 },
+// ]);
+
+// // Disable Next.js default body parser
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// };
+
+// // Custom MulterRequest interface
+// interface MulterRequest extends NextApiRequest {
+//   files: {
+//     front?: Express.Multer.File[];
+//     back?: Express.Multer.File[];
+//   };
+// }
+
+
+// export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+//   if (req.method === 'POST') {
+//     upload(req as any, res as any, async (err: any) => {
+//       if (err) {
+//         if (err instanceof multer.MulterError) {
+//           console.error('Multer error:', err.message);
+//           return res.status(400).json({ message: 'Multer error', error: err.message });
+//         } else {
+//           console.error('Error with multer:', err);
+//           return res.status(500).json({ message: 'Multer upload failed', error: err.message });
+//         }
+//       }
+
+//       const files = (req as MulterRequest).files;
+
+//       if (!files || (!files.front && !files.back)) {
+//         console.error('No files were uploaded');
+//         return res.status(400).json({ message: 'No files uploaded' });
+//       }
+
+//       try {
+//         const uploadResults: Record<string, any> = {};
+
+//         if (files.front && files.front[0]) {
+//           uploadResults.front = await uploadToCloudinary(files.front[0].buffer);
+//         }
+
+//         if (files.back && files.back[0]) {
+//           uploadResults.back = await uploadToCloudinary(files.back[0].buffer);
+//         }
+
+//         return res.status(200).json(uploadResults);
+//       } catch (error: any) {
+//         console.error('Error uploading to Cloudinary:', error.message);
+//         return res.status(500).json({ message: 'Cloudinary upload failed', error: error.message });
+//       }
+//     });
+//   } else {
+//     res.status(405).json({ message: `Method ${req.method} not allowed` });
+//   }
+// }
+
+
+
+// async function uploadToCloudinary(fileBuffer: Buffer): Promise<any> {
+//   return new Promise((resolve, reject) => {
+//     const uploadStream = cloudinary.uploader.upload_stream(
+//       { resource_type: 'image' },
+//       (error, result) => {
+//         if (error) {
+//           console.error('Cloudinary error:', error.message);
+//           reject(error);
+//         } else {
+//           console.log('Cloudinary upload result:', result);
+//           resolve(result);
+//         }
+//       }
+//     );
+
+//     const stream = Readable.from(fileBuffer);
+//     stream.pipe(uploadStream);
+//   });
+// }
+
+
+
+
+
+
+
+import { NextApiRequest, NextApiResponse } from 'next';
+import { v2 as cloudinary } from 'cloudinary';
+import multer from 'multer';
+import { Readable } from 'stream';
+import { runMiddleware } from '@/utils/runMiddleware'; // Adjust the import path as needed
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
+  api_key: process.env.CLOUDINARY_API_KEY!,
+  api_secret: process.env.CLOUDINARY_API_SECRET!,
+});
+
+// Multer setup
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5 MB limit per file
+  },
+}).fields([
+  { name: 'front', maxCount: 1 },
+  { name: 'back', maxCount: 1 },
+]);
+
+// Disable Next.js default body parser
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+// Custom MulterRequest interface
+interface MulterRequest extends NextApiRequest {
+  files: {
+    front?: Express.Multer.File[];
+    back?: Express.Multer.File[];
+  };
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    upload(req as any, res as any, async (err: any) => {
-      if (err) {
-        if (err instanceof multer.MulterError) {
-          console.error('Multer error:', err.message);
-          return res.status(400).json({ message: 'Multer error', error: err.message });
-        } else {
-          console.error('Error with multer:', err);
-          return res.status(500).json({ message: 'Multer upload failed', error: err.message });
-        }
-      }
+    try {
+      // Run the middleware
+      await runMiddleware(req, res, upload);
 
       const files = (req as MulterRequest).files;
 
@@ -534,9 +649,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).json({ message: 'No files uploaded' });
       }
 
-      try {
-        const uploadResults: Record<string, any> = {};
+      const uploadResults: Record<string, any> = {};
 
+      try {
         if (files.front && files.front[0]) {
           uploadResults.front = await uploadToCloudinary(files.front[0].buffer);
         }
@@ -545,18 +660,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           uploadResults.back = await uploadToCloudinary(files.back[0].buffer);
         }
 
+        console.log('Upload results:', uploadResults);
+
         return res.status(200).json(uploadResults);
       } catch (error: any) {
         console.error('Error uploading to Cloudinary:', error.message);
         return res.status(500).json({ message: 'Cloudinary upload failed', error: error.message });
       }
-    });
+    } catch (err: any) {
+      if (err instanceof multer.MulterError) {
+        console.error('Multer error:', err);
+        return res.status(400).json({ message: 'Multer error', error: err.message });
+      } else {
+        console.error('Error with multer:', err);
+        return res.status(500).json({ message: 'Multer upload failed', error: err.message });
+      }
+    }
   } else {
     res.status(405).json({ message: `Method ${req.method} not allowed` });
   }
 }
-
-
 
 async function uploadToCloudinary(fileBuffer: Buffer): Promise<any> {
   return new Promise((resolve, reject) => {
@@ -577,4 +700,3 @@ async function uploadToCloudinary(fileBuffer: Buffer): Promise<any> {
     stream.pipe(uploadStream);
   });
 }
-

@@ -116,53 +116,113 @@ const ClientInfoForm: React.FC<ClientInfoFormProps> = ({ email, clientData = {} 
       }
       if (backImageFile) {
         formData.append('back', backImageFile);
-      }
-  
+      }      
+
       try {
-        // Correct API endpoint
         const uploadResponse = await fetch('/api/upload-images', {
           method: 'POST',
           body: formData,
         });
-  
-        if (!uploadResponse.ok) {
-          const errorData = await uploadResponse.json();
-          console.error('Upload failed:', errorData.message);
-        }
-        
-        const uploadData = await uploadResponse.json();
-        images.front = uploadData.front ? { url: uploadData.front.url, public_id: uploadData.front.public_id } : null;
-        images.back = uploadData.back ? { url: uploadData.back.url, public_id: uploadData.back.public_id } : null;
-  
-        toast.success('Images uploaded successfully', {
-          position: 'top-right',
-          autoClose: 5000,
-        });
-      } catch (error: any) {
-        console.error('Error uploading images:', error.message);
-        toast.error('Error uploading images', {
+      
+        const uploadData = await uploadResponse.json(); // Read response body once
+      
+      if (!uploadResponse.ok) {
+        console.error('Upload failed:', uploadData.message || uploadData.error || 'Unknown error');
+        toast.error('Error uploading images: ' + (uploadData.error || uploadData.message || 'Unknown error'), {
           position: 'top-right',
           autoClose: 5000,
         });
         setIsLoading(false);
         return;
       }
+      images.front = uploadData.front
+        ? { url: uploadData.front.url, public_id: uploadData.front.public_id }
+        : null;
+      images.back = uploadData.back
+        ? { url: uploadData.back.url, public_id: uploadData.back.public_id }
+        : null;
+    
+      toast.success('Images uploaded successfully', {
+        position: 'top-right',
+        autoClose: 5000,
+      });
+    } catch (error: any) {
+      console.error('Error uploading images:', error.message);
+      toast.error('Error uploading images', {
+        position: 'top-right',
+        autoClose: 5000,
+      });
+      setIsLoading(false);
+      return;
     }
+  }
+
+
+      // try {
+      //   // Correct API endpoint
+      //   const uploadResponse = await fetch('/api/upload-images', {
+      //     method: 'POST',
+      //     body: formData,
+      //   });
+  
+      //   if (!uploadResponse.ok) {
+      //     const errorData = await uploadResponse.json();
+      //     console.error('Upload failed:', errorData.message);
+      //   }
+        
+      //   const uploadData = await uploadResponse.json();
+        
+      //   // const uploadData = await uploadResponse.json();
+      //   // images.front = uploadData.front ? { url: uploadData.front.url, public_id: uploadData.front.public_id } : null;
+      //   // images.back = uploadData.back ? { url: uploadData.back.url, public_id: uploadData.back.public_id } : null;
+
+      //   // After uploading images
+      //   images.front = uploadData.front
+      //     ? { url: uploadData.front.url, public_id: uploadData.front.public_id }
+      //     : null;
+      //   images.back = uploadData.back
+      //     ? { url: uploadData.back.url, public_id: uploadData.back.public_id }
+      //     : null;
+
+  
+      //   toast.success('Images uploaded successfully', {
+      //     position: 'top-right',
+      //     autoClose: 5000,
+      //   });
+      // } catch (error: any) {
+      //   console.error('Error uploading images:', error.message);
+      //   toast.error('Error uploading images', {
+      //     position: 'top-right',
+      //     autoClose: 5000,
+      //   });
+      //   setIsLoading(false);
+      //   return;
+      // }
+
+    // const updatedData = {
+    //   ...data,
+    //   images,
+    // };
+
+
+
 
     const updatedData = {
       ...data,
-      images,
+      images: [images.front?.url, images.back?.url].filter(Boolean), // Filters out any undefined or null values
     };
+    
 
     try {
       const response = await fetch('/api/client', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedData),
       });
 
+      console.log('updatedData:', updatedData);
       if (!response.ok) throw new Error('Error posting data to MongoDB');
 
       router.push('/dashboard/client');

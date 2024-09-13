@@ -1,0 +1,17 @@
+// utils/runMiddleware.ts
+import { NextApiRequest, NextApiResponse } from 'next';
+
+export function runMiddleware(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  fn: Function
+) {
+  return new Promise<void>((resolve, reject) => {
+    fn(req, res, (result: any) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve();
+    });
+  });
+}

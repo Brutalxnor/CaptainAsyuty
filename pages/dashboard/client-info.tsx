@@ -76,9 +76,7 @@
 
 
 
-
-
-
+//pages\dashboard\client-info.tsx
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
@@ -97,13 +95,13 @@ const ClientInfoPage: React.FC = () => {
   useEffect(() => {
     const fetchClientData = async () => {
       if (!user) return;
-
+    
       const email = user.primaryEmailAddress?.emailAddress || user.email;
       if (!email) {
         setLoading(false);
         return;
       }
-
+    
       try {
         const response = await fetch('/api/client', {
           method: 'POST',
@@ -112,12 +110,16 @@ const ClientInfoPage: React.FC = () => {
           },
           body: JSON.stringify({ email }),
         });
-
+    
         if (!response.ok) {
+          if (response.status === 409) {
+            // Handle client already exists case
+            throw new Error('Client already exists');
+          }
           const errorData = await response.json();
           throw new Error(errorData.message || 'Failed to fetch client data');
         }
-
+    
         const { client } = await response.json();
         setClientData(client);
       } catch (error: any) {
@@ -127,6 +129,7 @@ const ClientInfoPage: React.FC = () => {
         setLoading(false);
       }
     };
+    
 
     fetchClientData();
   }, [user]);
