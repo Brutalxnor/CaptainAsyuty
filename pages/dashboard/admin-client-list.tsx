@@ -1272,49 +1272,11 @@ const AdminClientList: React.FC = () => {
   const router = useRouter();
   const [months, setMonths] = useState(1); // default 1 month
   const [filteredClients, setFilteredClients] = useState<ClientData[]>([]); // Separate state for filtered clients
-  const [selectedClient, setSelectedClient] = useState<ClientData | null>(null);
-  // useEffect(() => {
-  //   const fetchClientData = async () => {
-  //     if (!user) return;
+  const [isOpen, setIsOpen] = useState(false); // Track dropdown state
   
-  //     try {
-  //       const response = await fetch('/api/client-exercises', {
-  //         method: 'GET',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       });
-  
-  //       const data = await response.json();
-  
-  //       if (!Array.isArray(data)) {
-  //         throw new Error('Client data is not an array OR Can`t fetch Data from DB');
-  //       }
-  
-  //       const updatedClients = await Promise.all(data.map(async (client: ClientData) => {
-  //         // Fetch the referral data for each client
-  //         const referralResponse = await fetch(`/api/referrals?email=${client.email}`);
-  //         const referrals = await referralResponse.json();
-  
-  //         return {
-  //           ...client,
-  //           referrals,
-  //         };
-  //       }));
-  
-  //       setClients(updatedClients);
-  //     } catch (error: any) {
-  //       console.error('Error fetching client data:', error);
-  //       setError(error.message || 'Error fetching client data');
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  
-  //   fetchClientData();
-  // }, [user, router]);
-  
-
+    const toggleDropdown = () => {
+      setIsOpen(!isOpen);
+    };
 
   useEffect(() => {
     const fetchClientData = async () => {
@@ -1432,20 +1394,6 @@ const AdminClientList: React.FC = () => {
     }
   };
 
-
-  // useEffect(() => {
-  //   // Fetch client data here
-  //   const fetchClientData = async () => {
-  //     try {
-  //       const response = await fetch('/api/clients');
-  //       const data = await response.json();
-  //       setClients(data);
-  //     } catch (error) {
-  //       console.error('Error fetching client data:', error);
-  //     }
-  //   };
-  //   fetchClientData();
-  // }, []);
 
   // Filter clients based on search term
   useEffect(() => {
@@ -1635,6 +1583,10 @@ const AdminClientList: React.FC = () => {
   
   const colors = ['bg-red-500', 'bg-green-500', 'bg-blue-500', 'bg-yellow-500', 'bg-purple-500', 'bg-pink-500'];
   
+  
+  
+  /////////working images
+  
   // const renderClientList = () => (
     //   <div className="client-list">
     //     {clients.map((client: ClientData) => (
@@ -1650,113 +1602,82 @@ const AdminClientList: React.FC = () => {
   //   </div>
   // );
   
-  
-    const renderClientImages = (client: ClientData) => {
-      if (!client.images || !Array.isArray(client.images)) {
-        return <p>No images available</p>; // Early return if images is undefined or not an array.
-      }
+  //   const renderClientImages = (client: ClientData) => {
+  //     if (!client.images || !Array.isArray(client.images)) {
+  //       return <p>No images available</p>; // Early return if images is undefined or not an array.
+  //     }
     
-      return (
-        <div className="mt-4">
-          <strong className="block text-lg mb-2">Client Images:</strong>
-          <div className="flex flex-row flex-wrap items-center justify-center space-x-4">
-            {client.images.map((imageUrl: string, index: number) => (
-              <img
-                key={index}
-                src={imageUrl}
-                alt={`Client image ${index + 1}`}
-                className="rounded-lg shadow-md"
-                style={{ width: '150px', height: '150px' }}
-              />
-            ))}
-          </div>
-        </div>
-      );
-    };
-    
-    
-    const handleClientSelect = (client: ClientData) => {
-      setSelectedClient(client); // Set the clicked client as the selected client
-    };
-
-    const renderClientList = () => (
-      <div className="client-list">
-        {clients.map((client: ClientData) => (
-          <div
-            key={client.email}
-            className="client-card"
-            onClick={() => handleClientSelect(client)} // Set client on click
-          >
-            <div className="client-body">
-              <div className="client-header">
-                <h3>{client.fullName || client.email}</h3>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-
-  const renderSelectedClient = () => {
-    if (!selectedClient) {
-      return <p>Please select a client to view details.</p>;
-    }
-
-    return (
-      <div className="client-card">
-        <div className="client-body">
-          {renderClientImages(selectedClient)} {/* Render selected client's images */}
-          <div className="client-header">
-            <h3>{selectedClient.fullName || selectedClient.email}</h3>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // const renderClientList = () => {
-  //   const currentUser = user?.email; // Get current user's email from auth context
-  //   console.log("")
-  //   // Find the client that matches the current logged-in user's email
-  //   const currentClient = clients.find((client) => client.fullName === currentUser);
-  
-  //   // If no client is found, display a message
-  //   if (!currentClient) {
-  //     return <p>No client data found for the current user.</p>;
-  //   }
-  
-  //   // Render the current user's information
-  //   return (
-  //     <div className="client-card">
-
-  //     {clients.map((client: ClientData) => (
-  //       <div key={client.email} className="client-card">
-  //         <div className="client-body">
-  //           {renderClientImages(client)} 
-  //           <div className="client-header">
-  //             <h3>{client.fullName || client.email}</h3> 
-  //           </div>
+  //     return (
+  //       <div className="mt-4">
+  //         <strong className="block text-lg mb-2">Client Images:</strong>
+  //         <div className="flex flex-row flex-wrap items-center justify-center space-x-4">
+  //           {client.images.map((imageUrl: string, index: number) => (
+  //             <img
+  //               key={index}
+  //               src={imageUrl}
+  //               alt={`Client image ${index + 1}`}
+  //               className="rounded-lg shadow-md"
+  //               style={{ width: '150px', height: '150px' }}
+  //             />
+  //           ))}
   //         </div>
   //       </div>
-  //     ))}
+  //     );
+  //   };
+    
+    
+  //   const handleClientSelect = (client: ClientData) => {
+  //     setSelectedClient(client); // Set the clicked client as the selected client
+  //   };
 
+  //   const renderClientList = () => (
+  //     <div className="client-list">
+  //       {clients.map((client: ClientData) => (
+  //         <div
+  //           key={client.email}
+  //           className="client-card"
+  //           onClick={() => handleClientSelect(client)} // Set client on click
+  //         >
+  //           <div className="client-body">
+  //             <div className="client-header">
+  //               <h3>{client.fullName || client.email}</h3>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       ))}
+  //     </div>
+  //   );
+
+  // const renderSelectedClient = () => {
+  //   if (!selectedClient) {
+  //     return <p>Please select a client to view details.</p>;
+  //   }
+
+  //   return (
+  //     <div className="client-card">
   //       <div className="client-body">
-  //         {renderClientImages(currentClient)}
+  //         {renderClientImages(selectedClient)} {/* Render selected client's images */}
   //         <div className="client-header">
-  //           <h3>{currentClient.fullName || currentClient.email}</h3>
+  //           <h3>{selectedClient.fullName || selectedClient.email}</h3>
   //         </div>
   //       </div>
   //     </div>
   //   );
   // };
+
+
+
+  /////////working images
+
+
+
+
+
   
 
   if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>
   
-
-
-
 
   return (
     <DashboardLayout>
@@ -1855,10 +1776,9 @@ const AdminClientList: React.FC = () => {
                             </div>
                           </div> */}
 
-                          <div className="client-images mt-4">
+                          {/* <div className="client-images mt-4">
                           <strong className="block text-lg mb-2">Client Images:</strong>
                           <div className="flex flex-row flex-wrap items-center justify-center space-x-4">
-                            {/* Check if client.images is an array */}
                             {Array.isArray(client.images) && client.images.length > 0 ? (
                               client.images.map((imageUrl: string, imgIndex: number) => (
                                 <img
@@ -1894,6 +1814,61 @@ const AdminClientList: React.FC = () => {
                             )}
                           </div>
                           </div>
+ */}
+
+
+                <div className="client-images mt-4">
+                      <strong className="block text-lg mb-2">Client Images:</strong>
+
+                      {/* Toggle Button */}
+                      <button
+                        onClick={toggleDropdown}
+                        className="bg-transparent text-blue-500 p-4 rounded-full shadow-md hover:bg-blue-100 focus:outline-none"
+                        aria-label={isOpen ? 'Hide Images' : 'Show Images'}
+                      >
+                        <FontAwesomeIcon icon={isOpen ? faChevronUp : faChevronDown} size="2x" />
+                      </button>
+
+                      {/* Conditional rendering of images based on the state */}
+                      {isOpen && (
+                        <div className="flex flex-row flex-wrap items-center justify-center space-x-4 mt-4">
+                          {/* Check if client.images is an array */}
+                          {Array.isArray(client.images) && client.images.length > 0 ? (
+                            client.images.map((imageUrl: string, imgIndex: number) => (
+                              <img
+                                key={imgIndex}
+                                src={imageUrl}
+                                alt={`Client Image ${imgIndex + 1}`}
+                                className="rounded-lg shadow-md"
+                                style={{ width: '150px', height: '150px' }}
+                              />
+                            ))
+                          ) : (
+                            // If client.images is an object (e.g., {front: ..., back: ...}), check and display front/back images
+                            client.images && (
+                              <>
+                                {client.images.front && (
+                                  <img
+                                    src={client.images.front.url} // Assuming the URL is inside `url` property
+                                    alt="Client Front Image"
+                                    className="rounded-lg shadow-md"
+                                    style={{ width: '150px', height: '150px' }}
+                                  />
+                                )}
+                                {client.images.back && (
+                                  <img
+                                    src={client.images.back.url} // Assuming the URL is inside `url` property
+                                    alt="Client Back Image"
+                                    className="rounded-lg shadow-md"
+                                    style={{ width: '150px', height: '150px' }}
+                                  />
+                                )}
+                              </>
+                            )
+                          )}
+                        </div>
+                      )}
+                    </div>
 
 
                           {/* <div className='text-center'>
@@ -1998,90 +1973,6 @@ const AdminClientList: React.FC = () => {
                                   )}
                                 </p>
                               </div>
-
-
-                              {/* <div className="mt-4 ">
-                                <strong className="block text-lg mb-2">Client Images:</strong>
-                                <div className="flex flex-row flex-wrap items-center justify-center space-x-4">  
-                                  {client.images && (
-                                    <>
-                                      {client.images.front && (
-                                        <img
-                                          src={client.images.front.url}
-                                          alt={`${client.fullName || client.email}'s front image`}
-                                          className="rounded-lg shadow-md"
-                                          style={{ width: '150px', height: '150px' }} // fixed size
-                                        />
-                                      )}
-                                      {client.images.back && (
-                                        <img
-                                          src={client.images.back.url}
-                                          alt={`${client.fullName || client.email}'s back image`}
-                                          className="rounded-lg shadow-md"
-                                          style={{ width: '150px', height: '150px' }} // fixed size
-                                        />
-                                      )}
-                                    </>
-                                  )}
-                                </div>
-                              </div> */}
-
-
-                              {/* <div className="mt-4">
-                                <strong className="block text-lg mb-2">Client Images:</strong>
-                                <div className="flex flex-row flex-wrap items-center justify-center space-x-4">
-                                  {client.images && (
-                                    <>
-                                      {client.images.front && (
-                                        <img
-                                          src={client.images.front.url}  // Make sure 'client.images.front.url' exists
-                                          alt={`${client.fullName || client.email}'s front image`}
-                                          className="rounded-lg shadow-md"
-                                          style={{ width: '150px', height: '150px' }}
-                                        />
-                                      )}
-                                      {client.images.back && (
-                                        <img
-                                          src={client.images.back.url}  // Make sure 'client.images.back.url' exists
-                                          alt={`${client.fullName || client.email}'s back image`}
-                                          className="rounded-lg shadow-md"
-                                          style={{ width: '150px', height: '150px' }}
-                                        />
-                                      )}
-                                    </>
-                                  )}
-                                </div>
-                              </div> */}
-                                {/* <div className="mt-4">
-                                  <strong className="block text-lg mb-2">Client Images:</strong>
-                                  <div className="flex flex-row flex-wrap items-center justify-center space-x-4">
-                                    {client.images && (
-                                      <>
-                                        {client.images.front && (
-                                          <img
-                                            src={client.images.front.url}
-                                            alt={`${client.fullName || client.email}'s front image`}
-                                            className="rounded-lg shadow-md"
-                                            style={{ width: '150px', height: '150px' }}
-                                          />
-                                        )}
-                                        {client.images.back && (
-                                          <img
-                                            src={client.images.back.url}
-                                            alt={`${client.fullName || client.email}'s back image`}
-                                            className="rounded-lg shadow-md"
-                                            style={{ width: '150px', height: '150px' }}
-                                          />
-                                        )}
-                                      </>
-                                    )}
-                                  </div>
-                                </div> */}
-                            <div className="client-list-container">
-                            {renderClientList()}
-                              {renderSelectedClient()}
-                            </div>
-
 
                             </div>
                             <div className="overflow-x-auto ">
