@@ -124,38 +124,39 @@ const PaymentsPage: React.FC = () => {
               <p className="text-center mb-4 text-[var(--text-color)]">{language === 'en' ? 'To access your exercises, please complete the payment process.' : 'للوصول إلى تمارينك، يرجى إكمال عملية الدفع.'}</p>
               <div className="text-center mb-4">
                 <p className="text-lg font-semibold text-[var(--text-color)]">{language === 'en' ? 'Please choose your training plan and pay on InstaPay/Vodafone cash via this number:' : 'يرجى اختيار خطة التدريب الخاصة بك والدفع عبر InstaPay/Vodafone cash عبر هذا الرقم:'}</p>
+                <p className="text-xl font-bold mt-2 text-[var(--text-color)]">abdo01158171@instapay</p>
                 <p className="text-xl font-bold mt-2 text-[var(--text-color)]">01151784998</p>
               </div>
               <div className="py-6 mt-6">
                 <h2 className="text-center text-3xl font-bold mb-6 text-[var(--text-color)]">{language === 'en' ? 'Reasonable and Flexible Plans' : 'خطط معقولة ومرنة'}</h2>
                 <div className="grid grid-cols-1 gap-6">
                   <div className="border-2 border-[var(--border-color)] rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-300 bg-[var(--background-color)]">
-                    <h3 className="text-xl font-bold mb-2 text-center text-[var(--text-color)]">{language === 'en' ? 'Monthly' : 'شهري'}</h3>
-                    <p className="text-2xl font-bold text-blue-500 text-center">499 {language === 'en' ? 'EGP / month' : 'جنيه / شهر'}</p>
+                    <h3 className="text-xl font-bold mb-2 text-center text-[var(--text-color)]">{language === 'en' ? '2 Monthly' : '2 شهر'}</h3>
+                    <p className="text-2xl font-bold text-blue-500 text-center">1000 {language === 'en' ? 'EGP / month' : 'جنيه / شهر'}</p>
                     <div className="mt-2 text-center">
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Weekly Exercise Updates' : 'تحديثات التمرين أسبوعياً'}</p>
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Nutrition Plan' : 'خطة تغذية'}</p>
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Basic Support' : 'مساعدة أساسية'}</p>
                     </div>
                   </div>
-                  <div className="border-2 border-[var(--border-color)] rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-300 bg-[var(--background-color)]">
-                    <h3 className="text-xl font-bold mb-2 text-center text-[var(--text-color)]">{language === 'en' ? 'Yearly' : 'سنوي'}</h3>
-                    <p className="text-2xl font-bold text-green-500 text-center">3999 {language === 'en' ? 'EGP / year' : 'جنيه / سنة'}</p>
-                    <div className="mt-2 text-center">
-                      <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Weekly Exercise Updates' : 'تحديثات التمرين أسبوعياً'}</p>
-                      <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Nutrition Plan' : 'خطة تغذية'}</p>
-                      <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Priority Support' : 'مساعدة ذات أولوية'}</p>
-                    </div>
                   </div>
                   <div className="border-2 border-[var(--border-color)] rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-300 bg-[var(--background-color)]">
-                    <h3 className="text-xl font-bold mb-2 text-center text-[var(--text-color)]">{language === 'en' ? 'Video Calls' : 'مكالمات فيديو'}</h3>
-                    <p className="text-2xl font-bold text-red-500 text-center">999 {language === 'en' ? 'EGP / month' : 'جنيه / شهر'}</p>
+                    <h3 className="text-xl font-bold mb-2 text-center text-[var(--text-color)]">{language === 'en' ? '3 Monthly' : '6 شهر'}</h3>
+                    <p className="text-2xl font-bold text-red-500 text-center">1300 {language === 'en' ? 'EGP / month' : 'جنيه / شهر'}</p>
                     <div className="mt-2 text-center">
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Daily Exercise Updates' : 'تحديثات التمرين يومياً'}</p>
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Nutrition Plan' : 'خطة تغذية'}</p>
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Personal Support' : 'مساعدة شخصية'}</p>
                     </div>
                   </div>
+                  <div className="border-2 border-[var(--border-color)] rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-300 bg-[var(--background-color)]">
+                    <h3 className="text-xl font-bold mb-2 text-center text-[var(--text-color)]">{language === 'en' ? '6 Months' : '6 شهور'}</h3>
+                    <p className="text-2xl font-bold text-green-500 text-center">2400 {language === 'en' ? 'EGP / year' : 'جنيه / سنة'}</p>
+                    <div className="mt-2 text-center">
+                      <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Weekly Exercise Updates' : 'تحديثات التمرين أسبوعياً'}</p>
+                      <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Nutrition Plan' : 'خطة تغذية'}</p>
+                      <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Priority Support' : 'مساعدة ذات أولوية'}</p>
+                    </div>
                 </div>
               </div>
             </>
