@@ -12054,6 +12054,328 @@
 
 
 
+  // const handleSaveWeights = async () => {
+  //   if (selectedExercise && activeSetIndex !== null && clientData) {
+  //     try {
+  //       const updatedWeights = selectedExercise.weights ? [...selectedExercise.weights] : [];
+  //       const updatedReps = selectedExercise.reps ? [...selectedExercise.reps] : [];
+
+  //       updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
+  //       updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
+
+  //       const response = await fetch('/api/assign-weights', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({
+  //           email: clientData.fullName,
+  //           exerciseId: selectedExercise.id,
+  //           weights: updatedWeights,
+  //           reps: updatedReps,
+  //         }),
+  //       });
+
+  //       if (!response.ok) {
+  //         const errorData = await response.json();
+  //         throw new Error(errorData.message || 'Failed to assign weights and reps');
+  //       }
+
+  //       const updatedExercises = clientData.exercises?.map(exercise =>
+  //         exercise.id === selectedExercise.id ? { ...exercise, weights: updatedWeights, reps: updatedReps } : exercise
+  //       );
+
+  //       setClientData({
+  //         ...clientData,
+  //         exercises: updatedExercises,
+  //       });
+
+  //       setShowWeightsModal(false);
+  //       setSets([]);
+  //     } catch (error: any) {
+  //       console.error('Error assigning weights and reps:', error);
+  //     }
+  //   }
+  // };
+
+//   const handleSaveWeights = async () => {
+//     if (selectedExercise && activeSetIndex !== null && clientData) {
+//         try {
+//             const updatedWeights = selectedExercise.weights ? [...selectedExercise.weights] : [];
+//             const updatedReps = selectedExercise.reps ? [...selectedExercise.reps] : [];
+
+//             updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
+//             updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
+
+//             const response = await fetch('/api/assign-weights', {
+//                 method: 'POST',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                 },
+//                 body: JSON.stringify({
+//                     fullname: clientData.fullName,
+//                     exerciseId: selectedExercise.id,
+//                     weights: updatedWeights,
+//                     reps: updatedReps,
+//                 }),
+//             });
+
+//             if (!response.ok) {
+//                 const errorData = await response.json();
+//                 console.error('Error data:', errorData);
+//                 throw new Error(errorData.message || 'Failed to assign weights and reps');
+//             }
+
+//             // Update the local state to reflect the changes
+//             const updatedExercises = clientData.exercises?.map(exercise =>
+//                 exercise.id === selectedExercise.id
+//                     ? { ...exercise, weights: updatedWeights, reps: updatedReps }
+//                     : exercise
+//             );
+
+//             setClientData({
+//                 ...clientData,
+//                 exercises: updatedExercises,
+//             });
+
+//             setShowWeightsModal(false); // Close the modal after saving
+//             setSets([]); // Clear the sets array
+//         } catch (error: any) {
+//             console.error('Error assigning weights and reps:', error);
+//         }
+//     }
+// };
+
+
+
+
+
+
+
+
+  // const handleSaveWeights = async () => {
+  //   if (selectedExercise && activeSetIndex !== null && clientData) {
+  //     try {
+  //       const updatedExercises = exercises.map((exercise) => {
+  //         if (exercise.id === selectedExercise.id) {
+  //           const updatedWeights = [...exercise.weights];
+  //           const updatedReps = [...exercise.reps];
+  //           updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
+  //           updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
+  //           return { ...exercise, weights: updatedWeights, reps: updatedReps };
+  //         }
+  //         return exercise;
+  //       });
+
+  //       const response = await fetch('/api/assign-weights', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({
+  //           fullname: clientData.fullName,
+  //           exerciseId: selectedExercise.id,
+  //           weights: updatedExercises.find(ex => ex.id === selectedExercise.id)?.weights,
+  //           reps: updatedExercises.find(ex => ex.id === selectedExercise.id)?.reps,
+  //         }),
+  //       });
+
+  //       if (!response.ok) {
+  //         const errorData = await response.json();
+  //         throw new Error(errorData.message || 'Failed to assign weights and reps');
+  //       }
+
+  //       setExercises(updatedExercises);
+  //       setClientData({
+  //         ...clientData,
+  //         exercises: updatedExercises,
+  //       });
+
+  //       setShowWeightsModal(false);
+  //       setSets([]);
+  //     } catch (error) {
+  //       console.error('Error assigning weights and reps:', error);
+  //     }
+  //   }
+  // };
+
+
+
+  // const handleSaveWeights = async () => {
+  //   if (selectedExercise && activeSetIndex !== null && clientData) {
+  //     try {
+  //       const userEmail = user.primaryEmailAddress?.emailAddress || user.email;
+  
+  //       if (!userEmail) {
+  //         console.error('User email is undefined before making the API call');
+  //         return;
+  //       }
+  
+  //       console.log('Sending weights data to API:', {
+  //         email: userEmail,
+  //         exerciseId: selectedExercise.id,
+  //         weights: sets.map((set) => set.weight),
+  //         reps: sets.map((set) => set.reps),
+  //       });
+  
+  //       const response = await fetch('/api/assign-weights', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({
+  //           email: userEmail,
+  //           exerciseId: selectedExercise.id,
+  //           weights: sets.map((set) => set.weight),
+  //           reps: sets.map((set) => set.reps),
+  //         }),
+  //       });
+  
+  //       if (!response.ok) {
+  //         const errorData = await response.json();
+  //         throw new Error(errorData.message || 'Failed to assign weights and reps');
+  //       }
+
+  //     handleStartRestTimer(selectedExercise.id, activeSetIndex, selectedExercise.restTime);
+  
+  //       setShowWeightsModal(false);
+  //       setSets([]);
+  //     } catch (error) {
+  //       console.error('Error assigning weights and reps:', error);
+  //     }
+  //   }
+  // };
+  
+
+
+
+
+
+
+  // const handleStartRestTimer = (exerciseId: string, setIndex: number, duration: number) => {
+  //   if (intervalId) {
+  //     clearInterval(intervalId);
+  //   }
+  //   setClickedButtons(prevState => {
+  //     const newState = { ...prevState };
+  //     if (!newState[exerciseId]) {
+  //       newState[exerciseId] = [];
+  //     }
+  //     newState[exerciseId][setIndex] = true;
+  //     return newState;
+  //   });
+
+  //   const startTime = Date.now();
+  //   const endTime = startTime + duration * 1000;
+  //   const newIntervalId = setInterval(() => {
+  //     const remainingTime = endTime - Date.now();
+  //     if (remainingTime <= 0) {
+  //       clearInterval(newIntervalId);
+  //       setTimers(prevTimers => ({ ...prevTimers, [`${exerciseId}-${setIndex}`]: '00:00' }));
+  //       setIntervalId(null);
+  //     } else {
+  //       const minutes = Math.floor(remainingTime / 60000);
+  //       const seconds = ((remainingTime % 60000) / 1000).toFixed(0).padStart(2, '0');
+  //       setTimers(prevTimers => ({ ...prevTimers, [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}` }));
+  //     }
+  //   }, 1000);
+
+  //   setIntervalId(newIntervalId);
+  // };
+
+
+  // const handleStartRestTimer = (exerciseId: string, setIndex: number, duration: number) => {
+  //   if (intervalId) {
+  //     clearInterval(intervalId);
+  //   }
+  
+  //   const minutes = Math.floor(duration / 60);
+  //   const seconds = (duration % 60).toString().padStart(2, '0');
+  
+  //   // Show the initial rest time before the timer starts
+  //   setTimers(prevTimers => ({
+  //     ...prevTimers,
+  //     [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
+  //   }));
+  
+  //   const startTime = Date.now();
+  //   const endTime = startTime + duration * 1000;
+  
+  //   const newIntervalId = setInterval(() => {
+  //     const remainingTime = endTime - Date.now();
+  //     if (remainingTime <= 0) {
+  //       clearInterval(newIntervalId);
+  //       setTimers(prevTimers => ({ ...prevTimers, [`${exerciseId}-${setIndex}`]: '00:00' }));
+  //       setIntervalId(null);
+  //     } else {
+  //       const minutes = Math.floor(remainingTime / 60000);
+  //       const seconds = ((remainingTime % 60000) / 1000).toFixed(0).padStart(2, '0');
+  //       setTimers(prevTimers => ({
+  //         ...prevTimers,
+  //         [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
+  //       }));
+  //     }
+  //   }, 1000);
+  
+  //   setIntervalId(newIntervalId);
+  // };
+  
+
+
+
+
+
+                {/* {currentExercise.started &&
+                  Array.from({ length: currentExercise.sets }).map((_, setIndex) => (
+                    <React.Fragment key={setIndex}>
+                      <tr>
+                        <td colSpan={3} className="py-2 px-4 border-b text-center">
+                          <div className="text-lg font-serif font-semibold italic text-left">
+                            {language === 'en' ? 'Choose your Weights:' : 'أختار اوزانك:'}
+                          </div>
+                          <div className="flex justify-center items-center space-x-4 mt-2">
+                            <div className="flex flex-col items-center">
+                              <FontAwesomeIcon icon={faWeightHanging} className="h-5 w-5 mr-1" />
+                              {currentExercise.weights?.[setIndex] || 0} kg
+                            </div>
+                            <div className="flex flex-col items-center">
+                              <FontAwesomeIcon icon={faRedoAlt} className="h-5 w-5 mr-1" />
+                              {currentExercise.reps?.[setIndex] || 0} reps
+                            </div>
+                            <button
+                              onClick={() => openWeightsModal(currentExercise, setIndex)}
+                              className="flex items-center bg-yellow-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-yellow-600 transition-all duration-200"
+                            >
+                              <FontAwesomeIcon icon={faPlus} className="mr-1" />
+                              {language === 'en' ? 'Add' : 'إضافة'}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colSpan={3} className="py-2 px-4 border-b text-center">
+                          <div className="text-lg font-serif font-semibold italic text-left">
+                            {language === 'en' ? 'Rest Timer:' : 'مؤقت الراحة:'}
+                          </div>
+                          <div className="flex justify-center items-center space-x-4 mt-2">
+                            <div>
+                              <FontAwesomeIcon icon={faClock} className="h-5 w-5 mr-2" />
+                              {timers[`${currentExercise.id}-${setIndex}`] || '00:00'}
+                            </div>
+                            {!clickedButtons[currentExercise.id]?.[setIndex] && (
+                              <button
+                                className="bg-green-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-600 transition-all duration-200"
+                                onClick={() => handleStartRestTimer(currentExercise.id, setIndex, currentExercise.restTime)}
+                              >
+                                <FontAwesomeIcon icon={faClock} className="mr-1" />
+                                {language === 'en' ? 'Start Timer' : 'ابدأ المؤقت'}
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  ))} */}
 
 
 
@@ -12071,12 +12393,13 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/router';
 import Modal from '@/components/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { fa1, fa2, fa3, fa4, fa5, fa6, fa7, faPlus, faSave, faTrash, faDumbbell, faHeartCircleBolt, faLock, faPlay, faStop, faWeightHanging, faRedoAlt, faClock, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { fa1, fa2, fa3, fa4, fa5, fa6, fa7, faPlus, faSave, faTrash, faDumbbell, faHeartCircleBolt, faLock, faPlay, faStop, faWeightHanging, faRedoAlt, faClock, faArrowLeft, faArrowRight, faTrophy } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import Slider from 'react-slick';
 import WeightsModal from '@/components/WeightsModal';
+import Snackbar from '@mui/material/Snackbar';  // Import Snackbar from Material UI
 
 const dayIcons: Record<string, IconDefinition> = {
   'Day 1': fa1,
@@ -12086,6 +12409,8 @@ const dayIcons: Record<string, IconDefinition> = {
   'Day 5': fa5,
   'Day 6': fa6,
 };
+
+
 
 interface Exercise {
   date: string;
@@ -12167,13 +12492,223 @@ const ClientExercises: React.FC = () => {
   const [showGifModal, setShowGifModal] = useState(false);
   const cardioContainerRef = useRef<HTMLDivElement | null>(null);
   const [cardioIntervals, setCardioIntervals] = useState<CardioIntervals>({});
-  
+  // State to manage Snackbar
+  const [snackbarOpen, setSnackbarOpen] = useState(false);  // Controls when to show the snackbar
+  const [snackbarMessage, setSnackbarMessage] = useState(''); // Snackbar message content
+  const [highlightedExercise, setHighlightedExercise] = useState<string | null>(null);  // Track highlighted exercise
+
+  const [highlightedExercises, setHighlightedExercises] = useState<string[]>([]);
+  const [showAchievement, setShowAchievement] = useState(false); // New state to show achievement
+  const [totalReps, setTotalReps] = useState(0); // New state to track total reps
+  const [totalWeights, setTotalWeights] = useState(0); // New state to track total weights
+
+
+// Function to open snackbar
+const openSnackbar = (message: string) => {
+  setSnackbarMessage(message);
+  setSnackbarOpen(true);
+};
+
+// Function to close snackbar
+const handleSnackbarClose = () => {
+  setSnackbarOpen(false);
+};
   // Function to handle horizontal scroll
   const scrollCardio = (direction: 'left' | 'right') => {
     if (cardioContainerRef.current) {
       const scrollAmount = direction === 'right' ? 300 : -300; // Adjust scroll distance
       cardioContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
+  };
+
+
+
+  useEffect(() => {
+    if (currentDayInCycle) {
+      handleDaySelection(`Day ${currentDayInCycle}`);
+    }
+  }, [currentDayInCycle]);
+
+  // Calculate total reps and weights for the current day
+  const calculateTotals = (exercisesForDay: Exercise[]) => {
+    let reps = 0;
+    let weights = 0;
+    exercisesForDay.forEach((exercise) => {
+      exercise.reps.forEach((rep) => (reps += rep));
+      exercise.weights.forEach((weight) => (weights += weight));
+    });
+    setTotalReps(reps);
+    setTotalWeights(weights);
+  };
+
+  // Check if all exercises are completed and trigger achievement animation
+  const checkCompletion = (exercisesForDay: Exercise[]) => {
+    if (highlightedExercises.length === exercisesForDay.length) {
+      calculateTotals(exercisesForDay);
+      setShowAchievement(true); // Show the achievement animation
+    }
+  };
+
+  // const handleStartRestTimer = (exerciseId: string, setIndex: number, duration: number) => {
+  //   if (intervalId) {
+  //     clearInterval(intervalId);
+  //   }
+  
+  //   const bell = new Audio('/sounds/bell.mp3'); // Ensure you have this file in your public folder
+  
+  //   const minutes = Math.floor(duration / 60);
+  //   const seconds = (duration % 60).toString().padStart(2, '0');
+  
+  //   setTimers((prevTimers) => ({
+  //     ...prevTimers,
+  //     [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
+  //   }));
+  
+  //   const startTime = Date.now();
+  //   const endTime = startTime + duration * 1000;
+  
+  //   const newIntervalId = setInterval(() => {
+  //     const remainingTime = endTime - Date.now();
+  
+  //     if (remainingTime <= 0) {
+  //       clearInterval(newIntervalId);
+  //       bell.play(); // Play the bell sound when the timer ends
+  
+  //       // Add the exercise set to the highlightedExercises array (to track multiple)
+  //       setHighlightedExercises((prevHighlighted) => {
+  //         // Only add it if it's not already in the list
+  //         const newHighlight = `${exerciseId}-${setIndex}`;
+  //         if (!prevHighlighted.includes(newHighlight)) {
+  //           return [...prevHighlighted, newHighlight];
+  //         }
+  //         return prevHighlighted;
+  //       });
+  
+  //       // Show snackbar when the rest time is over
+  //       openSnackbar(language === 'en' ? 'Rest finished' : 'انتهى وقت الراحة');
+  
+  //       setTimers((prevTimers) => ({
+  //         ...prevTimers,
+  //         [`${exerciseId}-${setIndex}`]: '00:00',
+  //       }));
+  
+  //       setIntervalId(null);
+  //     } else {
+  //       const minutes = Math.floor(remainingTime / 60000);
+  //       const seconds = ((remainingTime % 60000) / 1000).toFixed(0).padStart(2, '0');
+  //       setTimers((prevTimers) => ({
+  //         ...prevTimers,
+  //         [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
+  //       }));
+  //     }
+  //   }, 1000);
+  
+  //   setIntervalId(newIntervalId);
+  // };
+  
+
+  const handleStartRestTimer = (exerciseId: string, setIndex: number, duration: number) => {
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
+  
+    const bell = new Audio('/sounds/bell.mp3');
+  
+    const minutes = Math.floor(duration / 60);
+    const seconds = (duration % 60).toString().padStart(2, '0');
+  
+    setTimers((prevTimers) => ({
+      ...prevTimers,
+      [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
+    }));
+  
+    const startTime = Date.now();
+    const endTime = startTime + duration * 1000;
+  
+    const newIntervalId = setInterval(() => {
+      const remainingTime = endTime - Date.now();
+  
+      if (remainingTime <= 0) {
+        clearInterval(newIntervalId);
+        bell.play(); // Play the bell sound when the timer ends
+  
+        // Add the completed set to the highlighted sets array
+        setHighlightedExercises((prevHighlighted) => {
+          const newHighlight = `${exerciseId}-${setIndex}`;
+          if (!prevHighlighted.includes(newHighlight)) {
+            return [...prevHighlighted, newHighlight];
+          }
+          return prevHighlighted;
+        });
+  
+        // Show snackbar when the rest time is over
+        openSnackbar(language === 'en' ? 'Rest finished' : 'انتهى وقت الراحة');
+  
+        setTimers((prevTimers) => ({
+          ...prevTimers,
+          [`${exerciseId}-${setIndex}`]: '00:00',
+        }));
+  
+        setIntervalId(null);
+      } else {
+        const minutes = Math.floor(remainingTime / 60000);
+        const seconds = ((remainingTime % 60000) / 1000).toFixed(0).padStart(2, '0');
+        setTimers((prevTimers) => ({
+          ...prevTimers,
+          [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
+        }));
+      }
+    }, 1000);
+  
+    setIntervalId(newIntervalId);
+  };
+  
+
+
+  // Check for completion when highlightedExercises array changes
+  // useEffect(() => {
+  //   if (selectedDay && clientData) {
+  //     const exercisesForDay = clientData.exercises.filter((ex) => ex.day === selectedDay);
+  //     checkCompletion(exercisesForDay);
+  //   }
+  // }, [highlightedExercises]);
+
+  useEffect(() => {
+    if (clientData && selectedDay) {
+      const exercisesForDay = clientData.exercises.filter((ex) => ex.day === selectedDay);
+      
+      // Calculate the total number of sets for the day
+      const totalSetsForDay = calculateTotalSets(exercisesForDay);
+  
+      // If all sets are highlighted, show the achievement
+      if (highlightedExercises.length === totalSetsForDay) {
+        setShowAchievement(true);
+        calculateTotals(exercisesForDay); // Update the total reps and weight for the achievement display
+      }
+    }
+  }, [highlightedExercises, clientData, selectedDay]);
+  
+  const calculateTotalSets = (exercisesForDay: Exercise[]) => {
+    return exercisesForDay.reduce((total, exercise) => total + exercise.sets, 0);
+  };
+  
+  // Achievement animation UI
+  const renderAchievement = () => {
+    return (
+      <div className="fixed inset-0 bg-opacity-75 bg-black flex flex-col items-center justify-center z-50">
+        <FontAwesomeIcon icon={faTrophy} className="text-yellow-500 text-9xl mb-4 animate-bounce" />
+        <h2 className="text-4xl font-bold text-white">{language === 'en' ? 'Congratulations!' : 'تهانينا!'}</h2>
+        <p className="text-xl font-semibold text-white mt-4">
+          {language === 'en' ? `Total Reps: ${totalReps}, Total Weight: ${totalWeights} kg` : `إجمالي التكرارات: ${totalReps}, إجمالي الوزن: ${totalWeights} كجم`}
+        </p>
+        <button
+          onClick={() => setShowAchievement(false)} // Close the achievement animation
+          className="mt-6 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600"
+        >
+          {language === 'en' ? 'Continue' : 'استمر'}
+        </button>
+      </div>
+    );
   };
 
 
@@ -12347,136 +12882,89 @@ const ClientExercises: React.FC = () => {
   
 
 
+
+
+
   // const handleSaveWeights = async () => {
   //   if (selectedExercise && activeSetIndex !== null && clientData) {
   //     try {
-  //       const updatedWeights = selectedExercise.weights ? [...selectedExercise.weights] : [];
-  //       const updatedReps = selectedExercise.reps ? [...selectedExercise.reps] : [];
-
-  //       updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
-  //       updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
-
+  //       const userEmail = user.primaryEmailAddress?.emailAddress || user.email;
+  
+  //       if (!userEmail) {
+  //         console.error('User email is undefined before making the API call');
+  //         return;
+  //       }
+  
   //       const response = await fetch('/api/assign-weights', {
   //         method: 'POST',
   //         headers: {
   //           'Content-Type': 'application/json',
   //         },
   //         body: JSON.stringify({
-  //           email: clientData.fullName,
+  //           email: userEmail,
   //           exerciseId: selectedExercise.id,
-  //           weights: updatedWeights,
-  //           reps: updatedReps,
+  //           weights: sets.map((set) => set.weight),
+  //           reps: sets.map((set) => set.reps),
   //         }),
   //       });
-
+  
   //       if (!response.ok) {
   //         const errorData = await response.json();
   //         throw new Error(errorData.message || 'Failed to assign weights and reps');
   //       }
-
-  //       const updatedExercises = clientData.exercises?.map(exercise =>
-  //         exercise.id === selectedExercise.id ? { ...exercise, weights: updatedWeights, reps: updatedReps } : exercise
-  //       );
-
-  //       setClientData({
-  //         ...clientData,
-  //         exercises: updatedExercises,
-  //       });
-
+  
+  //       handleStartRestTimer(selectedExercise.id, activeSetIndex, selectedExercise.restTime);
+  
+  //       // Show the snackbar when weights are saved and the rest timer starts
+  //       openSnackbar(language === 'en' ? 'Rest timer started' : 'تم تشغيل مؤقت الراحة');
+  
   //       setShowWeightsModal(false);
   //       setSets([]);
-  //     } catch (error: any) {
+  //     } catch (error) {
   //       console.error('Error assigning weights and reps:', error);
   //     }
   //   }
   // };
+  
 
-//   const handleSaveWeights = async () => {
-//     if (selectedExercise && activeSetIndex !== null && clientData) {
-//         try {
-//             const updatedWeights = selectedExercise.weights ? [...selectedExercise.weights] : [];
-//             const updatedReps = selectedExercise.reps ? [...selectedExercise.reps] : [];
-
-//             updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
-//             updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
-
-//             const response = await fetch('/api/assign-weights', {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//                 body: JSON.stringify({
-//                     fullname: clientData.fullName,
-//                     exerciseId: selectedExercise.id,
-//                     weights: updatedWeights,
-//                     reps: updatedReps,
-//                 }),
-//             });
-
-//             if (!response.ok) {
-//                 const errorData = await response.json();
-//                 console.error('Error data:', errorData);
-//                 throw new Error(errorData.message || 'Failed to assign weights and reps');
-//             }
-
-//             // Update the local state to reflect the changes
-//             const updatedExercises = clientData.exercises?.map(exercise =>
-//                 exercise.id === selectedExercise.id
-//                     ? { ...exercise, weights: updatedWeights, reps: updatedReps }
-//                     : exercise
-//             );
-
-//             setClientData({
-//                 ...clientData,
-//                 exercises: updatedExercises,
-//             });
-
-//             setShowWeightsModal(false); // Close the modal after saving
-//             setSets([]); // Clear the sets array
-//         } catch (error: any) {
-//             console.error('Error assigning weights and reps:', error);
-//         }
-//     }
-// };
 
   const handleSaveWeights = async () => {
     if (selectedExercise && activeSetIndex !== null && clientData) {
+      console.log('Saving sets:', sets); // Log sets before sending
       try {
-        const updatedExercises = exercises.map((exercise) => {
-          if (exercise.id === selectedExercise.id) {
-            const updatedWeights = [...exercise.weights];
-            const updatedReps = [...exercise.reps];
-            updatedWeights[activeSetIndex] = sets[activeSetIndex].weight;
-            updatedReps[activeSetIndex] = sets[activeSetIndex].reps;
-            return { ...exercise, weights: updatedWeights, reps: updatedReps };
-          }
-          return exercise;
-        });
-
+        const userEmail = user.primaryEmailAddress?.emailAddress || user.email;
+  
+        if (!userEmail) {
+          console.error('User email is undefined before making the API call');
+          return;
+        }
+  
+        // Log sets before sending
+        console.log('Saving weights and reps:', sets.map((set) => set.weight), sets.map((set) => set.reps));
+  
         const response = await fetch('/api/assign-weights', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            fullname: clientData.fullName,
+            email: userEmail,
             exerciseId: selectedExercise.id,
-            weights: updatedExercises.find(ex => ex.id === selectedExercise.id)?.weights,
-            reps: updatedExercises.find(ex => ex.id === selectedExercise.id)?.reps,
+            weights: sets.map((set) => set.weight),
+            reps: sets.map((set) => set.reps),
           }),
         });
-
+  
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.message || 'Failed to assign weights and reps');
         }
-
-        setExercises(updatedExercises);
-        setClientData({
-          ...clientData,
-          exercises: updatedExercises,
-        });
-
+  
+        handleStartRestTimer(selectedExercise.id, activeSetIndex, selectedExercise.restTime);
+  
+        // Show snackbar when weights are saved and the rest timer starts
+        openSnackbar(language === 'en' ? 'Rest timer started' : 'تم تشغيل مؤقت الراحة');
+  
         setShowWeightsModal(false);
         setSets([]);
       } catch (error) {
@@ -12484,44 +12972,59 @@ const ClientExercises: React.FC = () => {
       }
     }
   };
-
-
-
-
-
-  const handleStartRestTimer = (exerciseId: string, setIndex: number, duration: number) => {
-    if (intervalId) {
-      clearInterval(intervalId);
-    }
-    setClickedButtons(prevState => {
-      const newState = { ...prevState };
-      if (!newState[exerciseId]) {
-        newState[exerciseId] = [];
-      }
-      newState[exerciseId][setIndex] = true;
-      return newState;
-    });
-
-    const startTime = Date.now();
-    const endTime = startTime + duration * 1000;
-    const newIntervalId = setInterval(() => {
-      const remainingTime = endTime - Date.now();
-      if (remainingTime <= 0) {
-        clearInterval(newIntervalId);
-        setTimers(prevTimers => ({ ...prevTimers, [`${exerciseId}-${setIndex}`]: '00:00' }));
-        setIntervalId(null);
-      } else {
-        const minutes = Math.floor(remainingTime / 60000);
-        const seconds = ((remainingTime % 60000) / 1000).toFixed(0).padStart(2, '0');
-        setTimers(prevTimers => ({ ...prevTimers, [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}` }));
-      }
-    }, 1000);
-
-    setIntervalId(newIntervalId);
-  };
-
-
   
+
+
+  // const handleStartRestTimer = (exerciseId: string, setIndex: number, duration: number) => {
+  //   if (intervalId) {
+  //     clearInterval(intervalId);
+  //   }
+  
+  //   const bell = new Audio('/sounds/bell.mp3'); // Ensure you have this file in your public folder
+  
+  //   const minutes = Math.floor(duration / 60);
+  //   const seconds = (duration % 60).toString().padStart(2, '0');
+  
+  //   setTimers((prevTimers) => ({
+  //     ...prevTimers,
+  //     [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
+  //   }));
+  
+  //   const startTime = Date.now();
+  //   const endTime = startTime + duration * 1000;
+  
+  //   const newIntervalId = setInterval(() => {
+  //     const remainingTime = endTime - Date.now();
+  
+  //     if (remainingTime <= 0) {
+  //       clearInterval(newIntervalId);
+  //       bell.play(); // Play the bell sound when the timer ends
+  
+  //       // Show snackbar when the rest time is over
+  //       openSnackbar(language === 'en' ? 'Rest finished' : 'انتهى وقت الراحة');
+
+  //       setHighlightedExercise(`${exerciseId}-${setIndex}`);
+        
+  //       setTimers((prevTimers) => ({
+  //         ...prevTimers,
+  //         [`${exerciseId}-${setIndex}`]: '00:00',
+  //       }));
+  //       setIntervalId(null);
+  //     } else {
+  //       const minutes = Math.floor(remainingTime / 60000);
+  //       const seconds = ((remainingTime % 60000) / 1000).toFixed(0).padStart(2, '0');
+  //       setTimers((prevTimers) => ({
+  //         ...prevTimers,
+  //         [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
+  //       }));
+  //     }
+  //   }, 1000);
+  
+  //   setIntervalId(newIntervalId);
+  // };
+  
+
+
 
   const calculateUnlockedDays = (exercises: Exercise[], startDate: string) => {
     const assignedDate = new Date(startDate);
@@ -12548,8 +13051,8 @@ const ClientExercises: React.FC = () => {
     setActiveSetIndex(setIndex);
   
     const initialSets = Array.from({ length: exercise.sets }).map((_, index) => ({
-      weight: exercise.weights[index] || 0,
-      reps: exercise.reps[index] || 0,
+      weight: exercise.weights[index] || 0, // Initialize weights
+      reps: exercise.reps[index] || 0,     // Initialize reps
       started: false,
       finished: false,
     }));
@@ -12557,8 +13060,25 @@ const ClientExercises: React.FC = () => {
   
     setShowWeightsModal(true);
   };
-  
 
+  
+  const handleWeightChange = (setIndex: number, newWeight: number) => {
+    setSets((prevSets) => {
+      const updatedSets = [...prevSets];
+      updatedSets[setIndex] = { ...updatedSets[setIndex], weight: newWeight };
+      return updatedSets;
+    });
+  };
+  
+  const handleRepsChange = (setIndex: number, newReps: number) => {
+    setSets((prevSets) => {
+      const updatedSets = [...prevSets];
+      updatedSets[setIndex] = { ...updatedSets[setIndex], reps: newReps };
+      return updatedSets;
+    });
+  };
+  
+  
   const handleGifClick = (gif: string) => {
     setSelectedGif(gif);
     setShowGifModal(true);
@@ -12571,8 +13091,9 @@ const ClientExercises: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div className="flex flex-col justify-center w-full max-w-3xl items-center min-h-screen relative p-6 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] rounded-lg shadow-lg md:p-6 sm:p-4">
-        <div className="absolute top-4 right-4 flex space-x-4">
+      {/* <div className="flex flex-col justify-center w-full max-w-3xl items-center min-h-screen relative p-6 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] rounded-lg shadow-lg md:p-6 sm:p-4"> */}
+      <div className="flex flex-col items-center justify-center p-4 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
+        <div className="absolute top-20 right-6 flex space-x-4">
           <FontAwesomeIcon
             icon={faDumbbell}
             className={`h-8 w-8 cursor-pointer ${showExercises ? 'text-blue-500' : 'text-gray-500'}`}
@@ -12647,57 +13168,79 @@ const ClientExercises: React.FC = () => {
                   </td>
                 </tr>
 
-                {currentExercise.started &&
-                  Array.from({ length: currentExercise.sets }).map((_, setIndex) => (
-                    <React.Fragment key={setIndex}>
-                      <tr>
-                        <td colSpan={3} className="py-2 px-4 border-b text-center">
-                          <div className="text-lg font-serif font-semibold italic text-left">
-                            {language === 'en' ? 'Choose your Weights:' : 'أختار اوزانك:'}
-                          </div>
-                          <div className="flex justify-center items-center space-x-4 mt-2">
-                            <div className="flex flex-col items-center">
-                              <FontAwesomeIcon icon={faWeightHanging} className="h-5 w-5 mr-1" />
-                              {currentExercise.weights?.[setIndex] || 0} kg
-                            </div>
-                            <div className="flex flex-col items-center">
-                              <FontAwesomeIcon icon={faRedoAlt} className="h-5 w-5 mr-1" />
-                              {currentExercise.reps?.[setIndex] || 0} reps
-                            </div>
-                            <button
-                              onClick={() => openWeightsModal(currentExercise, setIndex)}
-                              className="flex items-center bg-yellow-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-yellow-600 transition-all duration-200"
-                            >
-                              <FontAwesomeIcon icon={faPlus} className="mr-1" />
-                              {language === 'en' ? 'Add' : 'إضافة'}
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colSpan={3} className="py-2 px-4 border-b text-center">
-                          <div className="text-lg font-serif font-semibold italic text-left">
-                            {language === 'en' ? 'Rest Timer:' : 'مؤقت الراحة:'}
-                          </div>
-                          <div className="flex justify-center items-center space-x-4 mt-2">
-                            <div>
-                              <FontAwesomeIcon icon={faClock} className="h-5 w-5 mr-2" />
-                              {timers[`${currentExercise.id}-${setIndex}`] || '00:00'}
-                            </div>
-                            {!clickedButtons[currentExercise.id]?.[setIndex] && (
-                              <button
-                                className="bg-green-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-600 transition-all duration-200"
-                                onClick={() => handleStartRestTimer(currentExercise.id, setIndex, currentExercise.restTime)}
-                              >
-                                <FontAwesomeIcon icon={faClock} className="mr-1" />
-                                {language === 'en' ? 'Start Timer' : 'ابدأ المؤقت'}
-                              </button>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    </React.Fragment>
-                  ))}
+
+
+            {showAchievement && renderAchievement()}
+            {/* Add Golden Separator and Stopwatch Start */}
+            {currentExercise.started &&
+              Array.from({ length: currentExercise.sets }).map((_, setIndex) => (
+                <React.Fragment key={setIndex}>
+                  {/* <tr className={highlightedExercise === `${currentExercise.id}-${setIndex}` ? 'highlight-row' : ''}> */}
+                    <tr
+                      key={setIndex}
+                      className={
+                        highlightedExercises.includes(`${currentExercise.id}-${setIndex}`)
+                          ? 'bg-green-200'  // Highlight the row if the set is completed
+                          : ''
+                      }
+                    >
+                    <td colSpan={3} className="py-2 px-4 border-b text-center">
+                      <div className="text-lg font-serif font-semibold italic text-left">
+                        {language === 'en' ? 'Choose your Weights:' : 'أختار اوزانك:'}
+                      </div>
+                      <div className="flex justify-center items-center space-x-4 mt-2">
+                        <div className="flex flex-col items-center">
+                          <FontAwesomeIcon icon={faWeightHanging} className="h-5 w-5 mr-1" />
+                          {currentExercise.weights?.[setIndex] || 0} kg
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <FontAwesomeIcon icon={faRedoAlt} className="h-5 w-5 mr-1" />
+                          {currentExercise.reps?.[setIndex] || 0} reps
+                        </div>
+                        <button
+                          onClick={() => openWeightsModal(currentExercise, setIndex)}
+                          className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-yellow-600 transition-all duration-200"
+                        >
+                          <FontAwesomeIcon icon={faPlus} className="" />
+                          {/* {language === 'en' ? 'Add' : 'إضافة'} */}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr className={highlightedExercise === `${currentExercise.id}-${setIndex}` ? 'highlight-row' : ''}>
+                    <td colSpan={3} className="py-2 px-4 border-b text-center">
+                      <div className="text-lg font-serif font-semibold italic text-left">
+                        {language === 'en' ? 'Rest Timer:' : 'مؤقت الراحة:'}
+                      </div>
+                      <div className="flex justify-center items-center space-x-4 mt-2">
+                        <div>
+                          <FontAwesomeIcon icon={faClock} className="h-5 w-5 mr-2" />
+                          {timers[`${currentExercise.id}-${setIndex}`] || '00:00'}
+                        </div>
+                        {/* {!clickedButtons[currentExercise.id]?.[setIndex] && (
+                          <button
+                            className="bg-green-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-600 transition-all duration-200"
+                            onClick={() => handleStartRestTimer(currentExercise.id, setIndex, currentExercise.restTime)}
+                          >
+                            <FontAwesomeIcon icon={faClock} className="mr-1" />
+                            {language === 'en' ? 'Start Timer' : 'ابدأ المؤقت'}
+                          </button>
+                        )} */}
+                      </div>
+                    </td>
+                  </tr>
+
+                  {/* Add Golden Separator */}
+                  <tr>
+                    <td colSpan={3} className="py-4">
+                      <hr style={{ border: '10px solid gold', width: '100%' }} />
+                    </td>
+                  </tr>
+                </React.Fragment>
+              ))}
+
+
                 <tr>
                   <td colSpan={3} className="py-2 px-4 text-center">
                   <button
@@ -12737,7 +13280,7 @@ const ClientExercises: React.FC = () => {
 
         {/* Cardio Section */}
         {showCardio && (
-        <div className="relative w-full mb-4 bg-[var(--background-color)] p-6 rounded-lg shadow-lg"> {/* Added background */}
+        <div className="relative mb-4  p-4 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto"> 
           <h2 className="text-2xl font-bold mb-4 text-center">{language === 'en' ? 'Cardio Exercises' : 'تمارين الكارديو'}</h2>
 
           <div className="flex justify-between items-center mb-4">
@@ -12819,10 +13362,13 @@ const ClientExercises: React.FC = () => {
         <WeightsModal
           selectedExercise={selectedExercise}
           activeSetIndex={activeSetIndex}
-          clientData={clientData} // Ensure clientData is passed correctly
+          clientData={clientData}
           onClose={() => setShowWeightsModal(false)}
-          onSave={handleSaveWeights}
+          onWeightChange={handleWeightChange}  // Pass weight change handler
+          onRepsChange={handleRepsChange}      // Pass reps change handler
+          onSave={handleSaveWeights}           // Save button handler
         />
+
       )}
 
 
@@ -12833,6 +13379,14 @@ const ClientExercises: React.FC = () => {
           <img src={selectedGif} alt="Exercise GIF" className="w-full h-auto" />
         </Modal>
       )}
+
+    <Snackbar
+      open={snackbarOpen}
+      message={snackbarMessage}
+      autoHideDuration={3000}  // The snackbar will automatically close after 3 seconds
+      onClose={handleSnackbarClose}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}  // Position the snackbar
+    />
     </DashboardLayout>
   );
 };

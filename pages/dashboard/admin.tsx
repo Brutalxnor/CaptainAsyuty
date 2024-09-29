@@ -8,7 +8,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                        
+                        //pages/admin.tsx
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -34,6 +34,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import LoadingSpinner from '@/components/LoadingSpinner'; // Import the new component
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { ClientData } from '@/types/ClientData';
+import { FiCopy } from 'react-icons/fi'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -116,9 +117,9 @@ const AdminDashboard: React.FC = () => {
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const clientsPerPage = 10; // Number of clients to show per page
-
   // Calculate total pages
   const totalPages = Math.ceil(clientData.length / clientsPerPage);
+
 
 
   useEffect(() => {
@@ -198,6 +199,13 @@ const AdminDashboard: React.FC = () => {
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+  };
+
+  const truncate = (text: string, maxLength: number) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
   };
 
   const handleGifClick = (gif: string | null) => {
@@ -305,7 +313,8 @@ const AdminDashboard: React.FC = () => {
 
     return (
       <>
-        <div className='justify-center items-center flex flex-col'>
+        {/* <div className='justify-center items-center flex flex-col'> */}
+        <div className="flex flex-col items-center justify-center p-4 w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
           <div className="mb-4">
             {Object.keys(exercisesByDay).sort().map(day => (
               <button
@@ -409,7 +418,11 @@ const AdminDashboard: React.FC = () => {
                   {filteredClientsTenMax.map((client, index) => (
                     <React.Fragment key={index}>
                       <tr className="border-b border-[var(--border-color)]">
-                        <td className="py-2 px-4 text-xl font-bold min-w-full">{client.fullName? client.fullName : client.email}</td>
+                        {/* <td className="py-2 px-4 truncate  text-xl font-bold max-w-xs">{client.fullName? client.fullName : client.email}</td> */}
+                        
+                        <span  className="py-2 px-4 truncate  text-xl font-bold max-w-xs">
+                          {client.fullName ? truncate(client.fullName, 10) : truncate(client.email, 10)}
+                        </span>
                         <td className="py-2 px-4">
                           <button
                             onClick={() => toggleRow(index)}
@@ -460,7 +473,7 @@ const AdminDashboard: React.FC = () => {
             </div>
 
           </div>
-          <div className="mt-10 flex flex-col items-center justify-center">
+          <div className="mt-10 w-full max-w-lg mx-auto">
             <h2 className="text-3xl font-bold text-center mb-6 text-[var(--text-color)]">{'Client Statistics'}</h2>
             <div className="flex justify-center items-center">
               <div
@@ -511,11 +524,13 @@ const AdminDashboard: React.FC = () => {
                     <tbody>
                       {filteredClients.map((client, index) => (
                         <tr key={index} className="border-b border-gray-200 hover:text-blue-600 hover:bg-blue-100 transition-colors">
-                          <td className="py-2 px-4 text-lg font-semibold bg-transparent text-black-800 flex items-center">
+                          <td className="py-2 px-4 truncate max-w-xs text-lg font-semibold bg-transparent text-black-800 flex items-center">
                             <div className={`w-10 h-10 flex items-center justify-center text-white mr-3`}>
                               {client.fullName ? client.fullName.charAt(0).toUpperCase() : client.email.charAt(0).toUpperCase()}
                             </div>
-                            {client.fullName ? client.fullName : client.email}
+                            <span className="truncate">
+                              {client.fullName ? truncate(client.fullName, 10) : truncate(client.email, 10)}
+                            </span>
                           </td>
                           <td className="py-3 px-4 text-center">
                             <span

@@ -122,17 +122,29 @@ const PaymentsPage: React.FC = () => {
             <>
               <h1 className="text-2xl text-center font-lg italic font-serif mb-4 text-red-500">{language === 'en' ? 'Payments Required!' : 'مطلوب الدفع!'}</h1>
               <p className="text-center mb-4 text-[var(--text-color)]">{language === 'en' ? 'To access your exercises, please complete the payment process.' : 'للوصول إلى تمارينك، يرجى إكمال عملية الدفع.'}</p>
+              <div className="flex justify-center space-x-6 mt-4">
+                {/* InstaPay Image */}
+                <div className="w-24 h-24 rounded-full overflow-hidden">
+                  <img src="/instapay.png" alt="InstaPay" className="w-full h-full object-cover" />
+                </div>
+                {/* Vodafone Cash Image */}
+                <div className="w-24 h-24 rounded-full overflow-hidden">
+                  <img src="/Vodafone-Cash-Logo.png" alt="Vodafone Cash" className="w-full h-full object-cover" />
+                </div>
+              </div>
               <div className="text-center mb-4">
                 <p className="text-lg font-semibold text-[var(--text-color)]">{language === 'en' ? 'Please choose your training plan and pay on InstaPay/Vodafone cash via this number:' : 'يرجى اختيار خطة التدريب الخاصة بك والدفع عبر InstaPay/Vodafone cash عبر هذا الرقم:'}</p>
+                <p className="text-xl font-semibold mt-2 text-[var(--text-color)] italic">{language === 'en' ? 'InstaPay:' : ':انستا باى '} </p>
                 <p className="text-xl font-bold mt-2 text-[var(--text-color)]">abdo01158171@instapay</p>
-                <p className="text-xl font-bold mt-2 text-[var(--text-color)]">01151784998</p>
+                <p className="text-xl font-semibold mt-2 text-[var(--text-color)] italic">{language === 'en' ? 'Vodafone Cash:' : ':فودافون كاش'} </p>
+                <p className="text-xl font-bold mt-2 text-[var(--text-color)]">01070885502 {language === 'en' ? 'Vodafone Cash' : 'فودافون كاش '} </p>
               </div>
               <div className="py-6 mt-6">
                 <h2 className="text-center text-3xl font-bold mb-6 text-[var(--text-color)]">{language === 'en' ? 'Reasonable and Flexible Plans' : 'خطط معقولة ومرنة'}</h2>
                 <div className="grid grid-cols-1 gap-6">
                   <div className="border-2 border-[var(--border-color)] rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-300 bg-[var(--background-color)]">
-                    <h3 className="text-xl font-bold mb-2 text-center text-[var(--text-color)]">{language === 'en' ? '2 Monthly' : '2 شهر'}</h3>
-                    <p className="text-2xl font-bold text-blue-500 text-center">1000 {language === 'en' ? 'EGP / month' : 'جنيه / شهر'}</p>
+                    <h3 className="text-xl font-bold mb-2 text-center text-[var(--text-color)]">{language === 'en' ? '2 Months' : '2 شهر'}</h3>
+                    <p className="text-2xl font-bold text-blue-500 text-center">1000 {language === 'en' ? 'EGP / 2 month' : 'جنيه / 2 شهر'}</p>
                     <div className="mt-2 text-center">
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Weekly Exercise Updates' : 'تحديثات التمرين أسبوعياً'}</p>
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Nutrition Plan' : 'خطة تغذية'}</p>
@@ -141,7 +153,7 @@ const PaymentsPage: React.FC = () => {
                   </div>
                   </div>
                   <div className="border-2 border-[var(--border-color)] rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-300 bg-[var(--background-color)]">
-                    <h3 className="text-xl font-bold mb-2 text-center text-[var(--text-color)]">{language === 'en' ? '3 Monthly' : '6 شهر'}</h3>
+                    <h3 className="text-xl font-bold mb-2 text-center text-[var(--text-color)]">{language === 'en' ? '3 Monthly' : '3 شهر'}</h3>
                     <p className="text-2xl font-bold text-red-500 text-center">1300 {language === 'en' ? 'EGP / month' : 'جنيه / شهر'}</p>
                     <div className="mt-2 text-center">
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Daily Exercise Updates' : 'تحديثات التمرين يومياً'}</p>

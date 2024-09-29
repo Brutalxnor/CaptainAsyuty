@@ -54,8 +54,17 @@ interface ExerciseOption {
   gif?: string;
 }
 
+const generateDurationOptions = (min: number, max: number) => {
+  let options = [];
+  for (let i = min; i <= max; i++) {
+    options.push(`${i} min`);
+  }
+  return options;
+};
 
-const durationOptions = ['5 min', '10 min', '15 min', '20 min', '25 min', '30 min', '40 min', '50 min', '60 min', '120 min'];
+// Modify the durationOptions array to be dynamic based on your needs
+const durationOptions = generateDurationOptions(1, 120);  // Generates options from 1 minute to 120 minutes
+
 
 const AdminAddCardio = () => {
   const router = useRouter();

@@ -80,7 +80,7 @@ interface ClientData {
 
 const setsOptions = ['1', '2', '3', '4', '5', '6', '7'];
 const restTimeOptions = Array.from({ length: 12 }, (_, i) => (i + 1) * 10); // Generate rest time options in increments of 10 seconds
-const exerciseCategories = ['Shoulder', 'Chest', 'Triceps', 'Back', 'Biceps', 'Leg', 'Rest', 'Abdominis Rectus', 'Reverse Wrist Curls'];
+const exerciseCategories = ['Shoulder', 'Chest', 'Triceps', 'Back', 'Biceps', 'Leg', 'Rest', 'Abdominis Rectus', 'Reverse Wrest Curls'];
 const gifFolders = ['Back', 'Biceps', 'Chest', 'Leg', 'Shoulder', 'Triceps'];
 
 const AdminAddExercises = () => {

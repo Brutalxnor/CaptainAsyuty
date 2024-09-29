@@ -335,9 +335,15 @@ const ClientInfoForm: React.FC<ClientInfoFormProps> = ({ email, clientData = {} 
 
 return (
   // <div className="flex justify-center items-center min-h-screen">
-  <div className="container mx-auto text-center w-full max-w-3xl p-6 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] rounded-lg shadow-lg md:p-6 sm:p-4">
-  
-    <div className=" p-6 text-[var(--text-color)]  font-serif border-gray-200 rounded-lg shadow-lg overflow-y-auto relative">
+  // <div className="container mx-auto text-center w-full max-w-3xl p-6 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] rounded-lg shadow-lg md:p-6 sm:p-4">
+  // <div className="flex flex-col items-center text-center w-full max-w-3xl p-6 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] justify-center p-4 w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
+
+
+  // <div className="flex flex-col items-center justify-center w-full p-4 md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
+  //   <div className="p-6 text-[var(--text-color)] font-serif border-gray-200 rounded-lg shadow-lg overflow-y-auto relative">
+
+  <div className="flex flex-col items-center justify-center w-full overflow-x-hidden p-4 md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
+     <div className=" text-[var(--text-color)] font-serif border-gray-200 rounded-lg shadow-lg w-full max-w-3xl mx-auto relative">
       {isLoading && (
         <div className="absolute inset-0 bg-[var(--background-color)] bg-opacity-75 flex justify-center items-center">
 
@@ -347,7 +353,7 @@ return (
       )}
       {/* Client's Full Name */}
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-2 px-4 border-b text-left text-xl font-bold">
+        <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 py-2 px-4 border-b text-left text-xl font-bold ">
           {[
             { label: content.weight[language as 'en' | 'ar'], name: 'weight', type: 'text' },
             { label: content.height[language as 'en' | 'ar'], name: 'height', type: 'text' },
@@ -393,7 +399,7 @@ return (
                     onChange={(e) => handleToggleChange(select.name as keyof ClientData, e.target.value)}
                     className="mt-1"
                   />
-                  <span>Yes</span>
+                  <span>{language === 'en' ? 'Yes' : 'نعم'}</span>
                 </label>
                 <label className="flex items-center space-x-2">
                   <input
@@ -404,7 +410,7 @@ return (
                     onChange={(e) => handleToggleChange(select.name as keyof ClientData, e.target.value)}
                     className="mt-1"
                   />
-                  <span>No</span>
+                  <span>{language === 'en' ? 'No' : 'لا'}</span>
                 </label>
               </div>
             </div>

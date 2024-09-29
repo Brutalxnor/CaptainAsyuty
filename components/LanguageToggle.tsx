@@ -11,7 +11,7 @@ const LanguageToggle: React.FC = () => {
       onClick={toggleLanguage}
       className="bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 transition-colors duration-300 z-50 mb-2"
     >
-      {language === 'en' ? 'AR' : 'US'}
+      {language === 'en' ? 'ع' : 'US'}
     </button>
   );
 };
