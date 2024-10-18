@@ -17,6 +17,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { format, differenceInDays } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faClock, faCalendarCheck, faCalendarTimes } from '@fortawesome/free-solid-svg-icons';
+import { useRouter } from 'next/router';
 
 const PaymentsPage: React.FC = () => {
   const { language } = useLanguage();
@@ -29,6 +30,7 @@ const PaymentsPage: React.FC = () => {
   const [monthsRegistered, setMonthsRegistered] = useState<number | null>(null);
   const [daysLeft, setDaysLeft] = useState<number | null>(null);
   const [todayDate, setTodayDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
+  const router = useRouter();
 
   useEffect(() => {
     const checkPaymentStatus = async () => {
@@ -53,6 +55,24 @@ const PaymentsPage: React.FC = () => {
           const endDate = new Date(data.registrationEndDate);
           const calculatedDaysLeft = differenceInDays(endDate, today);
           setDaysLeft(calculatedDaysLeft);
+
+          const hasVisited = sessionStorage.getItem('hasVisitedClientInfoPage');
+
+          if (data.hasPaid && !hasVisited) {
+            router.push('/dashboard/client-info');
+  
+            // Update visit status in the backend
+            await fetch('/api/updateVisitStatus', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ email: user.primaryEmailAddress?.emailAddress || user.email }),
+            });
+
+            // Store in sessionStorage to prevent future redirects in this session
+            sessionStorage.setItem('hasVisitedClientInfoPage', 'true');
+          }
         } else {
           throw new Error('Failed to check payment status');
         }

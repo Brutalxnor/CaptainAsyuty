@@ -1165,7 +1165,7 @@ const SignUpPage = () => {
     try {
       await signUp(username, email, password, referralCode);
       toast.success('Successfully signed up!');
-      router.push('/dashboard');
+      router.push('/dashboard/client-info');
     } catch (error) {
       toast.error('Error signing up. Please try again.');
     } finally {

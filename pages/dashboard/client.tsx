@@ -1192,7 +1192,7 @@
 
 
 
-
+//pages/dashboard/client.tsx
 import React, { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import { useAuth } from '@/contexts/AuthContext';
@@ -1242,6 +1242,7 @@ interface ClientData {
   fullName: string;
   exercises: Exercise[];
   date: string; // Program start date
+  
 }
 
 const ClientDashboard: React.FC = () => {

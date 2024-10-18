@@ -147,6 +147,8 @@ export interface ClientData {
   admin: boolean; // Whether the client is an admin
   client: boolean; // Whether the client is a regular user (non-admin)
 
+  hasVisitedClientInfoPage?: boolean;
+  
   weight?: string; // Client's current weight (optional)
   height?: string; // Client's height (optional)
   age?: string; // Client's age (optional)
