@@ -75,6 +75,7 @@ interface ClientData {
     exerciseType: string;
     date: string;
     exercises?: Exercise[];
+    
   };
 }
 
@@ -104,7 +105,11 @@ const AdminAddExercises = () => {
   const [isGifModalOpen, setIsGifModalOpen] = useState<boolean>(false);
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState<number | null>(null);
   const [fetchExisting, setFetchExisting] = useState<boolean>(true);
+  const [isCopyMode, setIsCopyMode] = useState(false);
+  const [originalExercises, setOriginalExercises] = useState<ExerciseOption[]>([]); // Store original exercises
+  const [unlockedDays, setUnlockedDays] = useState<number[]>([]); // This initializes unlockedDays as an empty array
 
+  
   useEffect(() => {
     const fetchClients = async () => {
       try {
@@ -259,7 +264,7 @@ const AdminAddExercises = () => {
                     name: exerciseName,
                     sets: '1', // Default sets
                     day: `Day ${dayIndex + 1}`,
-                    restTime: 30, // Default rest time
+                    restTime: 60, // Default rest time
                   });
                 }
               });
@@ -292,6 +297,29 @@ const AdminAddExercises = () => {
     fetchGifOptions();
   }, []);
 
+  
+  const handleCopyModeToggle = () => {
+    // Toggle copy mode
+    setIsCopyMode(!isCopyMode);
+    if (!isCopyMode) {
+      // If we're switching to copy mode, save the current exercises
+      setOriginalExercises([...exercises]);
+    } else {
+      // If switching off copy mode, restore original exercises
+      setExercises(originalExercises);
+    }
+  };
+
+
+
+  const handleUnlockedDaysChange = (day: number) => {
+    if (unlockedDays.includes(day)) {
+      setUnlockedDays(unlockedDays.filter(d => d !== day)); // Remove day if it's already selected
+    } else {
+      setUnlockedDays([...unlockedDays, day]); // Add day if it's not selected
+    }
+  };
+  
 
 const handleAssignExercise = async () => {
     try {
@@ -301,6 +329,7 @@ const handleAssignExercise = async () => {
         exercises: exercises.map(ex => ({ ...ex, date: currentDate })), // Add the date to each exercise
         type: selectedType,
         date: currentDate,
+        unlockedDays, 
       };
       // console.log('Assigning exercises:', payload); // Debug log
       const response = await fetch('/api/adminAddExercise', {
@@ -324,6 +353,8 @@ const handleAssignExercise = async () => {
   };
   
 
+
+
   const handleExerciseChange = (index: number, field: string, value: string | number) => {
     const filteredExercises = exercises.filter(exercise => exercise.day === selectedDay);
     const updatedExercise = { ...filteredExercises[index], [field]: value };
@@ -343,9 +374,57 @@ const handleAssignExercise = async () => {
     setExercises(newExercises);
   };
 
+
+
+
   const handleAddExercise = () => {
-    setExercises([...exercises, { id: uuidv4(), name: '', sets: '', day: selectedDay, restTime: 30 }]);
+    setExercises([...exercises, { id: uuidv4(), name: '', sets: '', day: selectedDay, restTime: 60 }]);
   };
+
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const response = await fetch('/api/adminAddExercise');
+        const data = await response.json();
+  
+        if (data && data.clients && Array.isArray(data.clients)) {
+          setClients(data.clients); // Set the clients to populate the dropdown
+        } else {
+          console.error('No clients found.');
+        }
+      } catch (error) {
+        console.error('Error fetching clients:', error);
+      }
+    };
+  
+    fetchClients();
+  }, []);
+  
+  
+  const handleCopyExercisesFromClient = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const copyFromEmail = e.target.value; // Get the selected client's email
+    
+    try {
+      // Fetch exercises for this client only
+      const response = await fetch(`/api/adminAddExercise?copyMode=true&email=${copyFromEmail}`);
+      const data = await response.json();
+  
+      // Check if the client has exercises and set those as the copied exercises
+      if (data.exercises && data.exercises.length > 0) {
+        if (isCopyMode) {
+          setExercises(data.exercises); // Set the exercises to the selected client's exercises
+        }
+      } else {
+        console.error('No exercises found for this client.');
+      }
+    } catch (error) {
+      console.error('Error copying exercises:', error);
+    }
+  };
+  
+  
+
 
   const handleRemoveExercise = (index: number) => {
     const filteredExercises = exercises.filter(exercise => exercise.day === selectedDay);
@@ -585,6 +664,29 @@ const handleAssignExercise = async () => {
           </button>
         ))}
       </div>
+
+
+      <div className="flex items-center justify-center mb-4">
+      <label className="mr-2">Unlock Selected Days for Client</label>
+      <div className="flex flex-wrap">
+        {['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6'].map((day, index) => (
+          <div key={day} className="flex items-center mb-2 mr-4">
+            <input
+              type="checkbox"
+              value={index + 1}
+              checked={unlockedDays.includes(index + 1)}
+              onChange={() => handleUnlockedDaysChange(index + 1)}
+              className="mr-2"
+            />
+            <label>{day}</label>
+          </div>
+        ))}
+      </div>
+    </div>
+
+
+
+
       {exercises.filter(exercise => exercise.day === selectedDay).map((exercise, index) => (
         <div key={exercise.id} className="mb-4">
           <div className="flex items-center">
@@ -651,6 +753,43 @@ const handleAssignExercise = async () => {
           </div>
         </div>
       ))}
+
+
+      <div className="flex items-center mb-4">
+        <label className="mr-2">Copy Exercises From Another Client</label>
+        <input 
+          type="checkbox" 
+          checked={isCopyMode} 
+          onChange={handleCopyModeToggle} 
+          className="form-checkbox mr-2"
+        />
+        <FontAwesomeIcon icon={faExchangeAlt} className="h-5 w-5" />
+      </div>
+
+      {/* Show dropdown only if copy mode is enabled */}
+      {isCopyMode && (
+        <div className="mb-4 font-serif">
+          <label>Select Client to Copy Exercises From:</label>
+          <select
+            onChange={handleCopyExercisesFromClient}
+            className="block w-full mt-1 p-2 border-[var(--select-border-color)] bg-[var(--select-background-color)] text-[var(--select-text-color)] rounded-md"
+          >
+            <option value="" disabled>Select a client to copy exercises from</option>
+            {clients.length > 0 ? (
+              clients.map((client: any) => (
+                <option key={client.email} value={client.email}>
+                  {client.fullName} ({client.email})
+                </option>
+              ))
+            ) : (
+              <option disabled>No clients found</option>
+            )}
+          </select>
+        </div>
+      )}
+
+
+
       <button
         onClick={handleAddExercise}
         className="bg-green-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-600 transition duration-200 min-w-full flex-col flex items-center"
@@ -663,6 +802,7 @@ const handleAssignExercise = async () => {
       >
         <FontAwesomeIcon icon={faTasks} className="h-6 w-6" />
       </button>
+
       {error && <p className="text-red-500 mt-2">Error: {error}</p>}
     </>
   );

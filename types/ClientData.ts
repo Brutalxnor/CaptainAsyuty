@@ -148,7 +148,7 @@ export interface ClientData {
   client: boolean; // Whether the client is a regular user (non-admin)
 
   hasVisitedClientInfoPage?: boolean;
-  
+
   weight?: string; // Client's current weight (optional)
   height?: string; // Client's height (optional)
   age?: string; // Client's age (optional)
@@ -190,7 +190,7 @@ export interface ClientData {
   exercises?: Exercise[]; // Array of exercises assigned to the client
   exerciseType?: string; // Optional field for exercise type (e.g., strength training)
   cardio?: Cardio[]; // Array of cardio exercises assigned to the client
-
+  unlockedDays?: number[]; 
   images?: { // Images for the client
     front: Image; // Front image with URL and public ID
     back: Image; // Back image with URL and public ID

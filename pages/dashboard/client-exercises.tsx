@@ -12386,7 +12386,141 @@
 
 
 
+  
+  // const handleStartRestTimer = (exerciseId: string, setIndex: number, duration: number) => {
+  //   if (intervalId) {
+  //     clearInterval(intervalId);
+  //   }
+  
+  //   const bell = new Audio('/sounds/bell.mp3'); // Ensure you have this file in your public folder
+  
+  //   const minutes = Math.floor(duration / 60);
+  //   const seconds = (duration % 60).toString().padStart(2, '0');
+  
+  //   setTimers((prevTimers) => ({
+  //     ...prevTimers,
+  //     [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
+  //   }));
+  
+  //   const startTime = Date.now();
+  //   const endTime = startTime + duration * 1000;
+  
+  //   const newIntervalId = setInterval(() => {
+  //     const remainingTime = endTime - Date.now();
+  
+  //     if (remainingTime <= 0) {
+  //       clearInterval(newIntervalId);
+  //       bell.play(); // Play the bell sound when the timer ends
+  
+  //       // Add the exercise set to the highlightedExercises array (to track multiple)
+  //       setHighlightedExercises((prevHighlighted) => {
+  //         // Only add it if it's not already in the list
+  //         const newHighlight = `${exerciseId}-${setIndex}`;
+  //         if (!prevHighlighted.includes(newHighlight)) {
+  //           return [...prevHighlighted, newHighlight];
+  //         }
+  //         return prevHighlighted;
+  //       });
+  
+  //       // Show snackbar when the rest time is over
+  //       openSnackbar(language === 'en' ? 'Rest finished' : 'انتهى وقت الراحة');
+  
+  //       setTimers((prevTimers) => ({
+  //         ...prevTimers,
+  //         [`${exerciseId}-${setIndex}`]: '00:00',
+  //       }));
+  
+  //       setIntervalId(null);
+  //     } else {
+  //       const minutes = Math.floor(remainingTime / 60000);
+  //       const seconds = ((remainingTime % 60000) / 1000).toFixed(0).padStart(2, '0');
+  //       setTimers((prevTimers) => ({
+  //         ...prevTimers,
+  //         [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
+  //       }));
+  //     }
+  //   }, 1000);
+  
+  //   setIntervalId(newIntervalId);
+  // };
+  
 
+  // const handleStartRestTimer = (exerciseId: string, setIndex: number, duration: number) => {
+  //   if (intervalId) {
+  //     clearInterval(intervalId);
+  //   }
+  
+  //   const bell = new Audio('/sounds/bell.mp3');
+  
+  //   const minutes = Math.floor(duration / 60);
+  //   const seconds = (duration % 60).toString().padStart(2, '0');
+  
+  //   setTimers((prevTimers) => ({
+  //     ...prevTimers,
+  //     [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
+  //   }));
+  
+  //   const startTime = Date.now();
+  //   const endTime = startTime + duration * 1000;
+  
+  //   const newIntervalId = setInterval(() => {
+  //     const remainingTime = endTime - Date.now();
+  
+  //     if (remainingTime <= 0) {
+  //       clearInterval(newIntervalId);
+  //       bell.play(); // Play the bell sound when the timer ends
+  
+  //       // Add the completed set to the highlighted sets array
+  //       setHighlightedExercises((prevHighlighted) => {
+  //         const newHighlight = `${exerciseId}-${setIndex}`;
+  //         if (!prevHighlighted.includes(newHighlight)) {
+  //           return [...prevHighlighted, newHighlight];
+  //         }
+  //         return prevHighlighted;
+  //       });
+  
+  //       // Show snackbar when the rest time is over
+  //       openSnackbar(language === 'en' ? 'Rest finished' : 'انتهى وقت الراحة');
+  
+  //       setTimers((prevTimers) => ({
+  //         ...prevTimers,
+  //         [`${exerciseId}-${setIndex}`]: '00:00',
+  //       }));
+  
+  //       setIntervalId(null);
+  //     } else {
+  //       const minutes = Math.floor(remainingTime / 60000);
+  //       const seconds = ((remainingTime % 60000) / 1000).toFixed(0).padStart(2, '0');
+  //       setTimers((prevTimers) => ({
+  //         ...prevTimers,
+  //         [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
+  //       }));
+  //     }
+  //   }, 1000);
+  
+  //   setIntervalId(newIntervalId);
+  // };
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//pages/dashboard/client-exercises.tsx
 import React, { useEffect, useState, useRef } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import { useAuth } from '@/contexts/AuthContext';
@@ -12400,6 +12534,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import Slider from 'react-slick';
 import WeightsModal from '@/components/WeightsModal';
 import Snackbar from '@mui/material/Snackbar';  // Import Snackbar from Material UI
+import { ToastContainer, toast } from 'react-toastify';
 
 const dayIcons: Record<string, IconDefinition> = {
   'Day 1': fa1,
@@ -12440,6 +12575,7 @@ interface ClientData {
   exercises: Exercise[];
   cardio: Cardio[];
   date: string;
+  unlockedDays?: number[]; // Add this line
 }
 
 interface Timers {
@@ -12501,6 +12637,7 @@ const ClientExercises: React.FC = () => {
   const [showAchievement, setShowAchievement] = useState(false); // New state to show achievement
   const [totalReps, setTotalReps] = useState(0); // New state to track total reps
   const [totalWeights, setTotalWeights] = useState(0); // New state to track total weights
+  const [progress, setProgress] = useState<{ [key: string]: number }>({});
 
 
 // Function to open snackbar
@@ -12524,10 +12661,11 @@ const handleSnackbarClose = () => {
 
 
   useEffect(() => {
-    if (currentDayInCycle) {
-      handleDaySelection(`Day ${currentDayInCycle}`);
+    if (unlockedDays.length > 0) {
+      console.log('Unlocked days after state update:', unlockedDays);
     }
-  }, [currentDayInCycle]);
+  }, [unlockedDays]);
+  
 
   // Calculate total reps and weights for the current day
   const calculateTotals = (exercisesForDay: Exercise[]) => {
@@ -12549,63 +12687,10 @@ const handleSnackbarClose = () => {
     }
   };
 
-  // const handleStartRestTimer = (exerciseId: string, setIndex: number, duration: number) => {
-  //   if (intervalId) {
-  //     clearInterval(intervalId);
-  //   }
-  
-  //   const bell = new Audio('/sounds/bell.mp3'); // Ensure you have this file in your public folder
-  
-  //   const minutes = Math.floor(duration / 60);
-  //   const seconds = (duration % 60).toString().padStart(2, '0');
-  
-  //   setTimers((prevTimers) => ({
-  //     ...prevTimers,
-  //     [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
-  //   }));
-  
-  //   const startTime = Date.now();
-  //   const endTime = startTime + duration * 1000;
-  
-  //   const newIntervalId = setInterval(() => {
-  //     const remainingTime = endTime - Date.now();
-  
-  //     if (remainingTime <= 0) {
-  //       clearInterval(newIntervalId);
-  //       bell.play(); // Play the bell sound when the timer ends
-  
-  //       // Add the exercise set to the highlightedExercises array (to track multiple)
-  //       setHighlightedExercises((prevHighlighted) => {
-  //         // Only add it if it's not already in the list
-  //         const newHighlight = `${exerciseId}-${setIndex}`;
-  //         if (!prevHighlighted.includes(newHighlight)) {
-  //           return [...prevHighlighted, newHighlight];
-  //         }
-  //         return prevHighlighted;
-  //       });
-  
-  //       // Show snackbar when the rest time is over
-  //       openSnackbar(language === 'en' ? 'Rest finished' : 'انتهى وقت الراحة');
-  
-  //       setTimers((prevTimers) => ({
-  //         ...prevTimers,
-  //         [`${exerciseId}-${setIndex}`]: '00:00',
-  //       }));
-  
-  //       setIntervalId(null);
-  //     } else {
-  //       const minutes = Math.floor(remainingTime / 60000);
-  //       const seconds = ((remainingTime % 60000) / 1000).toFixed(0).padStart(2, '0');
-  //       setTimers((prevTimers) => ({
-  //         ...prevTimers,
-  //         [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
-  //       }));
-  //     }
-  //   }, 1000);
-  
-  //   setIntervalId(newIntervalId);
-  // };
-  
+
+
+
+
 
   const handleStartRestTimer = (exerciseId: string, setIndex: number, duration: number) => {
     if (intervalId) {
@@ -12614,16 +12699,10 @@ const handleSnackbarClose = () => {
   
     const bell = new Audio('/sounds/bell.mp3');
   
-    const minutes = Math.floor(duration / 60);
-    const seconds = (duration % 60).toString().padStart(2, '0');
-  
-    setTimers((prevTimers) => ({
-      ...prevTimers,
-      [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
-    }));
-  
     const startTime = Date.now();
     const endTime = startTime + duration * 1000;
+    
+    const totalDuration = endTime - startTime; // Total time for the progress bar
   
     const newIntervalId = setInterval(() => {
       const remainingTime = endTime - Date.now();
@@ -12649,6 +12728,11 @@ const handleSnackbarClose = () => {
           [`${exerciseId}-${setIndex}`]: '00:00',
         }));
   
+        setProgress((prevProgress) => ({
+          ...prevProgress,
+          [`${exerciseId}-${setIndex}`]: 100,
+        }));
+  
         setIntervalId(null);
       } else {
         const minutes = Math.floor(remainingTime / 60000);
@@ -12657,12 +12741,27 @@ const handleSnackbarClose = () => {
           ...prevTimers,
           [`${exerciseId}-${setIndex}`]: `${minutes}:${seconds}`,
         }));
+  
+        // Calculate and set the progress percentage
+        const elapsedTime = totalDuration - remainingTime;
+        const percentage = Math.min((elapsedTime / totalDuration) * 100, 100);
+        setProgress((prevProgress) => ({
+          ...prevProgress,
+          [`${exerciseId}-${setIndex}`]: percentage,
+        }));
       }
     }, 1000);
   
     setIntervalId(newIntervalId);
   };
   
+
+  useEffect(() => {
+    console.log('Unlocked days state:', unlockedDays); // Check if this is correct
+  }, [unlockedDays]);
+  
+
+
 
 
   // Check for completion when highlightedExercises array changes
@@ -12776,11 +12875,14 @@ const handleSnackbarClose = () => {
           exercises: initializedExercises,
           cardio: cardio.exercises || [],
           date: exercisesData.date || new Date().toISOString(),
+          unlockedDays: exercisesData.unlockedDays || [] // This should correctly populate unlockedDays
         };
 
         setClientData(initializedClientData);
         setExercises(initializedExercises);
-        
+        setUnlockedDays(exercisesData.unlockedDays || []); // Fetch unlocked days from API
+        calculateUnlockedDays(exercisesData.exercises, exercisesData.date);
+
         // setClientData({
         //   fullName: client.fullName || userEmail,
         //   exercises: exercisesData.exercises || [],
@@ -12802,6 +12904,9 @@ const handleSnackbarClose = () => {
 
     fetchClientData();
   }, [user, router]);
+
+
+
 
 
   const handleStartCardioTimer = (cardioId: string, duration: number) => {
@@ -12859,10 +12964,36 @@ const handleSnackbarClose = () => {
     }
   };
 
+  // const handleDaySelection = (day: string) => {
+  //   setSelectedDay(day);
+  //   setCurrentExerciseIndex(0);
+  // };
+
+
+  // const handleDaySelection = (day: string) => {
+  //   const dayNumber = parseInt(day.split(' ')[1]);
+  //   if (unlockedDays.includes(dayNumber)) {
+  //     setSelectedDay(day);
+  //     setCurrentExerciseIndex(0);
+  //   } else {
+  //     toast.error(language === 'en' ? 'This day is not unlocked yet!' : 'هذا اليوم غير متاح بعد!');
+  //   }
+  // };
+  
+  
   const handleDaySelection = (day: string) => {
-    setSelectedDay(day);
-    setCurrentExerciseIndex(0);
+    const dayNumber = parseInt(day.split(' ')[1]);
+  
+    // Check if the selected day is the unlocked day
+    if (unlockedDays.includes(dayNumber)) {
+      setSelectedDay(day);
+      setCurrentExerciseIndex(0);
+    } else {
+      toast.error(language === 'en' ? 'This day is not unlocked yet!' : 'هذا اليوم غير متاح بعد!');
+    }
   };
+  
+
 
 
   const handleToggleExercise = (exerciseId: string) => {
@@ -13026,19 +13157,65 @@ const handleSnackbarClose = () => {
 
 
 
-  const calculateUnlockedDays = (exercises: Exercise[], startDate: string) => {
-    const assignedDate = new Date(startDate);
-    const today = new Date();
+  // const calculateUnlockedDays = (exercises: Exercise[], startDate: string) => {
+  //   const assignedDate = new Date(startDate);
+  //   const today = new Date();
 
-    const diffTime = Math.abs(today.getTime() - assignedDate.getTime());
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  //   const diffTime = Math.abs(today.getTime() - assignedDate.getTime());
+  //   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-    const cycleDays = Array.from(new Set(exercises.map(ex => parseInt(ex.day.split(' ')[1], 10)))).sort((a, b) => a - b);
-    const currentDay = cycleDays[diffDays % cycleDays.length];
+  //   const cycleDays = Array.from(new Set(exercises.map(ex => parseInt(ex.day.split(' ')[1], 10)))).sort((a, b) => a - b);
+  //   const currentDay = cycleDays[diffDays % cycleDays.length];
 
-    setUnlockedDays(cycleDays);
-    setCurrentDayInCycle(currentDay);
-  };
+  //   setUnlockedDays(cycleDays);
+  //   setCurrentDayInCycle(currentDay);
+  // };
+
+
+//   const calculateUnlockedDays = (exercises: Exercise[], startDate: string) => {
+//     const assignedDate = new Date(startDate);
+//     const today = new Date();
+
+//     const diffTime = Math.abs(today.getTime() - assignedDate.getTime());
+//     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+//     // Get all days in the cycle (1, 2, 3,...)
+//     const cycleDays = Array.from(new Set(exercises.map(ex => parseInt(ex.day.split(' ')[1], 10)))).sort((a, b) => a - b);
+
+//     // Calculate the current day in the cycle
+//     const currentDay = cycleDays[diffDays % cycleDays.length];
+
+//     // Unlock all days up to the current day
+//     const unlockedDays = cycleDays.filter(day => day <= currentDay);
+
+//     // Set unlocked days and current day
+//     setUnlockedDays(unlockedDays);
+//     setCurrentDayInCycle(currentDay);
+// };
+
+
+
+const calculateUnlockedDays = (exercises: Exercise[], startDate: string) => {
+  const assignedDate = new Date(startDate);
+  const today = new Date();
+
+  const diffTime = Math.abs(today.getTime() - assignedDate.getTime());
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+  // Get all days in the cycle
+  const cycleDays = Array.from(new Set(exercises.map(ex => parseInt(ex.day.split(' ')[1], 10)))).sort((a, b) => a - b);
+
+  // Calculate the current unlocked day in the cycle
+  const currentDay = cycleDays[diffDays % cycleDays.length];
+
+  // Set current unlocked day in the cycle and all cycle days for UI display
+  setUnlockedDays([currentDay]); // This keeps only one unlocked day
+  setCurrentDayInCycle(currentDay);
+};
+
+
+
+
 
   // const openWeightsModal = (exercise: Exercise, setIndex: number) => {
   //   setSelectedExercise(exercise);
@@ -13093,6 +13270,8 @@ const handleSnackbarClose = () => {
     <DashboardLayout>
       {/* <div className="flex flex-col justify-center w-full max-w-3xl items-center min-h-screen relative p-6 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] rounded-lg shadow-lg md:p-6 sm:p-4"> */}
       <div className="flex flex-col items-center justify-center p-4 bg-[var(--background-color)] text-[var(--text-color)] border-[var(--border-color)] w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto">
+        
+          <ToastContainer />
         <div className="absolute top-20 right-6 flex space-x-4">
           <FontAwesomeIcon
             icon={faDumbbell}
@@ -13111,7 +13290,7 @@ const handleSnackbarClose = () => {
         </h1>
 
       {/* Day Selection */}
-      <div className="flex justify-center mb-4">
+      {/* <div className="flex justify-center mb-4">
         {unlockedDays.map((dayNumber) => {
           const dayName = `Day ${dayNumber}`;
           return (
@@ -13133,7 +13312,42 @@ const handleSnackbarClose = () => {
             </button>
           );
         })}
+      </div> */}
+
+
+      <div className="flex justify-center mb-4">
+        {Array.from(new Set(clientData?.exercises.map(ex => parseInt(ex.day.split(' ')[1], 10))))
+          .sort((a, b) => a - b)
+          .map((dayNumber) => {
+            const dayName = `Day ${dayNumber}`;
+            const isUnlocked = unlockedDays.includes(dayNumber); // Check if the day is unlocked from state
+
+            return (
+              <button
+                key={dayName}
+                className={`mx-2 py-2 px-4 rounded ${isUnlocked ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'} ${selectedDay === dayName ? 'border-2 border-blue-500' : ''}`}
+                onClick={() => handleDaySelection(dayName)}
+                disabled={!isUnlocked} // Disable interaction if the day is not unlocked
+              >
+                {isUnlocked ? (
+                  <>
+                    {dayName} <FontAwesomeIcon icon={dayIcons[dayName]} className="h-6 w-6" />
+                  </>
+                ) : (
+                  <>
+                    {dayName} <FontAwesomeIcon icon={faLock} />
+                  </>
+                )}
+              </button>
+            );
+          })}
       </div>
+
+
+
+
+
+
 
         {/* Exercise Section */}
         {currentExercise && showExercises ? (
@@ -13232,11 +13446,26 @@ const handleSnackbarClose = () => {
                   </tr>
 
                   {/* Add Golden Separator */}
+
                   <tr>
+                    <td colSpan={3} className="py-4">
+                      <div className="w-full h-4 bg-gray-300 rounded-md overflow-hidden">
+                        <div
+                          className="h-full bg-yellow-500 transition-all duration-500"
+                          style={{
+                            width: `${progress[`${currentExercise.id}-${setIndex}`] || 0}%`, // Set the width based on the progress state
+                          }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+
+
+                  {/* <tr>
                     <td colSpan={3} className="py-4">
                       <hr style={{ border: '10px solid gold', width: '100%' }} />
                     </td>
-                  </tr>
+                  </tr> */}
                 </React.Fragment>
               ))}
 
