@@ -164,7 +164,7 @@ const PaymentsPage: React.FC = () => {
                 <div className="grid grid-cols-1 gap-6">
                   <div className="border-2 border-[var(--border-color)] rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-300 bg-[var(--background-color)]">
                     <h3 className="text-xl font-bold mb-2 text-center text-[var(--text-color)]">{language === 'en' ? '2 Months' : '2 شهر'}</h3>
-                    <p className="text-2xl font-bold text-blue-500 text-center">1000 {language === 'en' ? 'EGP / 2 month' : 'جنيه / 2 شهر'}</p>
+                    <p className="text-2xl font-bold text-blue-500 text-center">2500 {language === 'en' ? 'EGP / 2 month' : 'جنيه / 2 شهر'}</p>
                     <div className="mt-2 text-center">
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Weekly Exercise Updates' : 'تحديثات التمرين أسبوعياً'}</p>
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Nutrition Plan' : 'خطة تغذية'}</p>
@@ -174,7 +174,7 @@ const PaymentsPage: React.FC = () => {
                   </div>
                   <div className="border-2 border-[var(--border-color)] rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-300 bg-[var(--background-color)]">
                     <h3 className="text-xl font-bold mb-2 text-center text-[var(--text-color)]">{language === 'en' ? '3 Monthly' : '3 شهر'}</h3>
-                    <p className="text-2xl font-bold text-red-500 text-center">1300 {language === 'en' ? 'EGP / month' : 'جنيه / شهر'}</p>
+                    <p className="text-2xl font-bold text-red-500 text-center">3000 {language === 'en' ? 'EGP / month' : 'جنيه / شهر'}</p>
                     <div className="mt-2 text-center">
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Daily Exercise Updates' : 'تحديثات التمرين يومياً'}</p>
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Nutrition Plan' : 'خطة تغذية'}</p>
@@ -183,7 +183,7 @@ const PaymentsPage: React.FC = () => {
                   </div>
                   <div className="border-2 border-[var(--border-color)] rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-300 bg-[var(--background-color)]">
                     <h3 className="text-xl font-bold mb-2 text-center text-[var(--text-color)]">{language === 'en' ? '6 Months' : '6 شهور'}</h3>
-                    <p className="text-2xl font-bold text-green-500 text-center">2400 {language === 'en' ? 'EGP / year' : 'جنيه / سنة'}</p>
+                    <p className="text-2xl font-bold text-green-500 text-center">5000 {language === 'en' ? 'EGP / year' : 'جنيه / سنة'}</p>
                     <div className="mt-2 text-center">
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Weekly Exercise Updates' : 'تحديثات التمرين أسبوعياً'}</p>
                       <p className="font-bold text-[var(--text-color)]">{language === 'en' ? 'Nutrition Plan' : 'خطة تغذية'}</p>
