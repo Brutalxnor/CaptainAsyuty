@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
         </Link>
         <div className="flex items-center mb-4 mt-5">
           <Image src="/logo.png" alt="Logo" width={50} height={50} />
-          <span className="ml-4">&copy; 2024 Captain El Asyuty</span>
+          <span className="ml-4">&copy; 2025 Captain El Asyuty</span>
         </div>
       </div>
     </footer>
